@@ -24,8 +24,8 @@ VARIANTS = {"1": ["A", "B", "C", "D", "E"], "2": ["B", "R", "RL", "G", "GL"], "3
 # round 3 re-scores GL after the guided fits and the evened 3, 8, S, beside round 2's GL (its specimen image is kept;
 # the font itself was rebuilt)
 PRIOR = {"3": {"GL_r2": ROOT / "build" / "carve2" / "named" / "GL.png"}}.get(ROUND, {})
-ANGULAR = ROOT.parent / "ortica-src" / "fonts" / "OrticaAngular-Bold.otf"
-CINZEL = ROOT.parent / "fonts" / "cinzel" / "Cinzel-wght.ttf"
+ANGULAR = ROOT / "vendor" / "ortica" / "fonts" / "OrticaAngular-Bold.otf"
+CINZEL = ROOT / "vendor" / "cinzel" / "Cinzel-wght.ttf"
 TEXT = ("Labels stay in the list for reuse. Mobilità ed equilibrio, perché è così: "
         "a short walk, then the next set.")
 

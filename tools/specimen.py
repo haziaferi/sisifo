@@ -10,7 +10,7 @@ import headless_browser as hb  # noqa: E402
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 VF = ROOT / "fonts" / "variable" / "Sisifo[wght].ttf"
-ORT = ROOT.parent / "ortica-src" / "fonts"
+ORT = ROOT / "vendor" / "ortica" / "fonts"
 ORIG = {300: "Light", 400: "Regular", 700: "Bold"}
 TEXT = "Labels stay in the list for reuse. Mobilità ed equilibrio, perché è così."
 

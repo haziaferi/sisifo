@@ -31,7 +31,7 @@ from fontTools.varLib.instancer import instantiateVariableFont
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 VF = ROOT / "fonts" / "variable" / "Sisifo[wght].ttf"
-ORTICA = ROOT.parent / "ortica-src" / "fonts"
+ORTICA = ROOT / "vendor" / "ortica" / "fonts"
 ORIGINAL = {s: ORTICA / f"OrticaLinear-{s}.otf" for s in ("Light", "Regular", "Bold")}
 EXEMPT = {}   # zero.dnom (drawn for Sisifo) is a non-exported helper, so nothing needs exempting
 sys.path.insert(0, str(pathlib.Path.home() / ".claude" / "tools"))

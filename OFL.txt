@@ -1,6 +1,7 @@
 Copyright 2021 Benedetta Bovani & Collletttivo (Ortica, https://github.com/collletttivo/ortica)
 Copyright © 2023, Collletttivo (https://www.collletttivo.it/ | collletttivo@gmail.com)
 Copyright 2026 haziaferi (Sisifo modifications, https://github.com/haziaferi/sisifo)
+Copyright 2020 The Cinzel Project Authors (https://github.com/NDISCOVER/Cinzel): the inscriptional capitals (ss01)
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:

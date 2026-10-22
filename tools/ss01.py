@@ -25,7 +25,7 @@ from fontTools.ttLib import TTFont
 from fontTools.varLib.instancer import instantiateVariableFont
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-CINZEL = ROOT.parent / "fonts" / "cinzel" / "Cinzel-wght.ttf"
+CINZEL = ROOT / "vendor" / "cinzel" / "Cinzel-wght.ttf"
 CINZEL_COPYRIGHT = "Copyright 2020 The Cinzel Project Authors (https://github.com/NDISCOVER/Cinzel)"
 CAPS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 # P: where each capital may stretch, as fractions of its ink width, with the share of the width change each band
@@ -360,5 +360,5 @@ def add(fonts, kind, ref=None):
                     members.extend(n for n in names if n[:-5] in members and n not in members)
         else:
             if CINZEL_COPYRIGHT not in (f.info.copyright or ""):
-                f.info.copyright = f"{f.info.copyright}. Inscriptional capitals (ss01) from Cinzel: {CINZEL_COPYRIGHT}"
+                f.info.copyright = f"{f.info.copyright.rstrip('. ')}. Inscriptional capitals (ss01) from Cinzel: {CINZEL_COPYRIGHT}"
     return names

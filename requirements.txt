@@ -1,0 +1,9 @@
+# Versions Sisifo was built and tested with (2026-10-23)
+fontmake==3.12.2
+fonttools==4.64.0
+ufoLib2==0.19.1
+ufo2ft==3.9.1
+glyphsLib==6.16.2
+booleanOperations==0.10.0
+Pillow==12.2.0
+pytest==9.1.1

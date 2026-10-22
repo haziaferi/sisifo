@@ -90,7 +90,7 @@ def build() -> pathlib.Path:
     return _fontmake(designspace(), OUT)
 
 
-CHOSEN = "GL"   # owner, 2026-10-22, after round 3: "The new GL reads better; keep it and move on"
+CHOSEN = "GLZ"  # owner, 2026-10-23: "Release GLZ" (GL carve + Cinzel capitals as ss01); GL before that
 RELEASE = ROOT / "fonts" / "variable" / "Sisifo[CARV,wght].ttf"
 
 

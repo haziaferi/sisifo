@@ -25,7 +25,7 @@ from ufoLib2.objects import Contour, Point
 from compat import _segments, split_cubic
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-ANGULAR = ROOT.parent / "ortica-src" / "source" / "Ortica Angular.ufo"
+ANGULAR = ROOT / "vendor" / "ortica" / "source" / "Ortica Angular.ufo"
 SNAP_ARC = 8
 SAMPLES = 48
 

@@ -5,7 +5,7 @@ Usage:  python tools/score_carve.py measure [round]   -> build/carve[2]/measured
 Round 2 adds the blind "personality" axis (weight 1) and Ortica Angular Bold as a second unnamed reference.
 
 Measured on a static instance at wght 400 and CARV 100 (titles and set numbers are where the carve shows), with the
-font search's own measure() from ../tools/measure.py:
+font search's own measure() (tools/search_measure.py, copied from the search):
   harmony, numbers, calm (measured half)   as in the font search
   technical                                measured on the variable file itself (weights, size, accents, licence)
   small text unharmed                      13 px x 2.8125 at CARV 0 against Ortica Linear Regular: x-height ratio,
@@ -27,16 +27,15 @@ from fontTools.pens.basePen import BasePen
 from PIL import Image, ImageDraw
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-SEARCH = ROOT.parent
-sys.path.insert(0, str(SEARCH / "tools"))
+sys.path.insert(0, str(ROOT / "tools"))
 sys.path.insert(0, str(pathlib.Path.home() / ".claude" / "tools"))
-import measure  # noqa: E402
+import search_measure as measure  # noqa: E402
 sys.path.insert(0, str(ROOT / "tools"))
 import gate  # noqa: E402
 
 ROUND = sys.argv[2] if len(sys.argv) > 2 else "1"
 OUT = ROOT / "build" / ("carve" if ROUND == "1" else f"carve{ROUND}")
-ORTICA = SEARCH / "ortica-src" / "fonts" / "OrticaLinear-Regular.otf"
+ORTICA = ROOT / "vendor" / "ortica" / "fonts" / "OrticaLinear-Regular.otf"
 VARIANTS = {"1": ["A", "B", "C", "D", "E"], "2": ["B", "R", "RL", "G", "GL"], "3": ["GL"],
             "4": ["GLP", "GLZ", "GL"]}[ROUND]
 # round 3: round 2's GL is judged again beside the new GL; its measured axes come from round 2

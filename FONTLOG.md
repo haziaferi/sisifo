@@ -77,3 +77,10 @@ large. Sisifo is not Ortica and is not endorsed by its authors.
 - Both pass the gate. Blind panel, ten axes with inscription: GLZ 0.868, GL (release, no ss01) 0.811, GLP 0.767.
   GLP read as condensed: Sisifo's O, C, D are already about as wide as Cinzel's (1.02-1.05), so it mainly narrowed
   E, S, B. GLZ has no kerning for its capitals yet.
+
+## 0.5 (2026-10-23): release GLZ
+- The release (`python tools/build.py release` -> fonts/variable/Sisifo[CARV,wght].ttf, 244 KB) is GLZ: the GL carve
+  with Cinzel's capitals as ss01. With ss01 off it is GL glyph for glyph (all 405 glyphs, outlines and advances, at
+  12 weight/carve points). OFL.txt and the font's copyright credit Cinzel.
+- Self-contained: Ortica (sources and published fonts, commit 27bf44d) and Cinzel are in vendor/ with their
+  licences; the font search's measure script is tools/search_measure.py; requirements.txt pins the build tools.

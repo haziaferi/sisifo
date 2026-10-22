@@ -11,7 +11,7 @@ import ufoLib2
 from fontTools.ttLib import TTFont
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-ORIGINAL = ROOT.parent / "ortica-src" / "fonts" / "OrticaLinear-Regular.otf"
+ORIGINAL = ROOT / "vendor" / "ortica" / "fonts" / "OrticaLinear-Regular.otf"
 
 
 def zero_width_glyphs(otf: pathlib.Path = ORIGINAL) -> list[str]:
