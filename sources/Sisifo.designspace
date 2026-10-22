@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<designspace format="5.0">
+  <axes>
+    <axis tag="wght" name="Weight" minimum="300" maximum="700" default="400"/>
+  </axes>
+  <sources>
+    <source filename="Sisifo-Light.ufo" familyname="Sisifo" stylename="Light">
+      <location>
+        <dimension name="Weight" xvalue="300"/>
+      </location>
+    </source>
+    <source filename="Sisifo-Regular.ufo" familyname="Sisifo" stylename="Regular">
+      <lib copy="1"/>
+      <groups copy="1"/>
+      <features copy="1"/>
+      <info copy="1"/>
+      <location>
+        <dimension name="Weight" xvalue="400"/>
+      </location>
+    </source>
+    <source filename="Sisifo-Bold.ufo" familyname="Sisifo" stylename="Bold">
+      <location>
+        <dimension name="Weight" xvalue="700"/>
+      </location>
+    </source>
+  </sources>
+  <instances>
+    <instance familyname="Sisifo" stylename="Light" postscriptfontname="Sisifo-Light">
+      <location>
+        <dimension name="Weight" xvalue="300"/>
+      </location>
+    </instance>
+    <instance familyname="Sisifo" stylename="Regular" postscriptfontname="Sisifo-Regular">
+      <location>
+        <dimension name="Weight" xvalue="400"/>
+      </location>
+    </instance>
+    <instance familyname="Sisifo" stylename="Medium" postscriptfontname="Sisifo-Medium">
+      <location>
+        <dimension name="Weight" xvalue="500"/>
+      </location>
+    </instance>
+    <instance familyname="Sisifo" stylename="SemiBold" postscriptfontname="Sisifo-SemiBold">
+      <location>
+        <dimension name="Weight" xvalue="600"/>
+      </location>
+    </instance>
+    <instance familyname="Sisifo" stylename="Bold" postscriptfontname="Sisifo-Bold">
+      <location>
+        <dimension name="Weight" xvalue="700"/>
+      </location>
+    </instance>
+  </instances>
+</designspace>
