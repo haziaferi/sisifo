@@ -37,3 +37,22 @@ def test_coverage_at_least_ortica(font):
 def test_size(font):
     p, _ = font
     assert p.stat().st_size <= 400 * 1024
+
+
+@pytest.fixture(scope="module", params=["A", "E"])
+def carved(request):
+    p = build.build_carved(request.param)
+    return p, TTFont(p)
+
+
+def test_carved_axes(carved):
+    _, t = carved
+    ax = {a.axisTag: (a.minValue, a.defaultValue, a.maxValue) for a in t["fvar"].axes}
+    assert ax == {"wght": (300, 400, 700), "CARV": (0, 0, 100)}
+    assert all(i.coordinates["CARV"] == 0 for i in t["fvar"].instances)
+
+
+def test_carved_size_and_coverage(carved):
+    p, t = carved
+    assert p.stat().st_size <= 400 * 1024
+    assert set(TTFont(ORIGINAL["Regular"]).getBestCmap()) <= set(t.getBestCmap())

@@ -1,6 +1,8 @@
 """Gate Sisifo's variable font against the original Ortica Linear fonts.
 
-Usage:  python tools/gate.py       -> build/gate.json + a table; exit 1 on any failure
+Usage:  python tools/gate.py [carved.ttf ...]   -> build/gate*.json + a table; exit 1 on any failure
+        No argument gates the weight-only font. A carved font gets the same checks at CARV 0, plus outline errors
+        and direction flips at CARV 0/50/100, and topology_changes: a carve that cuts through a stroke.
 
 compare_outlines  each glyph of the instance at 300/400/700 against the original OTF of that weight: advance width
                   equal, area within 1 %, bounds within 3 units (fontmake's cubic-to-quadratic conversion moves points
@@ -36,8 +38,13 @@ sys.path.insert(0, str(pathlib.Path.home() / ".claude" / "tools"))
 
 
 @functools.lru_cache(maxsize=None)
-def instance(w):
-    return instantiateVariableFont(TTFont(VF), {"wght": w}, static=True)
+def instance(w, carve=0, vf=None):
+    """Static instance at weight w (and carve, for a font with the CARV axis); vf defaults to the weight-only font."""
+    f = TTFont(vf or VF)
+    loc = {"wght": w}
+    if any(a.axisTag == "CARV" for a in f["fvar"].axes):
+        loc["CARV"] = carve
+    return instantiateVariableFont(f, loc, static=True)
 
 
 @functools.lru_cache(maxsize=None)
@@ -70,9 +77,8 @@ class _CubicPen(BasePen):
         self.value.append(("closePath", ()))
 
 
-def _measure(font, name):
-    """Area after merging overlaps (a variable font keeps overlapping contours; the original OTF had them merged),
-    bounds, and advance."""
+def _merged(font, name):
+    """The glyph with overlaps merged (booleanOperations), quadratics elevated to cubics first."""
     gs = font.getGlyphSet()
     rec = _CubicPen(gs)
     gs[name].draw(rec)
@@ -80,15 +86,33 @@ def _measure(font, name):
     seg = SegmentToPointPen(bg.getPointPen())
     for op, args in rec.value:
         getattr(seg, op)(*args)
-    merged = bg.removeOverlap()
+    return bg.removeOverlap()
+
+
+def topology_changes(weights, vf):
+    """Glyphs whose merged outline has a different number of contours carved (CARV 100) than plain (CARV 0): a cut
+    through a stroke, a counter opened, or a part come loose."""
+    bad = []
+    for w in weights:
+        plain, carved = instance(w, 0, vf), instance(w, 100, vf)
+        for name in plain.getGlyphOrder():
+            if len(_merged(plain, name).contours) != len(_merged(carved, name).contours):
+                bad.append(f"{name} at {w}")
+    return bad
+
+
+def _measure(font, name):
+    """Area after merging overlaps (a variable font keeps overlapping contours; the original OTF had them merged),
+    bounds, and advance."""
+    gs = font.getGlyphSet()
     a, b = AreaPen(), BoundsPen(gs)
-    merged.draw(a)
+    _merged(font, name).draw(a)
     gs[name].draw(b)
     return abs(a.value), b.bounds, font["hmtx"].metrics[name][0]
 
 
-def compare_outlines(w, style, chars=None):
-    new, old = instance(w), original(style)
+def compare_outlines(w, style, chars=None, vf=None):
+    new, old = instance(w, 0, vf), original(style)
     if chars:
         nc, oc = new.getBestCmap(), old.getBestCmap()
         pairs = [(nc[ord(c)], oc[ord(c)]) for c in chars if ord(c) in nc and ord(c) in oc]
@@ -134,8 +158,8 @@ def _signed_area(pts):
                for i in range(len(pts))) / 2
 
 
-def outline_errors(w):
-    f = instance(w)
+def outline_errors(w, carve=0, vf=None):
+    f = instance(w, carve, vf)
     errs = []
     for name in f.getGlyphOrder():
         for i, c in enumerate(_contours(f, name)):
@@ -148,10 +172,10 @@ def outline_errors(w):
     return errs
 
 
-def direction_flips(weights):
+def direction_flips(weights, carves=(0,), vf=None):
     signs = {}
-    for w in weights:
-        f = instance(w)
+    for w, c in ((w, c) for w in weights for c in carves):
+        f = instance(w, c, vf)
         for name in f.getGlyphOrder():
             for i, c in enumerate(_contours(f, name)):
                 if len(c) >= 3:
@@ -159,10 +183,10 @@ def direction_flips(weights):
     return sorted(f"{n} contour {i}" for (n, i), s in signs.items() if len(s) > 1)
 
 
-def shaped_widths_diff(texts, weights=(300, 400, 700)):
+def shaped_widths_diff(texts, weights=(300, 400, 700), vf=None):
     import headless_browser as hb
     style = {300: "Light", 400: "Regular", 700: "Bold"}
-    faces = (f"@font-face{{font-family:S;src:url('{VF.as_uri()}');font-weight:300 700}}"
+    faces = (f"@font-face{{font-family:S;src:url('{pathlib.Path(vf or VF).as_uri()}');font-weight:300 700}}"
              + "".join(f"@font-face{{font-family:O{w};src:url('{ORIGINAL[style[w]].as_uri()}')}}" for w in weights))
     spans = "".join(f'<span data-k="{w}|{t}|{fam}" style="font-family:{fam if fam != "S" else "S"};'
                     f'font-weight:{w if fam == "S" else 400};font-variation-settings:{chr(39)}wght{chr(39)} {w if fam == "S" else 400}">'
@@ -188,11 +212,11 @@ def shaped_widths_diff(texts, weights=(300, 400, 700)):
 DIGITS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
 
 
-def tabular_widths(weights):
-    return {w: {instance(w)["hmtx"].metrics[d + ".tf"][0] for d in DIGITS} for w in weights}
+def tabular_widths(weights, carve=0, vf=None):
+    return {w: {instance(w, carve, vf)["hmtx"].metrics[d + ".tf"][0] for d in DIGITS} for w in weights}
 
 
-def tnum_shaped_diff(weights=(300, 400, 550, 700)):
+def tnum_shaped_diff(weights=(300, 400, 550, 700), vf=None):
     """Widths of "0000" ... "9999" set with tnum by the browser's HarfBuzz; the largest spread at one weight, in px at
     100 px. The same strings without tnum must spread (else the feature was never what made them equal)."""
     import headless_browser as hb
@@ -201,7 +225,7 @@ def tnum_shaped_diff(weights=(300, 400, 550, 700)):
                     for w in weights for d in range(10) for f in (1, 0))
     page = ROOT / "build" / "tnum.html"
     page.parent.mkdir(exist_ok=True)
-    page.write_text(f"<!doctype html><meta charset=utf-8><style>@font-face{{font-family:S;src:url('{VF.as_uri()}');"
+    page.write_text(f"<!doctype html><meta charset=utf-8><style>@font-face{{font-family:S;src:url('{pathlib.Path(vf or VF).as_uri()}');"
                     f"font-weight:300 700}} body{{font:100px S;white-space:nowrap}}</style>{spans}", encoding="utf-8")
     js = ("(async()=>{await document.fonts.ready;const r={};for(const f of document.fonts){r['face:'+f.family]=f.status};"
           "document.querySelectorAll('span').forEach(s=>r[s.dataset.k]=s.getBoundingClientRect().width);"
@@ -218,34 +242,50 @@ def tnum_shaped_diff(weights=(300, 400, 550, 700)):
     return max(spread(w, 1) for w in weights)
 
 
-def run():
+def run(vf=None):
+    """The stage 1-2 gate on the weight-only font; given a carved font, the same at CARV 0 plus the carve checks."""
     out = {}
     for w, s in ((300, "Light"), (400, "Regular"), (700, "Bold")):
-        out[f"outlines {w}"] = compare_outlines(w, s)
-    out["outline errors"] = {w: outline_errors(w) for w in (300, 350, 400, 550, 650, 700)}
-    out["direction flips"] = direction_flips((300, 350, 400, 550, 650, 700))
-    out["shaped width diff px"] = shaped_widths_diff(["AVATAR", "To Ty Yo", "Wave LT", "Panca piana 62.5 kg"])
-    out["tabular widths"] = {w: sorted(s) for w, s in tabular_widths((300, 400, 550, 700)).items()}
-    out["tnum spread px"] = tnum_shaped_diff()
+        out[f"outlines {w}"] = compare_outlines(w, s, vf=vf)
+    carves = (0, 50, 100) if vf else (0,)
+    weights = (300, 350, 400, 550, 650, 700)
+    out["outline errors"] = {f"{w}/{c}": outline_errors(w, c, vf) for w in weights for c in carves}
+    out["direction flips"] = direction_flips(weights, carves, vf)
+    out["topology changes"] = topology_changes((300, 550, 700), vf) if vf else []
+    out["shaped width diff px"] = shaped_widths_diff(["AVATAR", "To Ty Yo", "Wave LT", "Panca piana 62.5 kg"], vf=vf)
+    out["tabular widths"] = {f"{w}/{c}": sorted(s) for c in carves
+                             for w, s in tabular_widths((300, 400, 550, 700), c, vf).items()}
+    out["tnum spread px"] = tnum_shaped_diff(vf=vf)
     return out
 
 
-def main():
-    r = run()
-    ok = all(not r[f"outlines {w}"]["mismatches"] for w in (300, 400, 700)) \
-        and not any(r["outline errors"].values()) and not r["direction flips"] and r["shaped width diff px"] <= 0.5 \
-        and all(len(s) == 1 for s in r["tabular widths"].values()) and r["tnum spread px"] <= 0.01
-    for w in (300, 400, 700):
-        x = r[f"outlines {w}"]
-        print(f"outlines {w}: {x['compared']} compared, {len(x['mismatches'])} mismatched, exempt {x['exempt']}")
-    print(f"outline errors: {sum(len(v) for v in r['outline errors'].values())}; direction flips: {len(r['direction flips'])}; "
-          f"shaped width diff: {r['shaped width diff px']:.2f} px at 100 px")
-    print(f"tabular widths: {r['tabular widths']}; tnum spread: {r['tnum spread px']:.3f} px at 100 px")
-    (ROOT / "build").mkdir(exist_ok=True)
-    (ROOT / "build" / "gate.json").write_text(json.dumps(r, indent=1, default=str), encoding="utf-8")
-    print("GATE PASS" if ok else "GATE FAIL")
-    return 0 if ok else 1
+def passed(r):
+    return (all(not r[f"outlines {w}"]["mismatches"] for w in (300, 400, 700))
+            and not any(r["outline errors"].values()) and not r["direction flips"] and not r["topology changes"]
+            and r["shaped width diff px"] <= 0.5 and all(len(s) == 1 for s in r["tabular widths"].values())
+            and r["tnum spread px"] <= 0.01)
+
+
+def main(paths):
+    ok_all = True
+    for vf in [pathlib.Path(p).resolve() for p in paths] or [None]:
+        r = run(vf)
+        print(f"== {vf or VF.relative_to(ROOT)}")
+        for w in (300, 400, 700):
+            x = r[f"outlines {w}"]
+            print(f"outlines {w}: {x['compared']} compared, {len(x['mismatches'])} mismatched, exempt {x['exempt']}")
+        print(f"outline errors: {sum(len(v) for v in r['outline errors'].values())}; direction flips: "
+              f"{len(r['direction flips'])}; topology changes: {r['topology changes'][:8]}; "
+              f"shaped width diff: {r['shaped width diff px']:.2f} px at 100 px")
+        print(f"tabular: one width per instance {all(len(s) == 1 for s in r['tabular widths'].values())}; "
+              f"tnum spread {r['tnum spread px']:.3f} px at 100 px")
+        out = ROOT / "build" / ("gate.json" if not vf else f"gate-{pathlib.Path(vf).parent.name}.json")
+        out.parent.mkdir(exist_ok=True)
+        out.write_text(json.dumps(r, indent=1, default=str), encoding="utf-8")
+        print("GATE PASS" if passed(r) else "GATE FAIL")
+        ok_all &= passed(r)
+    return 0 if ok_all else 1
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv[1:]))

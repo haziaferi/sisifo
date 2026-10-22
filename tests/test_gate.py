@@ -42,3 +42,27 @@ def test_tabular_one_width_per_instance():
 
 def test_tnum_shaped_equal():
     assert gate.tnum_shaped_diff((300, 400, 550, 700)) <= 0.01
+
+
+@pytest.fixture(params=["A", "E"])
+def carved_font(request):
+    import build
+    p = build.ROOT / "build" / "variants" / request.param / "Sisifo[CARV,wght].ttf"
+    if not p.exists():
+        build.build_carved(request.param)
+    return p
+
+
+def test_carved_matches_original_at_carve0(carved_font):
+    r = gate.compare_outlines(400, "Regular", vf=carved_font)
+    assert r["compared"] == 394 and r["mismatches"] == [], r["mismatches"][:10]
+
+
+def test_no_outline_errors_carved(carved_font):
+    for w in (300, 550, 700):
+        for c in (50, 100):
+            assert gate.outline_errors(w, carve=c, vf=carved_font) == [], (w, c)
+
+
+def test_no_direction_flips_carved(carved_font):
+    assert gate.direction_flips((300, 550, 700), carves=(0, 50, 100), vf=carved_font) == []
