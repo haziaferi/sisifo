@@ -56,3 +56,21 @@ def test_carved_size_and_coverage(carved):
     p, t = carved
     assert p.stat().st_size <= 400 * 1024
     assert set(TTFont(ORIGINAL["Regular"]).getBestCmap()) <= set(t.getBestCmap())
+
+
+def test_ss01_off_is_gl():
+    """Owner, 2026-10-23: "Keep GL inside GLZ: document that ss01 off is GL, no separate file." Every glyph of the GL
+    build has the same outline and advance in the release, at several weight and carve points."""
+    from fontTools.pens.recordingPen import DecomposingRecordingPen
+    from fontTools.varLib.instancer import instantiateVariableFont
+    gl, rel = build.build_carved("GL"), build.release()
+    names = TTFont(gl).getGlyphOrder()
+    for w, c in ((300, 0), (400, 100), (550, 50), (700, 100)):
+        a = instantiateVariableFont(TTFont(gl), {"wght": w, "CARV": c}, static=True)
+        b = instantiateVariableFont(TTFont(rel), {"wght": w, "CARV": c}, static=True)
+        ga, gb = a.getGlyphSet(), b.getGlyphSet()
+        for n in names:
+            pa, pb = DecomposingRecordingPen(ga), DecomposingRecordingPen(gb)
+            ga[n].draw(pa)
+            gb[n].draw(pb)
+            assert pa.value == pb.value and a["hmtx"].metrics[n] == b["hmtx"].metrics[n], (n, w, c)

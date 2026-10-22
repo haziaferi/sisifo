@@ -128,3 +128,9 @@ to it wait for the owner's go-ahead at the end of stage 1.
   (round 1's best, B, "lost personality"; round 2 added Angular's cuts and a blind personality axis; round 3 added
   guided fits for the 6 and other fallbacks and evened 3, 8, S). Released as `fonts/variable/Sisifo[CARV,wght].ttf`
   by `python tools/build.py release`. Scores and the panel's reasons: `docs/results/stage3-*.json`.
+- **Stage 4 (2026-10-23): the release is GLZ**, the GL carve with Cinzel's capitals as `ss01` (blind panel with an
+  inscription axis: GLZ 0.868, GL 0.811, GLP 0.767). **GL ships inside it**: `ss01` off is GL glyph for glyph
+  (`tests/test_build.py::test_ss01_off_is_gl`), so there is no separate GL file. Scored on the owner's five axes
+  (customization, app weight, simplicity, licence, upkeep): inside 1.00, a separate file 0.76.
+- **Self-contained repository** (2026-10-23): Ortica and Cinzel vendored with their licences; builds are
+  byte-reproducible from a commit.

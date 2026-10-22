@@ -84,3 +84,5 @@ large. Sisifo is not Ortica and is not endorsed by its authors.
   12 weight/carve points). OFL.txt and the font's copyright credit Cinzel.
 - Self-contained: Ortica (sources and published fonts, commit 27bf44d) and Cinzel are in vendor/ with their
   licences; the font search's measure script is tools/search_measure.py; requirements.txt pins the build tools.
+- GL is not a separate file: `ss01` off is GL glyph for glyph, now pinned by a test. README.md documents the axes,
+  the features and the build.
