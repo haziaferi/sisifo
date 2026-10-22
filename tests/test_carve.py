@@ -145,7 +145,7 @@ def test_angular_fit_is_angular_at_bold(masters):
     bold = masters["G"][("Bold", 100)]
     src = ufoLib2.Font.open(SOURCES / "Sisifo-Bold.ufo")
     for name in ("o", "n", "s", "S", "zero"):
-        target = af.angular_contours(src[name], src, ang[name], ang)
+        target = af.angular_contours(src[name], src, ang[name], ang, name in carve.EVEN)   # S is evened
         assert carve._iou(list(bold[name].contours), target) >= 0.99, name
 
 
@@ -154,3 +154,21 @@ def test_every_unfitted_glyph_has_a_reason(masters):
     log = json.loads((carve.ROOT / "build" / "fit-Angulars_own_cuts.json").read_text(encoding="utf-8"))
     assert len(log["fitted"]) >= 140
     assert all(isinstance(why, str) and why for why in log["not_fitted"].values())
+
+
+def test_six_is_angulars_six_at_bold(masters):
+    """Owner, round 2: the 6's arm came out "closer to a straight line at an angle"; anchored, it is Angular's 6."""
+    import angular_fit as af
+    ang = af.load_angular()
+    src = ufoLib2.Font.open(SOURCES / "Sisifo-Bold.ufo")
+    target = af.angular_contours(src["six"], src, ang["six"], ang)
+    assert carve._iou(list(masters["G"][("Bold", 100)]["six"].contours), target) >= 0.95
+
+
+def test_three_eight_s_evened():
+    """Owner, round 2: "even out 3, 8, S": facet lengths between sharp corners vary far less than in Angular."""
+    import angular_fit as af
+    ang = af.load_angular()
+    for name in ("three", "eight", "S"):
+        for c in af._merge(ang[name]):
+            assert af.facet_spread(af.even(c)) <= 0.5 * af.facet_spread(c) + 0.01, name

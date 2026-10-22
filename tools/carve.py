@@ -39,7 +39,17 @@ VARIANTS = {
     "GL": {"phi": 22.5, "theta": 42, "phase": True, "local": True, "fit": "angular",
            "look": "Angular's own cuts, gentler at Light", "strength": {"Light": 0.5, "Regular": 0.75, "Bold": 1.0}},
 }
-LOCAL_CUT = 0.5              # round 2: no cut deeper than half the stroke it cuts into, measured where it cuts
+# hand pins for the general Angular fit: glyph -> {Angular corner (merged order): (contour, segment[, t])}
+ANCHORS = {
+    # Angular's 6 curls its arm and hooks the terminal (corners 11-14); Linear's arm is thin and straight, so the
+    # inner-arm corners 8-9 fell on Linear's outer curve and the hook was lost (owner: "closer to a straight line at
+    # an angle"). Linear's 6, contour 0: segment 0 is the inner arm edge (junction to tip), 1 the terminal cut.
+    "six": {8: (0, 0, 0.45), 9: (0, 0, 0.7), 10: (0, 0, 0.85), 11: (0, 0, 0.93), 12: (0, 0), 13: (0, 1, 0.5),
+            14: (0, 1)},
+}
+# owner: "even out 3, 8, S": Angular's own facets there are uneven; angular_fit.even() re-spaces them along its edge
+EVEN = {"three", "eight", "S", "three.osf", "eight.osf"}
+LOCAL_CUT = 0.5             # round 2: no cut deeper than half the stroke it cuts into, measured where it cuts
 AXIS_TOL = math.radians(2)   # a tangent within 2 degrees of horizontal/vertical counts as an extreme
 SNAP = 20                    # a horizontal flat overshooting a vertical metric by up to 20 units lands on it
 OVER = 2                     # ... or falling short of it by up to 2 (drawing noise)
@@ -412,16 +422,12 @@ def _angular_fits(src, v):
     import json
     import angular_fit as af
     ang = af.load_angular()
-    out, log = {}, {}
-    for name in src["Bold"].keys():
-        if name not in ang or not ang[name].contours or not src["Bold"][name].contours:
-            continue
-        plans, why = af.plan(src["Bold"][name], src["Bold"], ang[name], ang)
-        if plans is None:
-            log[name] = why
-            continue
+    out, log, how = {}, {}, {}
+
+    def attempt(name, plans, carver):
+        """The six outlines for one fit, or the reason it is refused."""
         c0 = {s: af.contours(src[s][name], plans) for s in STYLES}
-        c100_bold = af.carve_bold(c0["Bold"], plans)
+        c100_bold = carver(c0["Bold"], plans)
         th = {s: _thickness(src[s][name], _polylines(src[s][name])) for s in STYLES}
         tb = [[th["Bold"](p, t) for p, t in cont] for cont in af.end_points_and_tangents(c0["Bold"])]
         res = {}
@@ -432,22 +438,42 @@ def _angular_fits(src, v):
             res[(s, 0)] = af.to_contours(c0[s])
             res[(s, 100)] = af.to_contours(af.displaced(c0[s], c0["Bold"], c100_bold, k, ratios))
         if any(_merged_count(res[(s, 0)]) != _merged_count(res[(s, 100)]) for s in STYLES):
-            log[name] = "topology changes when carved"
-            continue
+            return None, "topology changes when carved"
         # a scrambled correspondence can keep its topology: the carved Bold must be Angular's shape, and no lighter
         # weight may move much further from its plain outline than Bold does (Angular is a different drawing, so
         # Bold itself moves: its o overlaps Linear's by 0.74, and that difference is the personality being carried)
-        target = af.angular_contours(src["Bold"][name], src["Bold"], ang[name], ang)
+        target = af.angular_contours(src["Bold"][name], src["Bold"], ang[name], ang, name in EVEN)
         fit_iou = _iou(res[("Bold", 100)], target)
         drift = {s: _iou(res[(s, 0)], res[(s, 100)]) for s in STYLES}
         if fit_iou < 0.9 or min(drift.values()) < drift["Bold"] - 0.15:
-            log[name] = (f"shape check: overlap with Angular {fit_iou:.2f}; with plain "
-                         + ", ".join(f"{s} {d:.2f}" for s, d in drift.items()))
+            return None, (f"shape check: overlap with Angular {fit_iou:.2f}; with plain "
+                          + ", ".join(f"{s} {d:.2f}" for s, d in drift.items()))
+        return res, None
+
+    for name in src["Bold"].keys():
+        if not src["Bold"][name].contours:
             continue
+        if name not in ang or not ang[name].contours:
+            log[name] = "no Angular outline (absent, or components only)"
+            continue
+        res, why = None, None
+        plans, why = af.plan(src["Bold"][name], src["Bold"], ang[name], ang, name in EVEN)
+        if plans is not None:
+            res, why = attempt(name, plans, af.carve_bold)
+        if res is None:   # the general fit: overlapping pieces, or corners out of order (round 2, after the 6)
+            gplans, gwhy = af.plan_general(src["Bold"][name], src["Bold"], ang[name], ang, ANCHORS.get(name),
+                                           name in EVEN)
+            if gplans is not None:
+                res, gwhy = attempt(name, gplans, af.carve_bold_general)
+            if res is None:
+                log[name] = f"{why}; general fit: {gwhy}"
+                continue
+            how[name] = "general" + (" with anchors" if name in ANCHORS else "")
         out[name] = res
     log_path = ROOT / "build" / f"fit-{v['look'].replace(' ', '_').replace(',', '').replace(chr(39), '')}.json"
     log_path.parent.mkdir(exist_ok=True)
-    log_path.write_text(json.dumps({"fitted": sorted(out), "not_fitted": log}, indent=1), encoding="utf-8")
+    log_path.write_text(json.dumps({"fitted": sorted(out), "general": how, "not_fitted": log}, indent=1),
+                        encoding="utf-8")
     return out
 
 

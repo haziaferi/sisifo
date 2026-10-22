@@ -9,6 +9,7 @@ them once carve is tied to size. "plain" is Sisifo at CARV 0 throughout: a hidde
 import json
 import pathlib
 import random
+import shutil
 import sys
 
 sys.path.insert(0, str(pathlib.Path.home() / ".claude" / "tools"))
@@ -18,7 +19,10 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 ROUND = sys.argv[1] if len(sys.argv) > 1 else "1"
 OUT = ROOT / "build" / ("carve" if ROUND == "1" else f"carve{ROUND}")
 # round 2 (personality) adds Ortica Angular Bold as a second reference; it has one weight, used for every line
-VARIANTS = {"1": ["A", "B", "C", "D", "E"], "2": ["B", "R", "RL", "G", "GL"]}[ROUND]
+VARIANTS = {"1": ["A", "B", "C", "D", "E"], "2": ["B", "R", "RL", "G", "GL"], "3": ["GL"]}[ROUND]
+# round 3 re-scores GL after the guided fits and the evened 3, 8, S, beside round 2's GL (its specimen image is kept;
+# the font itself was rebuilt)
+PRIOR = {"3": {"GL_r2": ROOT / "build" / "carve2" / "named" / "GL.png"}}.get(ROUND, {})
 ANGULAR = ROOT.parent / "ortica-src" / "fonts" / "OrticaAngular-Bold.otf"
 TEXT = ("Labels stay in the list for reuse. Mobilità ed equilibrio, perché è così: "
         "a short walk, then the next set.")
@@ -60,7 +64,7 @@ def main():
     if ROUND != "1":
         entries.append(("angular", ANGULAR, 100))
     rng = random.Random(20261022)
-    codes = [f"K{i}" for i in range(1, len(entries) + 1)]
+    codes = [f"K{i}" for i in range(1, len(entries) + len(PRIOR) + 1)]
     rng.shuffle(codes)
     blind = {}
     (OUT / "named").mkdir(parents=True, exist_ok=True)
@@ -69,6 +73,13 @@ def main():
         for (name, font, carve), code in zip(entries, codes):
             render(page(font, carve, f"Sisifo {name}"), OUT / "named" / f"{name}.png")
             render(page(font, carve, ""), OUT / "blind" / f"{code}.png")
+            blind[code] = name
+        for (name, png), code in zip(PRIOR.items(), codes[len(entries):]):
+            shutil.copy(png, OUT / "named" / f"{name}.png")
+            # the judges get that round's unlabelled copy: the named image says "Sisifo GL" at the top
+            prior_codes = json.loads((png.parent.parent / "blind_codes.json").read_text(encoding="utf-8"))
+            prior_code = next(c for c, n in prior_codes.items() if n == png.stem)
+            shutil.copy(png.parent.parent / "blind" / f"{prior_code}.png", OUT / "blind" / f"{code}.png")
             blind[code] = name
     finally:
         hb.close_all()

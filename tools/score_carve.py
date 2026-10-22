@@ -37,7 +37,9 @@ import gate  # noqa: E402
 ROUND = sys.argv[2] if len(sys.argv) > 2 else "1"
 OUT = ROOT / "build" / ("carve" if ROUND == "1" else f"carve{ROUND}")
 ORTICA = SEARCH / "ortica-src" / "fonts" / "OrticaLinear-Regular.otf"
-VARIANTS = {"1": ["A", "B", "C", "D", "E"], "2": ["B", "R", "RL", "G", "GL"]}[ROUND]
+VARIANTS = {"1": ["A", "B", "C", "D", "E"], "2": ["B", "R", "RL", "G", "GL"], "3": ["GL"]}[ROUND]
+# round 3: round 2's GL is judged again beside the new GL; its measured axes come from round 2
+PRIOR = {"3": {"GL_r2": ("carve2", "GL")}}.get(ROUND, {})
 # round 2 (owner): a blind "personality" axis, judged against two unnamed references, plain and Ortica Angular
 JUDGED = ["stone", "carving", "calm"] + (["personality"] if ROUND != "1" else [])
 CONTROLS = ["plain"] + (["angular"] if ROUND != "1" else [])
@@ -197,8 +199,10 @@ def combine():
     codes = json.loads((OUT / "blind_codes.json").read_text(encoding="utf-8"))
     judges = [json.loads(p.read_text(encoding="utf-8")) for p in sorted(OUT.glob("judge_*.json"))]
     by_name = {name: code for code, name in codes.items()}
+    for name, (folder, v) in PRIOR.items():
+        m[name] = json.loads((ROOT / "build" / folder / "measured.json").read_text(encoding="utf-8"))[v]
     rows = []
-    for v in VARIANTS:
+    for v in VARIANTS + list(PRIOR):
         code, x = by_name[v], m[v]
         votes = {k: [j[code][k] for j in judges] for k in JUDGED}
         r = {"variant": v, "code": code, "harmony": x["harmony"], "numbers": x["numbers"],

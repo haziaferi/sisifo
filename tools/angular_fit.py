@@ -16,6 +16,7 @@ Glyphs that cannot be fitted return None, and carve.py carves them with the chis
 """
 import math
 import pathlib
+import statistics
 
 import ufoLib2
 from fontTools.pens.boundsPen import BoundsPen
@@ -100,6 +101,60 @@ class _Collect:
         pass
 
 
+SHARP = 70   # degrees: a corner turning this much or more (a terminal, a join) is kept where Angular drew it
+
+
+def _turn(a, b, c):
+    v1, v2 = (b[0] - a[0], b[1] - a[1]), (c[0] - b[0], c[1] - b[1])
+    return math.degrees(math.atan2(v1[0] * v2[1] - v1[1] * v2[0], v1[0] * v2[0] + v1[1] * v2[1]))
+
+
+def _runs(poly):
+    """Index runs between sharp corners (terminals, joins): [sharp, facet corners..., next sharp]."""
+    k = len(poly)
+    sharp = [i for i in range(k) if abs(_turn(poly[i - 1], poly[i], poly[(i + 1) % k])) >= SHARP]
+    if len(sharp) < 2:
+        return []
+    return [[(sharp[j] + m) % k for m in range(((sharp[(j + 1) % len(sharp)] - sharp[j]) % k) + 1)]
+            for j in range(len(sharp))]
+
+
+def even(poly):
+    """Even out a polygon's facets (owner: "even out 3, 8, S"). Angular's own 3, 8 and S are cut unevenly (a 26-unit
+    facet beside a 170 in the 8's lower counter; a 408-unit spine beside 30s in the S): the hand-made irregularity
+    the design leaves out. Between two sharp corners (terminals, joins: kept where Angular drew them) the facet
+    corners are re-spaced at equal steps along Angular's own edge, so the outline stays Angular's and the facets
+    come out one size. A contour with no sharp corners (a counter) is re-spaced all round, from its first corner."""
+    pts = [tuple(p) for p in poly]
+    k = len(pts)
+    runs = _runs(pts) or [[i % k for i in range(k + 1)]]
+    out = list(pts)
+    for run in runs:
+        path = [pts[i] for i in run]
+        seg = [math.dist(path[m], path[m + 1]) for m in range(len(path) - 1)]
+        total = sum(seg)
+        for j, idx in enumerate(run[1:-1], start=1):
+            goal, acc, m = total * j / (len(run) - 1), 0.0, 0
+            while m < len(seg) - 1 and acc + seg[m] < goal:
+                acc += seg[m]
+                m += 1
+            f = (goal - acc) / seg[m] if seg[m] else 0
+            out[idx] = (path[m][0] + (path[m + 1][0] - path[m][0]) * f, path[m][1] + (path[m + 1][1] - path[m][1]) * f)
+    return out
+
+
+def facet_spread(poly):
+    """Coefficient of variation of facet lengths within the runs between sharp corners: what 'even' improves."""
+    pts = [tuple(p) for p in poly]
+    runs = _runs(pts) or [list(range(len(pts))) + [0]]
+    cvs = []
+    for run in runs:
+        L = [math.dist(pts[run[m]], pts[run[m + 1]]) for m in range(len(run) - 1)]
+        if len(L) > 1:
+            cvs.append(statistics.pstdev(L) / statistics.mean(L))
+    return statistics.mean(cvs) if cvs else 0.0
+
+
 def _signed(pts):
     return sum(pts[i - 1][0] * pts[i][1] - pts[i][0] * pts[i - 1][1] for i in range(len(pts))) / 2
 
@@ -134,7 +189,7 @@ def _by_length(poly, samples, total, reverse):
     return out
 
 
-def plan(lin_bold, lin_font, ang, ang_font):
+def plan(lin_bold, lin_font, ang, ang_font, evened=False):
     """Per Linear contour: {"splits": {segment: sorted t values}, "corners": [(segment, t or None for its end
     point, Angular corner xy)] in contour order}, or None with the reason why the glyph cannot be fitted."""
     if [c.baseGlyph for c in lin_bold.components] != [c.baseGlyph for c in ang.components]:
@@ -148,6 +203,8 @@ def plan(lin_bold, lin_font, ang, ang_font):
     cl, ca = _centre(lin_bold, lin_font), _centre(ang, ang_font)
     dx = cl[0] - ca[0]
     angs = [[(x + dx, y) for x, y in c] for c in shapes]
+    if evened:
+        angs = [even(c) for c in angs]
     # match contours by their whole bounding box: an o's outside and its counter share a centre, and matching them
     # crosswise fills the same Bold shape while moving every point across the stroke
     box = lambda pts: (min(x for x, _ in pts), min(y for _, y in pts), max(x for x, _ in pts), max(y for _, y in pts))
@@ -192,6 +249,152 @@ def plan(lin_bold, lin_font, ang, ang_font):
         plans.append({"splits": {s: sorted(ts) for s, ts in splits.items()},
                       "corners": [(s, t, v) for (s, t), (_, v) in corners.items()]})
     return plans, None
+
+
+DMAX = 80   # general fit: an Angular corner further than this from any visible Linear point is left out
+
+
+def _ink_test(glyph):
+    from fontTools.pens.pointInsidePen import PointInsidePen
+
+    def ink(pt):
+        pen = PointInsidePen(None, pt)
+        for c in glyph.contours:
+            c.draw(pen)
+        return pen.getResult()
+    return ink
+
+
+def plan_general(lin_bold, lin_font, ang, ang_font, anchors=None, evened=False):
+    """The fit for glyphs plan() cannot take: Linear built from overlapping pieces (A, R, f-ligatures), or corners
+    whose nearest points come out of order (6, q). Angular is merged to its visible outline; each Angular corner
+    attaches to the nearest *visible* point of any Linear contour (ink on one side only), within DMAX. Linear's
+    points keep their own order, so nothing can scramble: between two corners that are neighbours on Angular's
+    outline the points go onto the edge joining them; elsewhere (the contour dives into an overlap) they move with
+    the corners around them. anchors: {Angular corner index in merged order: (contour, segment[, t])} pins a corner
+    to the end point of that segment, or to parameter t along it, for the few glyphs where nearest is wrong.
+    Returns per Linear contour {"splits", "corners": [(segment, t, xy, (polygon, vertex index))]}, or None, reason."""
+    if [c.baseGlyph for c in lin_bold.components] != [c.baseGlyph for c in ang.components]:
+        return None, "components differ"
+    cl, ca = _centre(lin_bold, lin_font), _centre(ang, ang_font)
+    dx = cl[0] - ca[0]
+    polys = [[(x + dx, y) for x, y in c] for c in _merge(ang)]
+    if evened:
+        polys = [even(c) for c in polys]
+    ink = _ink_test(lin_bold)
+    per = []
+    for c in lin_bold.contours:
+        segs, _ = _segments(c)
+        samples, total = _samples(segs)
+        vis = []
+        for k, smp in enumerate(samples):
+            a, b = samples[k - 1][2], samples[(k + 1) % len(samples)][2]
+            tx, ty = b[0] - a[0], b[1] - a[1]
+            n = math.hypot(tx, ty) or 1
+            nx, ny = -ty / n * 2, tx / n * 2
+            p = smp[2]
+            vis.append(not (ink((p[0] + nx, p[1] + ny)) and ink((p[0] - nx, p[1] - ny))))
+        ends = {}
+        for i in range(len(segs)):
+            nxt = (i + 1) % len(segs)
+            ends[i] = next(smp[3] for smp in samples if smp[0] == nxt and smp[1] == 0) if nxt else total
+        per.append((segs, samples, total, vis, ends))
+    corners = [dict() for _ in per]
+    flat_index = 0
+    for pi, poly in enumerate(polys):
+        for vi, v in enumerate(poly):
+            pin = (anchors or {}).get(flat_index)
+            flat_index += 1
+            if pin is not None:   # (contour, segment) for its end point, or (contour, segment, t) along it
+                ci, seg, t = pin if len(pin) == 3 else (*pin, None)
+                key, d = ((seg, t) if t is not None and 0.02 < t < 0.98 else (seg, None)), 0.0
+            else:
+                best = None
+                for ci, (segs, samples, total, vis, ends) in enumerate(per):
+                    for smp, ok in zip(samples, vis):
+                        if ok:
+                            d = math.dist(smp[2], v)
+                            if best is None or d < best[0]:
+                                best = (d, ci, smp)
+                if best is None or best[0] > DMAX:
+                    continue
+                d, ci, (seg, t, _, arc) = best
+                segs, samples, total, vis, ends = per[ci]
+                near = min(ends, key=lambda i: min(abs(ends[i] - arc), total - abs(ends[i] - arc)))
+                gap = min(abs(ends[near] - arc), total - abs(ends[near] - arc))
+                key = (near, None) if gap <= SNAP_ARC or not 0.02 < t < 0.98 else (seg, t)
+            if key in corners[ci] and corners[ci][key][0] <= d:
+                continue
+            corners[ci][key] = (d, v, (pi, vi))
+    plans = []
+    for ci in range(len(per)):
+        splits = {}
+        for (seg, t) in corners[ci]:
+            if t is not None:
+                splits.setdefault(seg, []).append(t)
+        plans.append({"splits": {s: sorted(ts) for s, ts in splits.items()},
+                      "corners": [(s, t, v, where) for (s, t), (_, v, where) in corners[ci].items()],
+                      "sizes": [len(p) for p in polys]})
+    if sum(len(p["corners"]) for p in plans) < 3:
+        return None, "fewer than three corners"
+    return plans, None
+
+
+def carve_bold_general(c0, plans):
+    """carve_bold() for plan_general(): edge placement only between corners that are neighbours on Angular's
+    outline; other pieces move with the corners around them and keep their curve (they lie in an overlap)."""
+    out = []
+    for cont, pl in zip(c0, plans):
+        pcs = cont["pieces"]
+        if len(pl["corners"]) < 2:
+            out.append({**cont, "pieces": [{**pc, "straight": False} for pc in pcs]})
+            continue
+        ends = [tuple(pc["pts"][-1]) for pc in pcs]
+        arc = [0.0]
+        for m in range(1, len(ends)):
+            arc.append(arc[-1] + math.dist(ends[m - 1], ends[m]))
+        total = arc[-1] + math.dist(ends[-1], ends[0])
+        at = {}
+        for seg, t, v, where in pl["corners"]:
+            at[next(m for m, pc in enumerate(pcs) if pc["end"] == (seg, t))] = (v, where)
+        order = sorted(at)
+        adjacent = lambda a, b: a[0] == b[0] and (abs(a[1] - b[1]) == 1 or abs(a[1] - b[1]) == pl["sizes"][a[0]] - 1)
+        new_end, on_edge = [], []
+        for m in range(len(pcs)):
+            if m in at:
+                new_end.append(at[m][0])
+                on_edge.append(True)
+                continue
+            k = max([o for o in order if o < m], default=order[-1])
+            nxt = min([o for o in order if o > m], default=order[0])
+            a0 = arc[k] if k < m else arc[k] - total
+            a1 = arc[nxt] if nxt > m else arc[nxt] + total
+            f = (arc[m] - a0) / (a1 - a0) if a1 != a0 else 0
+            (va, wa), (vb, wb) = at[k], at[nxt]
+            if adjacent(wa, wb):
+                new_end.append((va[0] + (vb[0] - va[0]) * f, va[1] + (vb[1] - va[1]) * f))
+                on_edge.append(True)
+            else:   # move with the corners around it
+                da = (va[0] - ends[k][0], va[1] - ends[k][1])
+                db = (vb[0] - ends[nxt][0], vb[1] - ends[nxt][1])
+                new_end.append((ends[m][0] + da[0] + (db[0] - da[0]) * f, ends[m][1] + da[1] + (db[1] - da[1]) * f))
+                on_edge.append(False)
+        pieces = []
+        for m, pc in enumerate(pcs):
+            p0, p3 = new_end[m - 1], new_end[m]
+            straight = on_edge[m - 1] and on_edge[m]
+            if len(pc["pts"]) == 4 and straight:
+                pts = [p0, (p0[0] + (p3[0] - p0[0]) / 3, p0[1] + (p3[1] - p0[1]) / 3),
+                       (p0[0] + 2 * (p3[0] - p0[0]) / 3, p0[1] + 2 * (p3[1] - p0[1]) / 3), p3]
+            elif len(pc["pts"]) == 4:   # handles follow their end points
+                o = pc["pts"]
+                pts = [p0, (o[1][0] + p0[0] - o[0][0], o[1][1] + p0[1] - o[0][1]),
+                       (o[2][0] + p3[0] - o[3][0], o[2][1] + p3[1] - o[3][1]), p3]
+            else:
+                pts = [p0, p3]
+            pieces.append({**pc, "pts": [list(q) for q in pts], "straight": straight})
+        out.append({**cont, "pieces": pieces})
+    return out
 
 
 def _split(P, ts):
@@ -292,7 +495,11 @@ def displaced(c0, c0_bold, c100_bold, strength, ratios=None):
         pieces = []
         for m, pc in enumerate(cont["pieces"]):
             p0, p3 = new_end[m - 1], new_end[m]
-            if len(pc["pts"]) == 4:
+            if len(pc["pts"]) == 4 and not b1["pieces"][m].get("straight", True):
+                o = pc["pts"]       # a piece left curved in Bold (in an overlap): handles follow their end points
+                full = [p0, (o[1][0] + p0[0] - o[0][0], o[1][1] + p0[1] - o[0][1]),
+                        (o[2][0] + p3[0] - o[3][0], o[2][1] + p3[1] - o[3][1]), p3]
+            elif len(pc["pts"]) == 4:
                 full = [p0, (p0[0] + (p3[0] - p0[0]) / 3, p0[1] + (p3[1] - p0[1]) / 3),
                         (p0[0] + 2 * (p3[0] - p0[0]) / 3, p0[1] + 2 * (p3[1] - p0[1]) / 3), p3]
             else:
@@ -331,12 +538,13 @@ def to_contours(conts):
     return res
 
 
-def angular_contours(lin_bold, lin_font, ang, ang_font):
-    """Angular's glyph as contours, shifted onto Linear's ink centre as the fit places it."""
+def angular_contours(lin_bold, lin_font, ang, ang_font, evened=False):
+    """Angular's glyph as contours (evened, if the fit was), shifted onto Linear's ink centre as the fit places it."""
     cl, ca = _centre(lin_bold, lin_font), _centre(ang, ang_font)
     dx = cl[0] - ca[0]
-    return [Contour(points=[Point(p.x + dx, p.y, type="line") for p in c if p.type is not None])
-            for c in ang.contours]
+    polys = _merge(ang) if evened else [[(p.x, p.y) for p in c if p.type is not None] for c in ang.contours]
+    return [Contour(points=[Point(x, y, type="line") for x, y in (even(c) if evened else c)])
+            for c in ([[(x + dx, y) for x, y in c] for c in polys])]
 
 
 def load_angular():

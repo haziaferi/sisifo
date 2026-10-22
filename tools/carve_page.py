@@ -19,7 +19,8 @@ OUT = ROOT / "build" / "carve" / "page"
 LOOK = {"A": "Angular: long flats, 45° facets", "B": "short flats, 45° facets", "C": "short flats, fine 25° facets",
         "D": "long flats, fine 25° facets", "E": "flats only, curves kept",
         "R": "chiselled rules: 42° cuts, counters out of phase", "RL": "chiselled rules, gentler at Light",
-        "G": "Ortica Angular's own cuts on Linear's outlines", "GL": "Angular's own cuts, gentler at Light"}
+        "G": "Ortica Angular's own cuts on Linear's outlines", "GL": "Angular's own cuts, gentler at Light",
+        "GL_r2": "round 2's GL, before the guided fits and evening"}
 # the panel's reasons, condensed (scores.json has them in full)
 NOTE = {
     "1": {
@@ -40,6 +41,12 @@ NOTE = {
         "R": "Practically the same as RL to the judges: consistent and clean, slightly mechanical.",
         "B": "Round 1's best, as the baseline: now read as \"a small step away from a generic serif\".",
     },
+    "3": {
+        "GL": "After your notes. The 6 is now Angular's 6: its arm curls and hooks, and it mirrors the 9 again. The "
+              "3, 8 and S have even facets (length spread 0.15 to 0.02, 0.39 to 0.08, 0.51 to 0.04). A, R, q, the "
+              "f-ligatures, @ and ® now carry Angular's cuts too: 170 glyphs instead of 154.",
+        "GL_r2": "Round 2's GL, judged again beside the new one. The panel scored the two the same on every axis.",
+    },
 }
 INTRO = {
     "1": ("Five ways to carve Ortica Linear, ranked by the eight axes. Titles and set numbers are carved (CARV 100). "
@@ -53,6 +60,12 @@ INTRO = {
           "<b>GL leads</b> (0.848), then G, which ties with RL and R; B trails. Angular's cuts bring the personality "
           "(GL 0.92, near Angular itself), while the rules bring cleaner, more even carving (0.75 against 0.58).",
           "Which should move on: GL as it is, GL with its lopsided digits and S evened out, or R?"),
+    "3": ("Round 3: GL after the guided fits and the evened 3, 8 and S, beside round 2's GL, with the same two "
+          "references.",
+          "<b>The panel scores them the same</b> (0.828 each). The same round 2 image scored 0.848 last round, so "
+          "differences under about 0.02 are beyond what three judges see on a whole page. The changes are measured "
+          "under the new GL; look at the 6, 9, 3, 8 and S in the set numbers and titles.",
+          "Does the new GL read better to you on the phone than round 2's?"),
 }
 AXES = [("personality", "Personality"), ("stone", "Stone"), ("carving", "Carving"), ("calm", "Calm"),
         ("harmony", "Harmony"), ("numbers", "Numbers"), ("technical", "Technical"), ("small", "Small text"),

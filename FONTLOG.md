@@ -53,3 +53,16 @@ large. Sisifo is not Ortica and is not endorsed by its authors.
   All four pass the gate. Nine axes with a blind personality axis (references: plain, and Angular Bold):
   GL 0.848, G 0.827, RL 0.814, R 0.810, B 0.753. Personality GL 0.92 (Angular itself 3.7 of 4); carving is
   stronger in the rules (0.75) than in Angular's cuts (0.50-0.58: lopsided 3 and 8, skewed S, uneven facets).
+- Round 3 (owner: guided fits for the 6 and the other fallbacks, even out 3, 8, S; re-score GL):
+  - A general fit (angular_fit.plan_general) for glyphs the first fit could not take: Angular merged to its
+    visible outline, corners attached to the nearest visible Linear point; between corners that are neighbours on
+    Angular's outline points go onto the edge, elsewhere (inside an overlap) they move with the corners. Adds A, AE,
+    R, q, @, (R), pilcrow and the f-ligatures: GL now fits 170 glyphs; Eng, Thorn, perthousand (components),
+    ae and foursuperior stay on the rules.
+  - The 6 by hand anchors (carve.ANCHORS): Angular's inner-arm and hook corners pinned along Linear's inner arm
+    and terminal; overlap with Angular's 6 at Bold 0.989, where its arm had been one straight cut.
+  - 3, 8, S evened (angular_fit.even): Angular's facet corners re-spaced at equal steps along its own edge between
+    sharp corners. Facet-length spread 0.15 -> 0.02 (3), 0.39 -> 0.08 (8), 0.51 -> 0.04 (S). Smoothing (Taubin)
+    was tried first and made the S worse (turn spread 10.5 -> 17.0); the lean measure showed no lean to fix.
+  - Gate passes; 137 tests. Blind re-score, new GL beside round 2's GL: 0.828 each, every axis equal. The same
+    round 2 image scored 0.848 in round 2, so the panel cannot resolve differences under about 0.02.

@@ -1,0 +1,188 @@
+{
+ "rows": [
+  {
+   "variant": "GL",
+   "code": "K1",
+   "harmony": 0.688,
+   "numbers": 0.894,
+   "technical": 1.0,
+   "small": 0.991,
+   "faithful": 0.964,
+   "stone": 0.75,
+   "carving": 0.667,
+   "personality": 0.75,
+   "calm": 0.819,
+   "votes": {
+    "stone": [
+     3,
+     3,
+     3
+    ],
+    "carving": [
+     3,
+     3,
+     2
+    ],
+    "calm": [
+     4,
+     4,
+     3
+    ],
+    "personality": [
+     3,
+     3,
+     3
+    ]
+   },
+   "disagreement": 1,
+   "why": [
+    {
+     "stone": "The bold display and set numbers are faceted like chiselled inscription letters, while the regular titles stay a calm serif with only a faint hewn edge.",
+     "carving": "The facets on S, 3, 5, 6 and 8 share one polygonal logic and look deliberate, with the 6 bowl cleaner than K3's; 3/8 and 0/O are still easy to tell apart, though a few joins are slightly uneven.",
+     "calm": "Light regular titles and a measured bold give it presence without shouting, and the body text stays quiet.",
+     "personality": "The cut-stone bold numerals are recognisable, though the regular weight reads close to a conventional book serif."
+    },
+    {
+     "stone": "Faceted, flat-cut curves on the bold S, 3, 5, 6, 8 and O read clearly as hewn letters on an inscriptional serif skeleton, though the regular titles stay close to a conventional book serif.",
+     "carving": "Facets are applied consistently across bold capitals and digits with crisp straight cuts, 0/O and 3/8 stay distinct, but a few joins (the tip of the 6, the lower bowl of the 5) are slightly lopsided and the regular weight carries the carving only faintly.",
+     "calm": "A measured serif with moderate weight contrast between regular and bold; the cuts add presence without shouting.",
+     "personality": "The polygonal bowls give it a recognisable chiselled voice, though the regular titles fall back toward a generic serif."
+    },
+    {
+     "stone": "Faceted bold caps, Squat and set numbers read as hewn inscription, though the regular titles stay a smooth bookish serif.",
+     "carving": "Facets on S, O, 0 and 3/8 are crisp, but the 6 in 62.5 is mostly round with only a few facets so it looks pasted on next to the polygonal 5 and O, and the O/0 are slightly lumpy.",
+     "calm": "Moderate weight and generous serifs keep it steady; the angular bold is present without shouting.",
+     "personality": "The chiselled polygonal bounds give a recognisable voice, slightly diluted by the inconsistent 6."
+    }
+   ],
+   "total": 0.8284,
+   "tie_with_next": true
+  },
+  {
+   "variant": "GL_r2",
+   "code": "K3",
+   "harmony": 0.688,
+   "numbers": 0.894,
+   "technical": 1.0,
+   "small": 0.991,
+   "faithful": 0.965,
+   "stone": 0.75,
+   "carving": 0.667,
+   "personality": 0.75,
+   "calm": 0.819,
+   "votes": {
+    "stone": [
+     3,
+     3,
+     3
+    ],
+    "carving": [
+     2,
+     3,
+     3
+    ],
+    "calm": [
+     4,
+     4,
+     3
+    ],
+    "personality": [
+     3,
+     3,
+     3
+    ]
+   },
+   "disagreement": 1,
+   "why": [
+    {
+     "stone": "Nearly identical to K1, with faceted bold capitals and digits that read as cut stone.",
+     "carving": "It uses the same polygonal system as K1, but the 6 and 5 bowls show slightly more irregular, lumpy facets, so the cuts look a bit less even and more processed.",
+     "calm": "It has the same quiet regular weight and measured bold, so it is calm with presence.",
+     "personality": "Its faceted numerals have the same distinct voice as K1."
+    },
+    {
+     "stone": "Nearly identical to K1: faceted bold capitals and digits read as cut stone over an inscriptional serif base, regular titles less so.",
+     "carving": "Coherent, crisp facets across S, 3, 5, 6, 8 and O with digits easy to tell apart; the 6 and 5 bowls are a touch more evenly polygonal than K1's, but the regular weight still barely shows the cuts.",
+     "calm": "Steady and composed, with the bold giving presence without aggression.",
+     "personality": "Distinct chiselled voice in the bold and numerals, softened by a conventional-looking regular."
+    },
+    {
+     "stone": "Same faceted bold display as K1, reading as chiselled stone in Squat, SISIFO and the set numbers, with smooth regular titles.",
+     "carving": "The 6 is faceted like the 5, S, 3, 8 and O, so the bold digits share one coherent cut; facets are crisp though O/0 remain a touch uneven and 0/O stay distinguishable by width.",
+     "calm": "Steady weight and open spacing; angularity adds presence without aggression.",
+     "personality": "Distinct chiselled-polygon voice applied more consistently than K1."
+    }
+   ],
+   "total": 0.8284,
+   "tie_with_next": false
+  }
+ ],
+ "control_votes": {
+  "plain": {
+   "stone": [
+    1,
+    1,
+    1
+   ],
+   "carving": [
+    0,
+    0,
+    0
+   ],
+   "calm": [
+    3,
+    4,
+    4
+   ],
+   "personality": [
+    1,
+    1,
+    1
+   ]
+  },
+  "angular": {
+   "stone": [
+    4,
+    4,
+    4
+   ],
+   "carving": [
+    3,
+    3,
+    3
+   ],
+   "calm": [
+    2,
+    2,
+    2
+   ],
+   "personality": [
+    4,
+    4,
+    4
+   ]
+  }
+ },
+ "plain_control_votes": {
+  "stone": [
+   1,
+   1,
+   1
+  ],
+  "carving": [
+   0,
+   0,
+   0
+  ],
+  "calm": [
+   3,
+   4,
+   4
+  ],
+  "personality": [
+   1,
+   1,
+   1
+  ]
+ }
+}

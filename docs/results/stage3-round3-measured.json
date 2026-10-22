@@ -1,0 +1,39 @@
+{
+ "GL": {
+  "harmony": 0.688,
+  "numbers": 0.894,
+  "calm_measured": 0.722,
+  "technical": 1.0,
+  "size_kb": 208,
+  "numbers_parts": {
+   "tabular": 1.0,
+   "lining": 1.0,
+   "distinct": 1.0,
+   "decimal": 0.577
+  },
+  "xheight_ratio": 1.0,
+  "width_ratio": 1.0,
+  "line_iou": 0.974,
+  "small": 0.991,
+  "shape_iou": 0.8915,
+  "shape_iou_plain": 0.9851,
+  "worst": [
+   [
+    0.7267267267267268,
+    "6"
+   ],
+   [
+    0.7827476038338658,
+    "C"
+   ],
+   [
+    0.7996965098634294,
+    "U"
+   ]
+  ],
+  "advances_equal": 1,
+  "kern_diff_px": 0.0,
+  "kerning": 1.0,
+  "faithful": 0.964
+ }
+}
