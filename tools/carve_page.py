@@ -20,7 +20,9 @@ LOOK = {"A": "Angular: long flats, 45° facets", "B": "short flats, 45° facets"
         "D": "long flats, fine 25° facets", "E": "flats only, curves kept",
         "R": "chiselled rules: 42° cuts, counters out of phase", "RL": "chiselled rules, gentler at Light",
         "G": "Ortica Angular's own cuts on Linear's outlines", "GL": "Angular's own cuts, gentler at Light",
-        "GL_r2": "round 2's GL, before the guided fits and evening"}
+        "GL_r2": "round 2's GL, before the guided fits and evening",
+        "GLP": "GL + proportioned capitals (ss01): Sisifo's own, carved, re-proportioned to Cinzel's widths",
+        "GLZ": "GL + Cinzel's capitals (ss01), carved by the rules"}
 # the panel's reasons, condensed (scores.json has them in full)
 NOTE = {
     "1": {
@@ -47,6 +49,16 @@ NOTE = {
               "f-ligatures, @ and ® now carry Angular's cuts too: 170 glyphs instead of 154.",
         "GL_r2": "Round 2's GL, judged again beside the new one. The panel scored the two the same on every axis.",
     },
+    "4": {
+        "GLZ": "\"The most convincing Roman inscriptional capitals of the set\": wide round O, C, D against narrow E, "
+               "S, B, a classical Q tail, a dignified rhythm. It also lifts the carving score above GL's. The cut "
+               "finish puts it above Cinzel itself on inscription (0.92 against 0.58). Known gap: no kerning yet for "
+               "these capitals.",
+        "GL": "Today's release, without ss01: the title lines in capitals use the default capitals. Read as sturdy "
+              "and dignified, \"more poster than lapidary\".",
+        "GLP": "Read as condensed by all three judges. Sisifo's O, C and D are already about as wide as Cinzel's "
+               "(ratios 1.02 to 1.05), so the stretch mostly narrowed E, S and B and the set lost width contrast.",
+    },
 }
 INTRO = {
     "1": ("Five ways to carve Ortica Linear, ranked by the eight axes. Titles and set numbers are carved (CARV 100). "
@@ -66,8 +78,14 @@ INTRO = {
           "differences under about 0.02 are beyond what three judges see on a whole page. The changes are measured "
           "under the new GL; look at the 6, 9, 3, 8 and S in the set numbers and titles.",
           "Does the new GL read better to you on the phone than round 2's?"),
+    "4": ("Stage 4: inscriptional capitals (ss01), for titles set in capitals. Two sources, both carved: Sisifo's own "
+          "capitals re-proportioned (GLP) and Cinzel's capitals (GLZ); today's release (GL) is the baseline. Ten "
+          "axes, with a blind inscription axis; plain Sisifo and Cinzel are the references.",
+          "<b>GLZ leads clearly</b> (0.868; GL 0.811, GLP 0.767), first on every judged axis. Look at the block "
+          "\"titles in capitals (ss01)\" in each image.",
+          "Should GLZ become the release, with Cinzel's capitals as ss01?"),
 }
-AXES = [("personality", "Personality"), ("stone", "Stone"), ("carving", "Carving"), ("calm", "Calm"),
+AXES = [("inscription", "Inscription"), ("personality", "Personality"), ("stone", "Stone"), ("carving", "Carving"), ("calm", "Calm"),
         ("harmony", "Harmony"), ("numbers", "Numbers"), ("technical", "Technical"), ("small", "Small text"),
         ("faithful", "Faithful (½)")]
 
@@ -107,6 +125,9 @@ def main():
     if "angular" in controls:
         refs += "\n" + reference("angular", "Ang", "Ortica Angular Bold, its one weight on every line",
                                  controls["angular"], keys)
+    if "cinzel" in controls:
+        refs += "\n" + reference("cinzel", "Cin", "Cinzel, uncarved, the inscriptional reference",
+                                 controls["cinzel"], keys)
     intro = "".join(f"<p>{p}</p>" for p in INTRO[ROUND])
     cards = "\n".join(card(r) for r in s["rows"])
     page = f"""<title>Sisifo Carve Variants</title>

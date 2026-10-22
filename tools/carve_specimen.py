@@ -19,13 +19,26 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 ROUND = sys.argv[1] if len(sys.argv) > 1 else "1"
 OUT = ROOT / "build" / ("carve" if ROUND == "1" else f"carve{ROUND}")
 # round 2 (personality) adds Ortica Angular Bold as a second reference; it has one weight, used for every line
-VARIANTS = {"1": ["A", "B", "C", "D", "E"], "2": ["B", "R", "RL", "G", "GL"], "3": ["GL"]}[ROUND]
+VARIANTS = {"1": ["A", "B", "C", "D", "E"], "2": ["B", "R", "RL", "G", "GL"], "3": ["GL"],
+            "4": ["GLP", "GLZ", "GL"]}[ROUND]
 # round 3 re-scores GL after the guided fits and the evened 3, 8, S, beside round 2's GL (its specimen image is kept;
 # the font itself was rebuilt)
 PRIOR = {"3": {"GL_r2": ROOT / "build" / "carve2" / "named" / "GL.png"}}.get(ROUND, {})
 ANGULAR = ROOT.parent / "ortica-src" / "fonts" / "OrticaAngular-Bold.otf"
+CINZEL = ROOT.parent / "fonts" / "cinzel" / "Cinzel-wght.ttf"
 TEXT = ("Labels stay in the list for reuse. Mobilità ed equilibrio, perché è così: "
         "a short walk, then the next set.")
+
+
+def CAPS_BLOCK(v, carve):
+    """Round 4 (stage 4): titles in capitals with the inscriptional set on (a no-op for faces without ss01)."""
+    if ROUND != "4":
+        return ""
+    ss = "font-feature-settings:'ss01' 1;"
+    return (f'<div class="lab">titles in capitals (ss01)</div>'
+            f'<div style="font-size:56px;line-height:62px;{ss}{v(600, carve)}">SISIFO</div>'
+            f'<div style="font-size:40px;line-height:46px;{ss}{v(400, carve)}">BENCH PRESS</div>'
+            f'<div style="font-size:28px;line-height:34px;{ss}{v(700, carve)}">MOBILITÀ · EQUILIBRIO</div>')
 
 
 def page(font_path, carve, label):
@@ -42,7 +55,7 @@ font-family:S}} .lab{{font:500 9px monospace;color:#575757;margin:10px 0 2px}}
 <div class="lab">titles, bold</div>
 <div style="font-size:44px;line-height:50px;{v(700, carve)}">Squat</div>
 <div style="font-size:28px;line-height:34px;{v(700, carve)}">Mobilità · Equilibrio</div>
-<div style="font-size:34px;line-height:40px;{v(600, carve)}">SISIFO · ROCK · 1/7 3/8 0/O</div>
+<div style="font-size:34px;line-height:40px;{v(600, carve)}">SISIFO · ROCK · 1/7 3/8 0/O</div>{CAPS_BLOCK(v, carve)}
 <div class="lab">set numbers</div>
 <div class="n" style="font-size:56px;line-height:62px;{v(700, carve)}">62.5 <span>kg</span> × 5</div>
 <div class="n" style="font-size:56px;line-height:62px;{v(400, carve)}">147.5 <span>kg</span> × 12</div>
@@ -55,14 +68,16 @@ def render(html, out):
     p = OUT / "html" / (out.stem + ".html")
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(html, encoding="utf-8")
-    hb.screenshot(str(p), str(out), 1080, 2450)
+    hb.screenshot(str(p), str(out), 1080, 2450 if ROUND != "4" else 2900)   # round 4 adds a block of capitals
 
 
 def main():
     fonts = {v: ROOT / "build" / "variants" / v / "Sisifo[CARV,wght].ttf" for v in VARIANTS}
     entries = [(v, fonts[v], 100) for v in VARIANTS] + [("plain", fonts[VARIANTS[0]], 0)]
-    if ROUND != "1":
+    if ROUND in ("2", "3"):
         entries.append(("angular", ANGULAR, 100))
+    if ROUND == "4":   # the reference for the inscriptional axis
+        entries.append(("cinzel", CINZEL, 100))
     rng = random.Random(20261022)
     codes = [f"K{i}" for i in range(1, len(entries) + len(PRIOR) + 1)]
     rng.shuffle(codes)

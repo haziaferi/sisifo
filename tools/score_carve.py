@@ -37,17 +37,21 @@ import gate  # noqa: E402
 ROUND = sys.argv[2] if len(sys.argv) > 2 else "1"
 OUT = ROOT / "build" / ("carve" if ROUND == "1" else f"carve{ROUND}")
 ORTICA = SEARCH / "ortica-src" / "fonts" / "OrticaLinear-Regular.otf"
-VARIANTS = {"1": ["A", "B", "C", "D", "E"], "2": ["B", "R", "RL", "G", "GL"], "3": ["GL"]}[ROUND]
+VARIANTS = {"1": ["A", "B", "C", "D", "E"], "2": ["B", "R", "RL", "G", "GL"], "3": ["GL"],
+            "4": ["GLP", "GLZ", "GL"]}[ROUND]
 # round 3: round 2's GL is judged again beside the new GL; its measured axes come from round 2
 PRIOR = {"3": {"GL_r2": ("carve2", "GL")}}.get(ROUND, {})
 # round 2 (owner): a blind "personality" axis, judged against two unnamed references, plain and Ortica Angular
-JUDGED = ["stone", "carving", "calm"] + (["personality"] if ROUND != "1" else [])
-CONTROLS = ["plain"] + (["angular"] if ROUND != "1" else [])
+JUDGED = ["stone", "carving", "calm"] + (["personality"] if ROUND != "1" else []) + (["inscription"] if ROUND == "4"
+                                                                                     else [])
+CONTROLS = ["plain"] + (["angular"] if ROUND in ("2", "3") else []) + (["cinzel"] if ROUND == "4" else [])
 SMALL = "Labels stay in the list for reuse. Mobilità ed equilibrio, perché è così."
 CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 AXES = {"harmony": 1, "stone": 1, "numbers": 1, "calm": 1, "technical": 1, "carving": 1, "small": 1, "faithful": 0.5}
 if ROUND != "1":
     AXES["personality"] = 1
+if ROUND == "4":          # stage 4 (owner): a blind "inscriptional character" axis
+    AXES["inscription"] = 1
 
 
 def vf(v):

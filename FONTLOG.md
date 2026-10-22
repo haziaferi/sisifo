@@ -66,3 +66,14 @@ large. Sisifo is not Ortica and is not endorsed by its authors.
     was tried first and made the S worse (turn spread 10.5 -> 17.0); the lean measure showed no lean to fix.
   - Gate passes; 137 tests. Blind re-score, new GL beside round 2's GL: 0.828 each, every axis equal. The same
     round 2 image scored 0.848 in round 2, so the panel cannot resolve differences under about 0.02.
+
+## 0.4 (2026-10-23), stage 4: inscriptional capitals (owner review pending)
+- `ss01`: A-Z plus every accented capital built from components (accents re-centred over the new capital; marks
+  below seated by boolean check: overlapping, no loose part, no pinhole). Built in memory at build time
+  (tools/ss01.py); default glyphs untouched.
+- Two sources, both carved: GLP, Sisifo's own carved capitals re-proportioned to Cinzel's measured widths in bands
+  that keep stems; GLZ, Cinzel's capitals (SIL OFL 1.1, Copyright 2020 The Cinzel Project Authors) at the weight
+  whose I stem matches Sisifo's (Light extrapolated), carved by the rules.
+- Both pass the gate. Blind panel, ten axes with inscription: GLZ 0.868, GL (release, no ss01) 0.811, GLP 0.767.
+  GLP read as condensed: Sisifo's O, C, D are already about as wide as Cinzel's (1.02-1.05), so it mainly narrowed
+  E, S, B. GLZ has no kerning for its capitals yet.

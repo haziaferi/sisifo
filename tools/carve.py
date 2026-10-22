@@ -11,6 +11,7 @@ Where the cuts fall is decided once, on Regular, as fractions of each segment's 
 turn either side of an extreme make a flat, and the rest of the curve gets one facet per `theta` degrees (or stays
 curved when theta is None). Widths, kerning and components are untouched.
 """
+import copy
 import math
 import pathlib
 import sys
@@ -39,6 +40,9 @@ VARIANTS = {
     "GL": {"phi": 22.5, "theta": 42, "phase": True, "local": True, "fit": "angular",
            "look": "Angular's own cuts, gentler at Light", "strength": {"Light": 0.5, "Regular": 0.75, "Bold": 1.0}},
 }
+# stage 4: the release carve plus inscriptional capitals (ss01), P = proportions only, Z = Cinzel's capitals
+VARIANTS["GLP"] = {**VARIANTS["GL"], "ss01": "P", "look": "GL with proportioned capitals"}
+VARIANTS["GLZ"] = {**VARIANTS["GL"], "ss01": "Z", "look": "GL with Cinzel capitals"}
 # hand pins for the general Angular fit: glyph -> {Angular corner (merged order): (contour, segment[, t])}
 ANCHORS = {
     # Angular's 6 curls its arm and hooks the terminal (corners 11-14); Linear's arm is thin and straight, so the
@@ -482,6 +486,10 @@ def make_masters(variant, out_dir):
     out_dir = pathlib.Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     src = {s: ufoLib2.Font.open(ROOT / "sources" / f"Sisifo-{s}.ufo") for s in STYLES}
+    plain_src = {s: copy.deepcopy(f) for s, f in src.items()}
+    if v.get("ss01") == "Z":   # stage 4: Cinzel's capitals, added before the carve plans them (the rules cut them)
+        import ss01
+        ss01.add(src, "Z")
     caps = {s: cut_cap(f) for s, f in src.items()}
     metrics = {s: _metrics(f) for s, f in src.items()}
     plans = {name: plan_glyph({s: src[s][name] for s in STYLES}, caps, metrics, v["phi"], v["theta"],
@@ -492,7 +500,7 @@ def make_masters(variant, out_dir):
     for s in STYLES:
         strength = v.get("strength", {}).get(s, 1.0)
         for carve_value in (0, 100):
-            f = ufoLib2.Font.open(ROOT / "sources" / f"Sisifo-{s}.ufo")
+            f = copy.deepcopy(src[s])
             for g in f:
                 if g.name in fitted:
                     g.clearContours()
@@ -508,6 +516,12 @@ def make_masters(variant, out_dir):
                         new.append(out)
                     g.clearContours()
                     g.contours.extend(new)
+            if v.get("ss01") == "P":   # stage 4: GL's own capitals, carved or plain, re-proportioned
+                import ss01
+                ss01.add({s: f}, "P", ref={s: plain_src[s]})
+            elif v.get("ss01") == "Z":   # marks below Cinzel's capitals, seated on the carved letter
+                import ss01
+                ss01.reseat_below_marks(f)
             if carve_value:
                 f.info.styleName = f"{s} Carved"
             p = out_dir / f"Sisifo-{s}-C{carve_value}.ufo"

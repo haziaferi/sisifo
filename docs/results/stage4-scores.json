@@ -1,0 +1,288 @@
+{
+ "rows": [
+  {
+   "variant": "GLZ",
+   "code": "K4",
+   "harmony": 0.688,
+   "numbers": 0.894,
+   "technical": 1.0,
+   "small": 0.991,
+   "faithful": 0.964,
+   "stone": 0.833,
+   "carving": 0.833,
+   "personality": 0.833,
+   "inscription": 0.917,
+   "calm": 0.778,
+   "votes": {
+    "stone": [
+     4,
+     3,
+     3
+    ],
+    "carving": [
+     4,
+     3,
+     3
+    ],
+    "calm": [
+     4,
+     3,
+     3
+    ],
+    "personality": [
+     4,
+     3,
+     3
+    ],
+    "inscription": [
+     4,
+     3,
+     4
+    ]
+   },
+   "disagreement": 1,
+   "why": [
+    {
+     "stone": "Faceted bold and numerals paired with chiselled Roman capitals read most convincingly as letters cut into stone.",
+     "carving": "One coherent faceted language runs through the lowercase, the capitals with their long Q tail, and the digits; the cuts are crisp and the 0 and O are clearly distinct.",
+     "calm": "The lighter, open capitals are dignified and steady while the bold keeps its presence.",
+     "personality": "The mix of Roman capital proportions and polygonal chisel facets is a distinctive, recognisable voice.",
+     "inscription": "Wide round O, C and D against narrow E, S and B with a measured rhythm give classical inscriptional proportions, close to Trajan or Cinzel with a cut finish."
+    },
+    {
+     "stone": "Its chiselled bold faceting and cut caps read as hewn stone while staying controlled.",
+     "carving": "Crisp, consistent cuts across caps, lowercase and digits, and the caps feel part of the same design, though the carved bold digits sit beside an uncarved regular set.",
+     "calm": "Bold presence with a measured rhythm; nothing feels aggressive.",
+     "personality": "The faceted bold with its classical caps (including the long-tailed Q) has a recognisable character.",
+     "inscription": "The ss01 caps are wide-round and lighter than K1's, with a classical Q tail and a dignified rhythm close to Roman inscription."
+    },
+    {
+     "stone": "Faceted bold and numbers plus flared, wedge-serifed ss01 capitals read clearly as inscription in stone.",
+     "carving": "Cuts are crisp and digits distinct; the flared ss01 capitals are a slightly different idiom from the faceted lowercase, but they still belong together.",
+     "calm": "Calm, dignified presence; the lighter ss01 weight keeps the capitals from shouting.",
+     "personality": "Carved lowercase combined with glyphic flared capitals and the long Q tail make it memorable.",
+     "inscription": "Wide round O C, narrow E S R, flared glyphic terminals and an even rhythm give the most convincing Roman inscriptional capitals of the set."
+    }
+   ],
+   "total": 0.8683,
+   "tie_with_next": false
+  },
+  {
+   "variant": "GL",
+   "code": "K1",
+   "harmony": 0.688,
+   "numbers": 0.894,
+   "technical": 1.0,
+   "small": 0.991,
+   "faithful": 0.964,
+   "stone": 0.75,
+   "carving": 0.75,
+   "personality": 0.75,
+   "inscription": 0.667,
+   "calm": 0.736,
+   "votes": {
+    "stone": [
+     3,
+     3,
+     3
+    ],
+    "carving": [
+     3,
+     3,
+     3
+    ],
+    "calm": [
+     3,
+     3,
+     3
+    ],
+    "personality": [
+     3,
+     3,
+     3
+    ],
+    "inscription": [
+     2,
+     3,
+     3
+    ]
+   },
+   "disagreement": 1,
+   "why": [
+    {
+     "stone": "Faceted, chiselled bold weights and heavy wedge-serif capitals feel hewn and grounded, though the regular titles stay a fairly conventional book serif.",
+     "carving": "The faceted cuts are crisp and consistent across bold lowercase, capitals and digits (0 vs O distinct), but the ss01 capitals are a much heavier, blockier voice than the regular lowercase, so they read slightly pasted on.",
+     "calm": "Steady and grounded, but the very heavy ss01 SISIFO block gets close to shouting.",
+     "personality": "The polygonal facets give it a recognisable stonecut voice without being gimmicky.",
+     "inscription": "The capitals are sturdy, but E, B and S are wide and heavy, so the proportions read more as a slab-like wedge serif than classical Roman lettering."
+    },
+    {
+     "stone": "Faceted, chiselled bold weights and the wedge-cut caps read convincingly as hewn letters while the regular stays grounded.",
+     "carving": "The cuts are angular and deliberate and shared by caps, lowercase and digits, though the bold 62.5 looks slightly rough beside the smooth regular 147.5.",
+     "calm": "It has strong presence in bold without shouting, and the regular weights are steady.",
+     "personality": "The faceted bold and the heavy cut SISIFO give it a recognisable voice.",
+     "inscription": "The ss01 caps are wide and dignified with round O and C, close to Roman proportions, though the heavy bold SISIFO leans more poster than lapidary."
+    },
+    {
+     "stone": "Faceted, polygonal bowls on bold text, numbers and capitals give a clear hewn-stone feel without losing the serif base.",
+     "carving": "Facets are applied consistently across lowercase, capitals and digits, and 0/O, 1/7, 3/8 stay distinct, though the heaviest bold counters look slightly lumpy.",
+     "calm": "Steady, well-weighted presence; the heavy ss01 SISIFO is assertive but not shouting.",
+     "personality": "The chiselled polygon curves give a recognisable voice on top of a familiar book serif.",
+     "inscription": "ss01 capitals are wide with round O C and narrower E S, giving a dignified inscriptional rhythm, but serifs stay bookish rather than Roman-cut."
+    }
+   ],
+   "total": 0.8114,
+   "tie_with_next": false
+  },
+  {
+   "variant": "GLP",
+   "code": "K2",
+   "harmony": 0.688,
+   "numbers": 0.894,
+   "technical": 1.0,
+   "small": 0.991,
+   "faithful": 0.964,
+   "stone": 0.75,
+   "carving": 0.75,
+   "personality": 0.75,
+   "inscription": 0.25,
+   "calm": 0.736,
+   "votes": {
+    "stone": [
+     3,
+     3,
+     3
+    ],
+    "carving": [
+     3,
+     3,
+     3
+    ],
+    "calm": [
+     3,
+     3,
+     3
+    ],
+    "personality": [
+     3,
+     3,
+     3
+    ],
+    "inscription": [
+     1,
+     1,
+     1
+    ]
+   },
+   "disagreement": 0,
+   "why": [
+    {
+     "stone": "It shares the hewn, faceted bold and numerals, and the condensed capitals look like a carved plaque.",
+     "carving": "The cuts are clean and deliberate and the digits are clear; the condensed ss01 capitals are coherent with the facets but their proportions break from the lowercase.",
+     "calm": "The tall, narrow capitals are quiet and upright with presence, and nothing is aggressive.",
+     "personality": "The condensed faceted capitals give a distinct, slightly archaic poster voice.",
+     "inscription": "Everything is uniformly condensed (narrow O, C and D), the opposite of classical inscriptional width contrast."
+    },
+    {
+     "stone": "It has the same faceted chiselled bold, and the carved caps feel cut into stone.",
+     "carving": "Cuts are coherent across caps, lowercase and digits, and the digits are clearly distinct.",
+     "calm": "It is calm and present, though the condensed caps add some vertical tension.",
+     "personality": "The carved facets are distinctive, but the condensed caps make it read more like a generic condensed titling face.",
+     "inscription": "The ss01 caps are narrow and condensed, so O, C and D are not wide and the rhythm is far from classical Roman proportions."
+    },
+    {
+     "stone": "Same faceted, hewn treatment as K1, so bold display reads as cut stone.",
+     "carving": "Cuts are coherent across cases and digits stay distinct, though the condensed ss01 capitals compress the facets into tighter, busier shapes.",
+     "calm": "Composed and readable; the condensed capitals feel a little tense but not aggressive.",
+     "personality": "Distinct carved voice, with the tall condensed capitals adding an upright, slightly Germanic note.",
+     "inscription": "ss01 capitals are condensed with narrow O and C, the opposite of classical Roman proportions."
+    }
+   ],
+   "total": 0.7675,
+   "tie_with_next": false
+  }
+ ],
+ "control_votes": {
+  "plain": {
+   "stone": [
+    1,
+    1,
+    1
+   ],
+   "carving": [
+    0,
+    0,
+    0
+   ],
+   "calm": [
+    3,
+    4,
+    3
+   ],
+   "personality": [
+    1,
+    1,
+    1
+   ],
+   "inscription": [
+    1,
+    1,
+    1
+   ]
+  },
+  "cinzel": {
+   "stone": [
+    2,
+    2,
+    2
+   ],
+   "carving": [
+    0,
+    0,
+    0
+   ],
+   "calm": [
+    2,
+    2,
+    2
+   ],
+   "personality": [
+    3,
+    3,
+    3
+   ],
+   "inscription": [
+    3,
+    2,
+    2
+   ]
+  }
+ },
+ "plain_control_votes": {
+  "stone": [
+   1,
+   1,
+   1
+  ],
+  "carving": [
+   0,
+   0,
+   0
+  ],
+  "calm": [
+   3,
+   4,
+   3
+  ],
+  "personality": [
+   1,
+   1,
+   1
+  ],
+  "inscription": [
+   1,
+   1,
+   1
+  ]
+ }
+}
