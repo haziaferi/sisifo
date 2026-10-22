@@ -1,7 +1,8 @@
 """Score the stage 3 carve variants on the owner's eight axes (design.md, "How quality is judged").
 
-Usage:  python tools/score_carve.py measure   -> build/carve/measured.json
-        python tools/score_carve.py combine   -> build/carve/scores.json + a table (needs build/carve/judge_*.json)
+Usage:  python tools/score_carve.py measure [round]   -> build/carve[2]/measured.json
+        python tools/score_carve.py combine [round]   -> build/carve[2]/scores.json + a table (needs judge_*.json)
+Round 2 adds the blind "personality" axis (weight 1) and Ortica Angular Bold as a second unnamed reference.
 
 Measured on a static instance at wght 400 and CARV 100 (titles and set numbers are where the carve shows), with the
 font search's own measure() from ../tools/measure.py:
@@ -33,12 +34,18 @@ import measure  # noqa: E402
 sys.path.insert(0, str(ROOT / "tools"))
 import gate  # noqa: E402
 
-OUT = ROOT / "build" / "carve"
+ROUND = sys.argv[2] if len(sys.argv) > 2 else "1"
+OUT = ROOT / "build" / ("carve" if ROUND == "1" else f"carve{ROUND}")
 ORTICA = SEARCH / "ortica-src" / "fonts" / "OrticaLinear-Regular.otf"
-VARIANTS = ["A", "B", "C", "D", "E"]
+VARIANTS = {"1": ["A", "B", "C", "D", "E"], "2": ["B", "R", "RL", "G", "GL"]}[ROUND]
+# round 2 (owner): a blind "personality" axis, judged against two unnamed references, plain and Ortica Angular
+JUDGED = ["stone", "carving", "calm"] + (["personality"] if ROUND != "1" else [])
+CONTROLS = ["plain"] + (["angular"] if ROUND != "1" else [])
 SMALL = "Labels stay in the list for reuse. Mobilità ed equilibrio, perché è così."
 CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 AXES = {"harmony": 1, "stone": 1, "numbers": 1, "calm": 1, "technical": 1, "carving": 1, "small": 1, "faithful": 0.5}
+if ROUND != "1":
+    AXES["personality"] = 1
 
 
 def vf(v):
@@ -193,28 +200,27 @@ def combine():
     rows = []
     for v in VARIANTS:
         code, x = by_name[v], m[v]
-        votes = {k: [j[code][k] for j in judges] for k in ("stone", "carving", "calm")}
+        votes = {k: [j[code][k] for j in judges] for k in JUDGED}
         r = {"variant": v, "code": code, "harmony": x["harmony"], "numbers": x["numbers"],
              "technical": x["technical"], "small": x["small"], "faithful": x["faithful"],
-             "stone": round(statistics.mean(votes["stone"]) / 4, 3),
-             "carving": round(statistics.mean(votes["carving"]) / 4, 3),
+             **{k: round(statistics.mean(votes[k]) / 4, 3) for k in JUDGED if k != "calm"},
              "calm": round((statistics.mean(votes["calm"]) / 4 + x["calm_measured"]) / 2, 3),
              "votes": votes, "disagreement": max(max(s) - min(s) for s in votes.values()),
-             "why": [{k: j[code][k + "_why"] for k in ("stone", "carving", "calm")} for j in judges]}
+             "why": [{k: j[code][k + "_why"] for k in JUDGED} for j in judges]}
         r["total"] = round(sum(r[a] * w for a, w in AXES.items()) / sum(AXES.values()), 4)
         rows.append(r)
-    plain = by_name["plain"]
-    control = {k: [j[plain][k] for j in judges] for k in ("stone", "carving", "calm")}
+    controls = {c: {k: [j[by_name[c]][k] for j in judges] for k in JUDGED} for c in CONTROLS}
     rows.sort(key=lambda r: -r["total"])
     for i, r in enumerate(rows):
         r["tie_with_next"] = i + 1 < len(rows) and r["total"] - rows[i + 1]["total"] < 0.02
-    (OUT / "scores.json").write_text(json.dumps({"rows": rows, "plain_control_votes": control}, indent=1,
+    (OUT / "scores.json").write_text(json.dumps({"rows": rows, "control_votes": controls,
+                                                 "plain_control_votes": controls["plain"]}, indent=1,
                                                 ensure_ascii=False), encoding="utf-8")
     print("var  total  " + "  ".join(f"{a[:5]:>5}" for a in AXES) + "  disagree")
     for r in rows:
         print(f"{r['variant']:4} {r['total']:.3f}  " + "  ".join(f"{r[a]:5.2f}" for a in AXES)
               + f"  {r['disagreement']}{'  (tie with next)' if r['tie_with_next'] else ''}")
-    print("plain control votes:", control)
+    print("control votes:", controls)
 
 
 if __name__ == "__main__":

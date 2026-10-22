@@ -39,3 +39,17 @@ large. Sisifo is not Ortica and is not endorsed by its authors.
   direction flips at CARV 0/50/100, topology unchanged when carved. Cubic-to-quadratic error 0.25 unit.
 - Scores (docs/results/stage3-*.json; eight axes, faithful at half weight): B 0.838, C 0.832, D 0.828 (a tie),
   A 0.813, E 0.765. The blind panel's hidden control (plain) scored stone 1, carving 0 in every vote.
+- Round 2 (owner: "even in A, the font still lost personality"). Measured cause: round 1's A cut 23 round glyphs
+  about 500 times at 30 degrees; Ortica Angular Bold cuts them 369 times at 42, and cuts the two sides of a stroke
+  out of phase. New variants:
+  - R / RL, chiselled rules: 42-degree cuts; a counter's extremes stay corners while the outside is flat (decided
+    locally: ink away from the curve's centre); each cut capped at half the stroke it cuts into, by a ray cast.
+  - G / GL, Ortica Angular's own cuts (tools/angular_fit.py): Angular Bold's corners projected onto Linear Bold
+    (contours matched by whole bounding box; nearest point, or share of length when that breaks order); CARV 100
+    Bold is Angular's shape exactly (overlap 1.00); lighter weights take Bold's moves with the across-stroke part
+    scaled by their own stroke thickness. 150 glyphs fit in G, 154 in GL; the rest (A, R, q, 6 among them) use the
+    rules, each with its reason in docs/results/stage3-round2-fit-*.json.
+  - RL and GL carve Light at 0.5 and Regular at 0.75 of the full carve.
+  All four pass the gate. Nine axes with a blind personality axis (references: plain, and Angular Bold):
+  GL 0.848, G 0.827, RL 0.814, R 0.810, B 0.753. Personality GL 0.92 (Angular itself 3.7 of 4); carving is
+  stronger in the rules (0.75) than in Angular's cuts (0.50-0.58: lopsided 3 and 8, skewed S, uneven facets).

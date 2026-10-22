@@ -1,0 +1,362 @@
+{
+ "rows": [
+  {
+   "variant": "GL",
+   "code": "K5",
+   "harmony": 0.688,
+   "numbers": 0.894,
+   "technical": 1.0,
+   "small": 0.991,
+   "faithful": 0.965,
+   "stone": 0.917,
+   "carving": 0.583,
+   "personality": 0.917,
+   "calm": 0.736,
+   "votes": {
+    "stone": [
+     4,
+     4,
+     3
+    ],
+    "carving": [
+     2,
+     3,
+     2
+    ],
+    "calm": [
+     3,
+     3,
+     3
+    ],
+    "personality": [
+     4,
+     4,
+     3
+    ]
+   },
+   "disagreement": 1,
+   "why": [
+    {
+     "stone": "Facets plus slight irregular tilts in S, 3, 8 and 5 make it feel the most like hand-hewn rock.",
+     "carving": "The irregularity is mostly coherent, but some glyphs (lopsided 3 and 8, the skewed S) start to look wobbly rather than deliberately cut.",
+     "calm": "Still composed at regular weight, though the unevenness adds a little restlessness.",
+     "personality": "The rough, chipped look is unmistakable and memorable."
+    },
+    {
+     "stone": "Coarser, bolder facets make the display text read strongly as cut stone or an inscription.",
+     "carving": "Facets are larger but still applied as one system and stay crisp; S and 6 become noticeably polygonal yet digits stay clearly distinguishable.",
+     "calm": "More angular energy than K1/K4 but still steady rather than aggressive.",
+     "personality": "Strong, unmistakable chiselled voice while keeping a classical skeleton."
+    },
+    {
+     "stone": "Stronger, irregular facets make it feel rough-hewn from rock, especially in the bold S and numerals.",
+     "carving": "Facets vary in size from glyph to glyph (lumpy S, uneven 0 and 5), which edges toward broken or processed rather than one controlled chisel; digits remain legible.",
+     "calm": "Still grounded and not shouting, but the irregular outlines make the bold numbers a bit restless.",
+     "personality": "More rugged and memorable than K1/K4, though part of the character comes from apparent randomness."
+    }
+   ],
+   "total": 0.8481,
+   "tie_with_next": false
+  },
+  {
+   "variant": "G",
+   "code": "K7",
+   "harmony": 0.705,
+   "numbers": 0.896,
+   "technical": 1.0,
+   "small": 0.991,
+   "faithful": 0.957,
+   "stone": 0.917,
+   "carving": 0.5,
+   "personality": 0.833,
+   "calm": 0.708,
+   "votes": {
+    "stone": [
+     4,
+     4,
+     3
+    ],
+    "carving": [
+     2,
+     2,
+     2
+    ],
+    "calm": [
+     3,
+     3,
+     3
+    ],
+    "personality": [
+     4,
+     3,
+     3
+    ]
+   },
+   "disagreement": 1,
+   "why": [
+    {
+     "stone": "Looks the same as K5: irregular faceting that reads strongly as hewn stone.",
+     "carving": "The cuts are coherent overall, but the lopsided digits and tilted S drift toward an unsteady, slightly glitchy look.",
+     "calm": "Calm at regular weight, with mild restlessness from the irregular contours.",
+     "personality": "A distinctive hand-chipped voice you would recognise again."
+    },
+    {
+     "stone": "Strong, coarse facets give a pronounced carved-stone look like K5.",
+     "carving": "Faceting is coherent overall but some curves (S, 6, 5 bowls) turn uneven and slightly lumpy, edging toward processed rather than chiselled.",
+     "calm": "Steady weight, though the irregular angularity adds a touch of restlessness.",
+     "personality": "Distinct hewn character, but the irregularity reads somewhat more processed than designed."
+    },
+    {
+     "stone": "Strong rough faceting gives a rough-hewn rock feel, like K5.",
+     "carving": "Irregular facet sizes on S, 0 and 5 read partly as processing artefacts rather than deliberate cuts, though the design is applied to every glyph and digits stay clear.",
+     "calm": "Grounded with presence, slightly restless in the bold set numbers.",
+     "personality": "Rugged and recognisable, essentially the same voice as K5."
+    }
+   ],
+   "total": 0.8269,
+   "tie_with_next": true
+  },
+  {
+   "variant": "RL",
+   "code": "K1",
+   "harmony": 0.62,
+   "numbers": 0.883,
+   "technical": 1.0,
+   "small": 0.991,
+   "faithful": 0.975,
+   "stone": 0.75,
+   "carving": 0.75,
+   "personality": 0.75,
+   "calm": 0.688,
+   "votes": {
+    "stone": [
+     3,
+     3,
+     3
+    ],
+    "carving": [
+     3,
+     3,
+     3
+    ],
+    "calm": [
+     3,
+     3,
+     3
+    ],
+    "personality": [
+     3,
+     3,
+     3
+    ]
+   },
+   "disagreement": 0,
+   "why": [
+    {
+     "stone": "Coarse straight facets on every curve make the titles and numbers read clearly as chiselled stone on a classical serif skeleton.",
+     "carving": "Faceting is applied consistently to every glyph with clean straight cuts; the narrow hexagonal 0 still separates from the wider O, though bowls are slightly mechanical.",
+     "calm": "Regular-weight titles stay quiet and steady, and the bold set numbers have presence without shouting.",
+     "personality": "The polygonal bowls give a recognisable inscriptional voice, though it feels uniformly processed rather than hand-cut."
+    },
+    {
+     "stone": "Moderate polygonal faceting on curves gives the display text a clearly hewn, inscribed feel without losing the classical serif base.",
+     "carving": "Facets are applied consistently across letters and digits and read as deliberate cuts; 3/8 and 0/O stay distinct, though some bowls (S, 6) look slightly lumpy at the largest size.",
+     "calm": "Regular weight stays quiet and steady; the bold has presence without shouting.",
+     "personality": "The chiselled facets give a recognisable voice beyond a stock serif."
+    },
+    {
+     "stone": "Faceted bowls and flat-cut curves in a classical serif read clearly as a cut inscription without losing the serif's dignity.",
+     "carving": "Facets are applied evenly across lower case, capitals and digits so it reads as one design, and 1/7, 3/8, 0/O stay distinct, though at the largest size some facets look more polygon-sampled than chiselled.",
+     "calm": "Steady and measured with good presence; the faceting adds a slight restlessness to the bold numerals.",
+     "personality": "A recognisable hewn-serif voice, but close to its siblings and to its smooth source."
+    }
+   ],
+   "total": 0.8141,
+   "tie_with_next": true
+  },
+  {
+   "variant": "R",
+   "code": "K4",
+   "harmony": 0.617,
+   "numbers": 0.856,
+   "technical": 1.0,
+   "small": 0.991,
+   "faithful": 0.967,
+   "stone": 0.75,
+   "carving": 0.75,
+   "personality": 0.75,
+   "calm": 0.688,
+   "votes": {
+    "stone": [
+     3,
+     3,
+     3
+    ],
+    "carving": [
+     3,
+     3,
+     3
+    ],
+    "calm": [
+     3,
+     3,
+     3
+    ],
+    "personality": [
+     3,
+     3,
+     3
+    ]
+   },
+   "disagreement": 0,
+   "why": [
+    {
+     "stone": "Practically the same coarse faceting as K1, so it reads as hewn stone in the same way.",
+     "carving": "Facets are consistent and clean across the alphabet and digits; 0/O and 3/8 stay distinct.",
+     "calm": "Steady regular titles and confident bold numbers, not aggressive.",
+     "personality": "A distinct faceted voice, slightly mechanical in its regularity."
+    },
+    {
+     "stone": "Visible faceting on bowls and terminals reads as chiselled stone, very close to K1.",
+     "carving": "Coherent, crisp facets across letters and numerals; digits remain easy to separate, with only minor unevenness on S and 6.",
+     "calm": "Steady and grounded; the angularity adds presence without aggression.",
+     "personality": "Distinct hewn character that would be recognised again."
+    },
+    {
+     "stone": "Same clear faceted-curve treatment as K1, giving a convincing cut-stone reading at title sizes.",
+     "carving": "Consistent facets across all glyphs with crisp corners and unambiguous digits, though the large bowls still look slightly polygonal rather than V-cut.",
+     "calm": "Steady with presence; facets add mild visual energy without aggression.",
+     "personality": "Distinct hewn character, practically indistinguishable from K1."
+    }
+   ],
+   "total": 0.8101,
+   "tie_with_next": false
+  },
+  {
+   "variant": "B",
+   "code": "K2",
+   "harmony": 0.686,
+   "numbers": 0.856,
+   "technical": 1.0,
+   "small": 0.991,
+   "faithful": 0.978,
+   "stone": 0.5,
+   "carving": 0.583,
+   "personality": 0.5,
+   "calm": 0.8,
+   "votes": {
+    "stone": [
+     2,
+     2,
+     2
+    ],
+    "carving": [
+     3,
+     2,
+     2
+    ],
+    "calm": [
+     4,
+     4,
+     4
+    ],
+    "personality": [
+     2,
+     2,
+     2
+    ]
+   },
+   "disagreement": 1,
+   "why": [
+    {
+     "stone": "Finer, smaller facets suggest carving only when you look closely; at a glance it reads mostly as a smooth serif.",
+     "carving": "Subtle cuts are crisp and coherent across letters and digits, with no broken shapes, but the effect is faint.",
+     "calm": "Very calm and even, while the bold weights still carry presence.",
+     "personality": "A slight hint of character on top of what is mostly a familiar book serif."
+    },
+    {
+     "stone": "Faceting is fine-grained, so the text reads mostly as a smooth serif with only a faint hewn quality.",
+     "carving": "Cuts are clean and coherent but so subtle they barely register as carving at display size; digits are fully legible.",
+     "calm": "Very calm and composed, with enough weight in the bold to hold presence.",
+     "personality": "Hard to tell from the plain serif except on close inspection; character is understated."
+    },
+    {
+     "stone": "Only a light hint of faceting on curves, so it reads mostly as a polished book serif with a faint chiselled edge.",
+     "carving": "Coherent and clean but so subtle at display size that the cuts read as slight low-resolution flattening rather than deliberate chisel strokes.",
+     "calm": "Very calm and composed while the bold weights still carry presence.",
+     "personality": "A small step away from a generic serif; easy to mistake for the uncarved face."
+    }
+   ],
+   "total": 0.7535,
+   "tie_with_next": false
+  }
+ ],
+ "control_votes": {
+  "plain": {
+   "stone": [
+    1,
+    1,
+    1
+   ],
+   "carving": [
+    0,
+    0,
+    0
+   ],
+   "calm": [
+    4,
+    4,
+    4
+   ],
+   "personality": [
+    1,
+    1,
+    1
+   ]
+  },
+  "angular": {
+   "stone": [
+    4,
+    4,
+    4
+   ],
+   "carving": [
+    3,
+    3,
+    2
+   ],
+   "calm": [
+    2,
+    2,
+    2
+   ],
+   "personality": [
+    3,
+    4,
+    4
+   ]
+  }
+ },
+ "plain_control_votes": {
+  "stone": [
+   1,
+   1,
+   1
+  ],
+  "carving": [
+   0,
+   0,
+   0
+  ],
+  "calm": [
+   4,
+   4,
+   4
+  ],
+  "personality": [
+   1,
+   1,
+   1
+  ]
+ }
+}

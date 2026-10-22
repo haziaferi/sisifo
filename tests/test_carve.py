@@ -14,7 +14,7 @@ SHAPES = ["o", "O", "S", "a", "g", "e", "zero", "eight", "Q", "at"]
 @pytest.fixture(scope="module")
 def masters(tmp_path_factory):
     out = {}
-    for v in ("A", "C", "E"):
+    for v in ("A", "C", "E", "R", "G"):
         paths = carve.make_masters(v, tmp_path_factory.mktemp(v))
         out[v] = {k: ufoLib2.Font.open(p) for k, p in paths.items()}
     return out
@@ -108,7 +108,7 @@ def _topology(font, name):
     return len(bg.removeOverlap().contours)
 
 
-@pytest.mark.parametrize("variant", ["A", "C"])
+@pytest.mark.parametrize("variant", ["A", "C", "R", "G"])
 @pytest.mark.parametrize("style", STYLES)
 def test_topology_unchanged(masters, variant, style):
     """A carve that lets a counter touch the outside (a stroke cut through) changes how many contours remain once
@@ -124,3 +124,33 @@ def test_counters_not_snapped(masters, style):
     inner = min(f["o"].contours, key=lambda c: max(p.x for p in c) - min(p.x for p in c))
     ys = [p.y for p in inner if p.type is not None]
     assert min(ys) > 0 and max(ys) < f.info.xHeight
+
+
+@pytest.mark.parametrize("style", STYLES)
+def test_counters_out_of_phase(masters, style):
+    """Round 2: the outside of the o is flat at its top, its counter has a single corner there (Angular's o)."""
+    g = masters["R"][(style, 100)]["o"]
+    tops = []
+    for c in sorted(g.contours, key=lambda c: max(p.x for p in c) - min(p.x for p in c)):
+        on = [p for p in c if p.type is not None]
+        top = max(p.y for p in on)
+        tops.append(sum(1 for p in on if abs(p.y - top) < 0.5))
+    counter, outside = tops
+    assert counter == 1 and outside >= 2
+
+
+def test_angular_fit_is_angular_at_bold(masters):
+    import angular_fit as af
+    ang = af.load_angular()
+    bold = masters["G"][("Bold", 100)]
+    src = ufoLib2.Font.open(SOURCES / "Sisifo-Bold.ufo")
+    for name in ("o", "n", "s", "S", "zero"):
+        target = af.angular_contours(src[name], src, ang[name], ang)
+        assert carve._iou(list(bold[name].contours), target) >= 0.99, name
+
+
+def test_every_unfitted_glyph_has_a_reason(masters):
+    import json
+    log = json.loads((carve.ROOT / "build" / "fit-Angulars_own_cuts.json").read_text(encoding="utf-8"))
+    assert len(log["fitted"]) >= 140
+    assert all(isinstance(why, str) and why for why in log["not_fitted"].values())

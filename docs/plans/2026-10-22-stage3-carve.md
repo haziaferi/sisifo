@@ -112,3 +112,44 @@ Angular is fully polygonal: 295 contours, no curves. Its outer `o` is an octagon
   - every variant's 1:1 PNGs (1080 px wide, shown at 384 css px) with its scores;
   - the owner reviews it on the 6T in Waterfox.
 - [ ] Commit "Sisifo: stage 3 variants scored".
+
+---
+
+## Round 2 (owner, 2026-10-22): personality
+
+Owner's review of round 1: "even in A, the most angular version, the font still lost personality". Compared with
+both Linear and Angular: it lost Linear's curves without gaining Angular's character. Measured cause, on 23 round
+glyphs: Angular Bold has 369 cuts at a median turn of 42°; round 1's A has about 500 cuts at 30°, and C about 700 at
+23°. The depth cap forced shallow, even cuts. Angular also cuts the two sides of a stroke out of phase (outer `o`: flats at
+the extremes; counter: corners there), so its strokes swell and thin; round 1 cuts both sides alike.
+
+Owner's decisions: build both directions and score them together; add a blind "personality" axis; score both Light
+treatments.
+
+### Variants
+
+| id | direction | Light |
+|---|---|---|
+| R | chiselled rules | same carve at every weight |
+| RL | chiselled rules | gentler toward Light (Light 0.5, Regular 0.75, Bold 1 of the full carve) |
+| G | Angular's own cuts | same |
+| GL | Angular's own cuts | gentler toward Light |
+| B | round 1's best, carried over as the baseline | same |
+
+- **Chiselled rules** (`carve.py`, new parameters):
+  - Cuts turn about 42°, which is Angular's median.
+  - **Counters out of phase.** A contour wound against the glyph's main contour gets no flats, and its extremes become corners. On the `o`, the outer octagon has flats at the extremes and the counter octagon has corners there: Angular's arrangement.
+  - **Local depth.** Each cut is capped at half the stroke it cuts into, measured at that spot (a ray cast from the cut to the far edge of the ink), not at half the thinnest stroke in the font.
+- **Angular's own cuts** (`tools/angular_fit.py`):
+  - **Matching.** For each glyph where Angular Bold has the same number of contours as Linear Bold, contours are matched by bounding box. Angular is shifted so its ink centre sits on Linear's, and Linear's advance widths are kept.
+  - **Splitting.** Each Angular corner is projected onto the Linear contour, and Linear is split there, keeping their order around the contour.
+  - **CARV 100 Bold.** Every point takes Angular's position: inserted points sit on Angular's corners, and Linear's own points land on the nearest Angular edge.
+  - **Light and Regular.** They take the same displacement, from each point's CARV 0 position to its carved position.
+  - **Fallback.** Glyphs that don't match (contour counts differ, the order breaks, or a stroke cuts through) keep the chiselled rules, and the result lists them.
+- **Light strength** is applied per master as C0 + s × (carved − C0). The structure is the same, so this only blends existing outlines.
+- **Personality axis**:
+  - **Specimens.** The panel also gets Ortica Linear (plain Sisifo) and Ortica Angular Bold (its one weight, used for every line) as unnamed specimens.
+  - **The question.** "How much distinct, deliberate character does it have?", scored 0–4.
+  - **Weighting.** It counts fully, making nine axes. Faithful keeps half weight.
+  - **The references.** They're scored as controls and aren't ranked.
+- **Gate:** unchanged. A variant that fails it is reported, not scored.

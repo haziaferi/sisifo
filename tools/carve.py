@@ -30,7 +30,16 @@ VARIANTS = {
     "C": {"phi": 12, "theta": 25, "look": "fine facets"},
     "D": {"phi": 22.5, "theta": 25, "look": "long flats, fine facets"},
     "E": {"phi": 15, "theta": None, "look": "flats only"},
+    # round 2 (personality): Angular's 42-degree cuts, counters out of phase, depth limited by the stroke cut into
+    "R": {"phi": 22.5, "theta": 42, "phase": True, "local": True, "look": "chiselled rules"},
+    "RL": {"phi": 22.5, "theta": 42, "phase": True, "local": True, "look": "chiselled rules, gentler at Light",
+           "strength": {"Light": 0.5, "Regular": 0.75, "Bold": 1.0}},
+    # Angular's own cuts (tools/angular_fit.py); glyphs that cannot be fitted take the chiselled rules above
+    "G": {"phi": 22.5, "theta": 42, "phase": True, "local": True, "fit": "angular", "look": "Angular's own cuts"},
+    "GL": {"phi": 22.5, "theta": 42, "phase": True, "local": True, "fit": "angular",
+           "look": "Angular's own cuts, gentler at Light", "strength": {"Light": 0.5, "Regular": 0.75, "Bold": 1.0}},
 }
+LOCAL_CUT = 0.5              # round 2: no cut deeper than half the stroke it cuts into, measured where it cuts
 AXIS_TOL = math.radians(2)   # a tangent within 2 degrees of horizontal/vertical counts as an extreme
 SNAP = 20                    # a horizontal flat overshooting a vertical metric by up to 20 units lands on it
 OVER = 2                     # ... or falling short of it by up to 2 (drawing noise)
@@ -125,7 +134,71 @@ def _seg_P(segs, i):
     return [_xy(segs[i - 1][2])] + [_xy(q) for q in segs[i][1]] + [_xy(segs[i][2])]
 
 
-def plan_glyph(glyphs, caps, metrics, phi, theta):
+def _polylines(glyph):
+    """The glyph's contours flattened to closed polylines (for ray casts)."""
+    out = []
+    for c in glyph.contours:
+        segs, _ = _segments(c)
+        pts = []
+        for i in range(len(segs)):
+            if segs[i][0] == "curve":
+                P = _seg_P(segs, i)
+                pts += [_bez(P, k / 12) for k in range(1, 13)]
+            else:
+                pts.append(_xy(segs[i][2]))
+        out.append(pts)
+    return out
+
+
+def _counter_edge(glyph, segs, i):
+    """Phase (round 2): is the extreme at the end of segment i on a counter's edge, i.e. does the ink lie away from
+    the curve's centre? A counter's extremes stay corners while the outside is flat there, so the stroke swells and
+    thins around the letter, as in Angular's o. Decided locally, because Ortica draws some counters (e, 6) in the
+    same contour as the outside."""
+    n = len(segs)
+    e = _xy(segs[i][2])
+    a, b = _bez(_seg_P(segs, i), 0.5), _bez(_seg_P(segs, (i + 1) % n), 0.5)
+    cx, cy = (a[0] + b[0]) / 2 - e[0], (a[1] + b[1]) / 2 - e[1]     # towards the centre of curvature
+    d = math.hypot(cx, cy) or 1
+    pen = PointInsidePen(None, (e[0] + 3 * cx / d, e[1] + 3 * cy / d))
+    for c in glyph.contours:
+        c.draw(pen)
+    return not pen.getResult()
+
+
+def _thickness(glyph, polys):
+    """Function: the stroke thickness behind a point of the outline, along its inward normal (towards the ink): the
+    distance to the nearest outline edge the ray meets. Overlapping contours can only shorten it (a cautious cap)."""
+    def ink(pt):
+        pen = PointInsidePen(None, pt)
+        for c in glyph.contours:
+            c.draw(pen)
+        return pen.getResult()
+
+    def measure(pt, tangent):
+        tx, ty = tangent
+        n = math.hypot(tx, ty) or 1
+        nx, ny = -ty / n, tx / n
+        if not ink((pt[0] + 2 * nx, pt[1] + 2 * ny)):
+            nx, ny = -nx, -ny
+        ox, oy = pt[0] + nx, pt[1] + ny      # start just inside, past the edge the point is on
+        best = 1000.0
+        for poly in polys:
+            for i in range(len(poly)):
+                (ax, ay), (bx, by) = poly[i - 1], poly[i]
+                ex, ey = bx - ax, by - ay
+                den = nx * ey - ny * ex
+                if abs(den) < 1e-9:
+                    continue
+                s = ((ax - ox) * ey - (ay - oy) * ex) / den        # along the ray
+                u = ((ax - ox) * ny - (ay - oy) * nx) / den        # along the edge
+                if s > 0.5 and 0 <= u <= 1:
+                    best = min(best, s + 1)
+        return best
+    return measure
+
+
+def plan_glyph(glyphs, caps, metrics, phi, theta, phase=False, local=False):
     """How one glyph is carved, the same for every master. glyphs/caps/metrics are dicts by style; the structure (which
     extremes get flats, which pieces are hidden) is read on Regular, and every cut is checked on every weight: no facet
     and no unsnapped flat cuts deeper than that weight's cap (half its thin stroke), so a large bowl gets more facets
@@ -134,6 +207,7 @@ def plan_glyph(glyphs, caps, metrics, phi, theta):
     "hidden": [per segment, per piece: ink on both sides]}."""
     reg = glyphs["Regular"]
     hidden_at = _hidden_test(reg)
+    thick = {s: _thickness(g, _polylines(g)) for s, g in glyphs.items()} if local else None
     plans = []
     for ci, c in enumerate(reg.contours):
         segs, _ = _segments(c)
@@ -145,6 +219,8 @@ def plan_glyph(glyphs, caps, metrics, phi, theta):
             if segs[i][0] == "curve" and nxt[0] == "curve" and segs[i][1] and nxt[1]:
                 ax = _flat_axis(segs[i][1][-1], segs[i][2], nxt[1][0])
                 if ax and not hidden_at([_xy(segs[i][1][-1]), _xy(segs[i][2]), _xy(segs[i][2]), _xy(nxt[1][0])]):
+                    if phase and _counter_edge(reg, segs, i):
+                        continue
                     flats[i] = ax
         splits, hidden = [], []
         for i, (kind, ctl, p) in enumerate(segs):
@@ -160,6 +236,15 @@ def plan_glyph(glyphs, caps, metrics, phi, theta):
                 hidden.append([hidden_at(Ps["Regular"])])
                 continue
             at = lambda s, f: _bez(Ps[s], _t_at_turn(cums[s], f * cums[s][-1]))
+            if local:   # half the stroke behind the middle of this segment, per weight
+                seg_cap = {s: LOCAL_CUT * thick[s](_bez(P, 0.5), (_bez(P, 0.51)[0] - _bez(P, 0.49)[0],
+                                                                  _bez(P, 0.51)[1] - _bez(P, 0.49)[1]))
+                           for s, P in Ps.items()}
+            else:
+                seg_cap = caps
+
+            def flat_cap(s, e, axis):
+                return LOCAL_CUT * thick[s](e, (0, 1) if axis == "v" else (1, 0)) if local else caps[s]
 
             def flat_half(end):
                 """Largest half-angle <= phi whose flat retreats no deeper than the cap at any weight."""
@@ -168,13 +253,14 @@ def plan_glyph(glyphs, caps, metrics, phi, theta):
                     return 0.0
                 k = 0 if flats[j] == "v" else 1
                 e = {s: (Ps[s][3] if end else Ps[s][0]) for s in Ps}
+                fcap = {s: flat_cap(s, e[s], flats[j]) for s in Ps}
                 f = min(math.radians(phi), 0.45 * T)
                 while f > 1e-3:
                     ok = True
                     for s in Ps:
                         q = at(s, 1 - f / T if end else f / T)
                         snaps = k == 1 and _snap_target(e[s][1], q[1] > e[s][1], metrics[s]) is not None
-                        if not snaps and abs(q[k] - e[s][k]) > caps[s]:
+                        if not snaps and abs(q[k] - e[s][k]) > fcap[s]:
                             ok = False
                     if ok:
                         return f
@@ -189,7 +275,7 @@ def plan_glyph(glyphs, caps, metrics, phi, theta):
                 while k < 24:
                     mids = [a + (b - a) * j / k for j in range(1, k)]
                     fr = sorted(x / T for x in [a, b] + mids if 1e-3 < x / T < 1 - 1e-3)
-                    deep = any(_sagitta(pc) > caps[s] for s in Ps for pc in _pieces(Ps[s], fr)[(1 if ps else 0):
+                    deep = any(_sagitta(pc) > seg_cap[s] for s in Ps for pc in _pieces(Ps[s], fr)[(1 if ps else 0):
                                                                                              (-1 if pe else None)])
                     if not deep:
                         break
@@ -286,6 +372,85 @@ def cut_cap(font):
     return CUT * (tops[-1] - tops[0])
 
 
+def _merged_count(contours):
+    from booleanOperations.booleanGlyph import BooleanGlyph
+    g = ufoLib2.objects.Glyph()
+    g.contours.extend(contours)
+    bg = BooleanGlyph()
+    g.drawPoints(bg.getPointPen())
+    return len(bg.removeOverlap().contours)
+
+
+def _bool(contours):
+    from booleanOperations.booleanGlyph import BooleanGlyph
+    g = ufoLib2.objects.Glyph()
+    g.contours.extend(contours)
+    bg = BooleanGlyph()
+    g.drawPoints(bg.getPointPen())
+    return bg
+
+
+def _area_of(bg):
+    from fontTools.pens.areaPen import AreaPen
+    a = AreaPen()
+    bg.draw(a)
+    return abs(a.value)
+
+
+def _iou(a, b):
+    """Intersection over union of two outlines (overlaps merged), exactly, by boolean operations."""
+    ga, gb = _bool(a), _bool(b)
+    inter = _area_of(ga & gb)
+    union = _area_of(_bool(a).removeOverlap()) + _area_of(_bool(b).removeOverlap()) - inter  # `|` returns empty here
+    return inter / union if union else 1.0
+
+
+def _angular_fits(src, v):
+    """Glyph name -> {(style, carve): contours} for every glyph Ortica Angular's own cuts fit onto; the rest are
+    logged (build/fit-<look>.json) and carved by the rules. A fit is kept only if no weight changes topology when
+    carved (a stroke cut through or a part come loose)."""
+    import json
+    import angular_fit as af
+    ang = af.load_angular()
+    out, log = {}, {}
+    for name in src["Bold"].keys():
+        if name not in ang or not ang[name].contours or not src["Bold"][name].contours:
+            continue
+        plans, why = af.plan(src["Bold"][name], src["Bold"], ang[name], ang)
+        if plans is None:
+            log[name] = why
+            continue
+        c0 = {s: af.contours(src[s][name], plans) for s in STYLES}
+        c100_bold = af.carve_bold(c0["Bold"], plans)
+        th = {s: _thickness(src[s][name], _polylines(src[s][name])) for s in STYLES}
+        tb = [[th["Bold"](p, t) for p, t in cont] for cont in af.end_points_and_tangents(c0["Bold"])]
+        res = {}
+        for s in STYLES:
+            k = v.get("strength", {}).get(s, 1.0)
+            ratios = [[min(1.0, th[s](p, t) / max(b, 1)) for (p, t), b in zip(cont, bc)]
+                      for cont, bc in zip(af.end_points_and_tangents(c0[s]), tb)]
+            res[(s, 0)] = af.to_contours(c0[s])
+            res[(s, 100)] = af.to_contours(af.displaced(c0[s], c0["Bold"], c100_bold, k, ratios))
+        if any(_merged_count(res[(s, 0)]) != _merged_count(res[(s, 100)]) for s in STYLES):
+            log[name] = "topology changes when carved"
+            continue
+        # a scrambled correspondence can keep its topology: the carved Bold must be Angular's shape, and no lighter
+        # weight may move much further from its plain outline than Bold does (Angular is a different drawing, so
+        # Bold itself moves: its o overlaps Linear's by 0.74, and that difference is the personality being carried)
+        target = af.angular_contours(src["Bold"][name], src["Bold"], ang[name], ang)
+        fit_iou = _iou(res[("Bold", 100)], target)
+        drift = {s: _iou(res[(s, 0)], res[(s, 100)]) for s in STYLES}
+        if fit_iou < 0.9 or min(drift.values()) < drift["Bold"] - 0.15:
+            log[name] = (f"shape check: overlap with Angular {fit_iou:.2f}; with plain "
+                         + ", ".join(f"{s} {d:.2f}" for s, d in drift.items()))
+            continue
+        out[name] = res
+    log_path = ROOT / "build" / f"fit-{v['look'].replace(' ', '_').replace(',', '').replace(chr(39), '')}.json"
+    log_path.parent.mkdir(exist_ok=True)
+    log_path.write_text(json.dumps({"fitted": sorted(out), "not_fitted": log}, indent=1), encoding="utf-8")
+    return out
+
+
 def make_masters(variant, out_dir):
     v = VARIANTS[variant]
     out_dir = pathlib.Path(out_dir)
@@ -293,16 +458,28 @@ def make_masters(variant, out_dir):
     src = {s: ufoLib2.Font.open(ROOT / "sources" / f"Sisifo-{s}.ufo") for s in STYLES}
     caps = {s: cut_cap(f) for s, f in src.items()}
     metrics = {s: _metrics(f) for s, f in src.items()}
-    plans = {name: plan_glyph({s: src[s][name] for s in STYLES}, caps, metrics, v["phi"], v["theta"])
+    plans = {name: plan_glyph({s: src[s][name] for s in STYLES}, caps, metrics, v["phi"], v["theta"],
+                              v.get("phase", False), v.get("local", False))
              for name in src["Regular"].keys()}
+    fitted = _angular_fits(src, v) if v.get("fit") == "angular" else {}
     paths = {}
     for s in STYLES:
+        strength = v.get("strength", {}).get(s, 1.0)
         for carve_value in (0, 100):
             f = ufoLib2.Font.open(ROOT / "sources" / f"Sisifo-{s}.ufo")
             for g in f:
-                if g.contours:
-                    new = [_carve_contour(c, p, v["theta"], carve_value == 100, _metrics(f))
-                           for c, p in zip(src[s][g.name].contours, plans[g.name])]
+                if g.name in fitted:
+                    g.clearContours()
+                    g.contours.extend(fitted[g.name][(s, carve_value)])
+                elif g.contours:
+                    new = []
+                    for c, p in zip(src[s][g.name].contours, plans[g.name]):
+                        out = _carve_contour(c, p, v["theta"], carve_value == 100, _metrics(f))
+                        if carve_value and strength < 1:   # a gentler carve: part of the way from plain to carved
+                            plain = _carve_contour(c, p, v["theta"], False, _metrics(f))
+                            for q, q0 in zip(out, plain):
+                                q.x, q.y = q0.x + strength * (q.x - q0.x), q0.y + strength * (q.y - q0.y)
+                        new.append(out)
                     g.clearContours()
                     g.contours.extend(new)
             if carve_value:

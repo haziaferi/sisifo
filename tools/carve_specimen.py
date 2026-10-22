@@ -1,7 +1,7 @@
 """Stage 3 specimens: each carve variant at the OnePlus 6T's density (2.8125), 1080 px wide = 384 dp.
 
-Usage:  python tools/carve_specimen.py      -> build/carve/named/<id>.png (owner) and build/carve/blind/<code>.png
-                                               (judges), build/carve/blind_codes.json
+Usage:  python tools/carve_specimen.py [round]   -> build/carve[2]/named/<id>.png (owner), blind/<code>.png
+                                                  (judges), blind_codes.json; round 1 by default
 
 Display text (titles, set numbers) is carved (CARV 100); the 13 px paragraph is plain (CARV 0), as the app will set
 them once carve is tied to size. "plain" is Sisifo at CARV 0 throughout: a hidden control for the judges.
@@ -15,8 +15,11 @@ sys.path.insert(0, str(pathlib.Path.home() / ".claude" / "tools"))
 import headless_browser as hb  # noqa: E402
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-OUT = ROOT / "build" / "carve"
-VARIANTS = ["A", "B", "C", "D", "E"]
+ROUND = sys.argv[1] if len(sys.argv) > 1 else "1"
+OUT = ROOT / "build" / ("carve" if ROUND == "1" else f"carve{ROUND}")
+# round 2 (personality) adds Ortica Angular Bold as a second reference; it has one weight, used for every line
+VARIANTS = {"1": ["A", "B", "C", "D", "E"], "2": ["B", "R", "RL", "G", "GL"]}[ROUND]
+ANGULAR = ROOT.parent / "ortica-src" / "fonts" / "OrticaAngular-Bold.otf"
 TEXT = ("Labels stay in the list for reuse. Mobilità ed equilibrio, perché è così: "
         "a short walk, then the next set.")
 
@@ -53,7 +56,9 @@ def render(html, out):
 
 def main():
     fonts = {v: ROOT / "build" / "variants" / v / "Sisifo[CARV,wght].ttf" for v in VARIANTS}
-    entries = [(v, fonts[v], 100) for v in VARIANTS] + [("plain", fonts["A"], 0)]
+    entries = [(v, fonts[v], 100) for v in VARIANTS] + [("plain", fonts[VARIANTS[0]], 0)]
+    if ROUND != "1":
+        entries.append(("angular", ANGULAR, 100))
     rng = random.Random(20261022)
     codes = [f"K{i}" for i in range(1, len(entries) + 1)]
     rng.shuffle(codes)

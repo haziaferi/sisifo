@@ -1,6 +1,7 @@
-"""Owner review page for the stage 3 carve variants (all of them, owner's choice), from build/carve/scores.json.
+"""Owner review page for the stage 3 carve variants (all of them, owner's choice), from build/carve[N]/scores.json.
 
-Usage:  python tools/carve_page.py     -> build/carve/page/index.html + img/*.png (published as an artifact)
+Usage:  python tools/carve_page.py [round]   -> build/carve/page/index.html + img/*.png (published as an artifact;
+                                               one page and one link, each round replaces the last)
 
 Images are the 1:1 specimens (1080 px wide), shown 384 css px wide: one image pixel per screen pixel on the 6T.
 Page text uses the system font: the phone's browser blocks web fonts, and the type under review is in the images.
@@ -9,44 +10,91 @@ import html
 import json
 import pathlib
 import shutil
+import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-CARVE = ROOT / "build" / "carve"
-OUT = CARVE / "page"
+ROUND = sys.argv[1] if len(sys.argv) > 1 else "1"
+CARVE = ROOT / "build" / ("carve" if ROUND == "1" else f"carve{ROUND}")
+OUT = ROOT / "build" / "carve" / "page"
 LOOK = {"A": "Angular: long flats, 45° facets", "B": "short flats, 45° facets", "C": "short flats, fine 25° facets",
-        "D": "long flats, fine 25° facets", "E": "flats only, curves kept"}
-NOTE = {  # the panel's reasons, condensed (build/carve/scores.json has them in full)
-    "B": "Read as the most convincingly hewn by two of three judges. The full stop becomes a diamond, and the largest "
-         "bold rounds step slightly.",
-    "C": "The calmest of the carved ones: crisp, even cuts on a still-classical serif. All three judges call the "
-         "carving moderate rather than decisive.",
-    "D": "Clear, even chiselling. One judge sees the bold O, 0, C and 6 turn slightly stepped.",
-    "A": "Strongest flats; the facets start to look low-poly on e, s, 5 and 6 at the largest sizes.",
-    "E": "Very calm, but the carving barely registers: it reads as a plain classical serif.",
+        "D": "long flats, fine 25° facets", "E": "flats only, curves kept",
+        "R": "chiselled rules: 42° cuts, counters out of phase", "RL": "chiselled rules, gentler at Light",
+        "G": "Ortica Angular's own cuts on Linear's outlines", "GL": "Angular's own cuts, gentler at Light"}
+# the panel's reasons, condensed (scores.json has them in full)
+NOTE = {
+    "1": {
+        "B": "Read as the most convincingly hewn by two of three judges. The full stop becomes a diamond, and the "
+             "largest bold rounds step slightly.",
+        "C": "The calmest of the carved ones: crisp, even cuts on a still-classical serif. All three judges call the "
+             "carving moderate rather than decisive.",
+        "D": "Clear, even chiselling. One judge sees the bold O, 0, C and 6 turn slightly stepped.",
+        "A": "Strongest flats; the facets start to look low-poly on e, s, 5 and 6 at the largest sizes.",
+        "E": "Very calm, but the carving barely registers: it reads as a plain classical serif.",
+    },
+    "2": {
+        "GL": "The strongest voice of the four: \"unmistakable\", a chiselled character on a classical skeleton. The "
+              "cost: lopsided 3 and 8, a skewed S and uneven facets read to two judges as partly processed.",
+        "G": "The same voice, a little rougher, since Light is carved as hard as Bold. Same notes on 3, 8, S and 6.",
+        "RL": "Every glyph cut the same way, crisp and consistent, digits clear. Recognisable, but \"uniformly "
+              "processed rather than hand-cut\".",
+        "R": "Practically the same as RL to the judges: consistent and clean, slightly mechanical.",
+        "B": "Round 1's best, as the baseline: now read as \"a small step away from a generic serif\".",
+    },
 }
-AXES = [("stone", "Stone"), ("carving", "Carving"), ("calm", "Calm"), ("harmony", "Harmony"), ("numbers", "Numbers"),
-        ("technical", "Technical"), ("small", "Small text"), ("faithful", "Faithful (½)")]
+INTRO = {
+    "1": ("Five ways to carve Ortica Linear, ranked by the eight axes. Titles and set numbers are carved (CARV 100). "
+          "The 13 px text stays plain, as it will in the app.",
+          "<b>B, C and D tie</b> (within 0.02 of each other); A and E trail.",
+          "Which one should move on, or should two of them be blended (for example C's facets with B's flats)?"),
+    "2": ("Round 2, after your note that even A lost personality. Two directions, each with Light carved the same as "
+          "Bold or more gently: chiselled rules (R, RL) and Ortica Angular's own cuts fitted to Linear's outlines "
+          "(G, GL). Round 1's B is the baseline. A ninth axis, personality, was judged blind beside Ortica Linear and "
+          "Ortica Angular.",
+          "<b>GL leads</b> (0.848), then G, which ties with RL and R; B trails. Angular's cuts bring the personality "
+          "(GL 0.92, near Angular itself), while the rules bring cleaner, more even carving (0.75 against 0.58).",
+          "Which should move on: GL as it is, GL with its lopsided digits and S evened out, or R?"),
+}
+AXES = [("personality", "Personality"), ("stone", "Stone"), ("carving", "Carving"), ("calm", "Calm"),
+        ("harmony", "Harmony"), ("numbers", "Numbers"), ("technical", "Technical"), ("small", "Small text"),
+        ("faithful", "Faithful (½)")]
 
 
 def card(r):
     v = r["variant"]
     bars = "".join(f'<div class="ax"><span>{label}</span><i style="--v:{r[k]:.3f}"></i><b>{r[k]:.2f}</b></div>'
-                   for k, label in AXES)
+                   for k, label in AXES if k in r)
     tie = '<span class="tie">tie with next</span>' if r["tie_with_next"] else ""
     return f"""<section id="{v.lower()}">
   <header><h2>{v}</h2><p class="look">{LOOK[v]}</p><p class="total">{r['total']:.3f}{tie}</p></header>
-  <p class="note">{html.escape(NOTE[v])}</p>
+  <p class="note">{html.escape(NOTE[ROUND][v])}</p>
   <div class="axes">{bars}</div>
   <img src="img/{v}.png" width="384" alt="Sisifo variant {v}: titles, set numbers and 13 px text at 6T size">
 </section>"""
 
 
+def reference(name, title, look, votes, keys):
+    said = "; ".join(f"{k} {votes[k]}" for k in keys)
+    return f"""  <section class="control" id="{name}">
+    <header><h2>{title}</h2><p class="look">{look}</p><p class="total">&nbsp;</p></header>
+    <p class="note">Panel votes for this reference, unnamed among the others: {said}.</p>
+    <img src="img/{name}.png" width="384" alt="{html.escape(look)} at 6T size, for comparison">
+  </section>"""
+
+
 def main():
     s = json.loads((CARVE / "scores.json").read_text(encoding="utf-8"))
-    (OUT / "img").mkdir(parents=True, exist_ok=True)
+    if OUT.exists():
+        shutil.rmtree(OUT)
+    (OUT / "img").mkdir(parents=True)
     for p in (CARVE / "named").glob("*.png"):
         shutil.copy(p, OUT / "img" / p.name)
-    ctl = s["plain_control_votes"]
+    controls = s.get("control_votes", {"plain": s["plain_control_votes"]})
+    keys = list(controls["plain"])
+    refs = reference("plain", "0", "plain Sisifo (Ortica Linear's outlines), no carve", controls["plain"], keys)
+    if "angular" in controls:
+        refs += "\n" + reference("angular", "Ang", "Ortica Angular Bold, its one weight on every line",
+                                 controls["angular"], keys)
+    intro = "".join(f"<p>{p}</p>" for p in INTRO[ROUND])
     cards = "\n".join(card(r) for r in s["rows"])
     page = f"""<title>Sisifo Carve Variants</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -77,21 +125,14 @@ h2 {{ margin:0; font-size:28px; }}
 .ax i {{ height:6px; background:linear-gradient(90deg, var(--bar) calc(var(--v)*100%), var(--track) 0); }}
 .ax b {{ font:500 12px var(--mono); font-variant-numeric:tabular-nums; text-align:right; }}
 img {{ display:block; width:100%; max-width:384px; height:auto; }}
-.control img {{ opacity:.95; }}
 </style>
 <main>
   <div class="intro">
-    <h1>Sisifo carve variants</h1>
-    <p>Five ways to carve Ortica Linear, ranked by the eight axes. Titles and set numbers are carved (CARV 100). The 13 px text stays plain, as it will in the app.</p>
-    <p><b>B, C and D tie</b> (within 0.02 of each other); A and E trail. On this phone each image shows at its real size: hold it at arm's length for the set numbers.</p>
-    <p>Which one should move on, or should two of them be blended (for example C's facets with B's flats)?</p>
+    <h1>Sisifo carve variants{'' if ROUND == '1' else ', round ' + ROUND}</h1>
+    {intro}
   </div>
 {cards}
-  <section class="control" id="plain">
-    <header><h2>0</h2><p class="look">plain Sisifo, no carve: the judges' hidden control</p><p class="total">&nbsp;</p></header>
-    <p class="note">Panel votes for the control: stone {ctl['stone']}, carving {ctl['carving']}, calm {ctl['calm']}. The judges told carved from plain every time.</p>
-    <img src="img/plain.png" width="384" alt="Sisifo uncarved at 6T size, for comparison">
-  </section>
+{refs}
 </main>"""
     (OUT / "index.html").write_text(page, encoding="utf-8")
     print(OUT / "index.html")
