@@ -22,6 +22,17 @@ def row(fam, w, label):
             f'<div class="p">{TEXT}</div></div></div>')
 
 
+SETS = ["62.5", "67.5", "100.0", "11.25", "48.0"]
+
+
+def figures_block():
+    """Right-aligned set weights, proportional against tnum: tabular columns line up, proportional ones wander."""
+    col = lambda w, tnum: (f'<div class="col" style="font-weight:{w};font-feature-settings:{chr(39)}tnum{chr(39)} {tnum}">'
+                           f'<div class="lab">{w} {"tnum" if tnum else "default"}</div>'
+                           + "".join(f"<div>{s}</div>" for s in SETS) + "</div>")
+    return '<div class="row figs">' + "".join(col(w, t) for w in (400, 700) for t in (0, 1)) + "</div>"
+
+
 def main():
     faces = f"@font-face{{font-family:S;src:url('{VF.as_uri()}');font-weight:300 700}}" + "".join(
         f"@font-face{{font-family:O{w};src:url('{(ORT / f'OrticaLinear-{s}.otf').as_uri()}')}}" for w, s in ORIG.items())
@@ -34,7 +45,9 @@ def main():
 html{{zoom:2.8125}} body{{margin:0;width:384px;background:#ebebeb;color:#1c1c1c;padding:12px 16px;box-sizing:border-box}}
 .row{{padding:8px 0;border-bottom:1px solid rgba(0,0,0,.1)}} .lab{{font:500 9px monospace;color:#575757;margin-bottom:2px}}
 .d{{font-size:28px;line-height:32px}} .n{{font-size:34px;line-height:40px;font-variant-numeric:lining-nums}}
-.n span{{font-size:16px;color:#575757}} .p{{font-size:13px;line-height:20px}}</style>{rows}"""
+.n span{{font-size:16px;color:#575757}} .p{{font-size:13px;line-height:20px}}
+.figs{{display:flex;gap:10px;font-family:S;font-size:26px;line-height:32px}} .col{{flex:1;text-align:right}}
+.col .lab{{text-align:right}}</style>{figures_block()}{rows}"""
     page = ROOT / "build" / "specimen.html"
     page.parent.mkdir(exist_ok=True)
     page.write_text(html, encoding="utf-8")

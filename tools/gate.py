@@ -185,6 +185,39 @@ def shaped_widths_diff(texts, weights=(300, 400, 700)):
     return max(diffs)
 
 
+DIGITS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+
+
+def tabular_widths(weights):
+    return {w: {instance(w)["hmtx"].metrics[d + ".tf"][0] for d in DIGITS} for w in weights}
+
+
+def tnum_shaped_diff(weights=(300, 400, 550, 700)):
+    """Widths of "0000" ... "9999" set with tnum by the browser's HarfBuzz; the largest spread at one weight, in px at
+    100 px. The same strings without tnum must spread (else the feature was never what made them equal)."""
+    import headless_browser as hb
+    spans = "".join(f'<span data-k="{w}|{d}|{f}" style="font-variation-settings:{chr(39)}wght{chr(39)} {w};'
+                    f'font-feature-settings:{chr(39)}tnum{chr(39)} {f}">{str(d) * 4}</span><br>'
+                    for w in weights for d in range(10) for f in (1, 0))
+    page = ROOT / "build" / "tnum.html"
+    page.parent.mkdir(exist_ok=True)
+    page.write_text(f"<!doctype html><meta charset=utf-8><style>@font-face{{font-family:S;src:url('{VF.as_uri()}');"
+                    f"font-weight:300 700}} body{{font:100px S;white-space:nowrap}}</style>{spans}", encoding="utf-8")
+    js = ("(async()=>{await document.fonts.ready;const r={};for(const f of document.fonts){r['face:'+f.family]=f.status};"
+          "document.querySelectorAll('span').forEach(s=>r[s.dataset.k]=s.getBoundingClientRect().width);"
+          "return JSON.stringify(r)})()")
+    try:
+        res = json.loads(hb.evaluate(str(page), js, 4000, 3000))
+    finally:
+        hb.close_all()
+    if res.get("face:S") != "loaded":
+        raise RuntimeError("Sisifo not loaded in the tnum page")
+    spread = lambda w, f: max(res[f"{w}|{d}|{f}"] for d in range(10)) - min(res[f"{w}|{d}|{f}"] for d in range(10))
+    if min(spread(w, 0) for w in weights) < 10:
+        raise RuntimeError("proportional digits did not spread; the page is not measuring Sisifo")
+    return max(spread(w, 1) for w in weights)
+
+
 def run():
     out = {}
     for w, s in ((300, "Light"), (400, "Regular"), (700, "Bold")):
@@ -192,18 +225,22 @@ def run():
     out["outline errors"] = {w: outline_errors(w) for w in (300, 350, 400, 550, 650, 700)}
     out["direction flips"] = direction_flips((300, 350, 400, 550, 650, 700))
     out["shaped width diff px"] = shaped_widths_diff(["AVATAR", "To Ty Yo", "Wave LT", "Panca piana 62.5 kg"])
+    out["tabular widths"] = {w: sorted(s) for w, s in tabular_widths((300, 400, 550, 700)).items()}
+    out["tnum spread px"] = tnum_shaped_diff()
     return out
 
 
 def main():
     r = run()
     ok = all(not r[f"outlines {w}"]["mismatches"] for w in (300, 400, 700)) \
-        and not any(r["outline errors"].values()) and not r["direction flips"] and r["shaped width diff px"] <= 0.5
+        and not any(r["outline errors"].values()) and not r["direction flips"] and r["shaped width diff px"] <= 0.5 \
+        and all(len(s) == 1 for s in r["tabular widths"].values()) and r["tnum spread px"] <= 0.01
     for w in (300, 400, 700):
         x = r[f"outlines {w}"]
         print(f"outlines {w}: {x['compared']} compared, {len(x['mismatches'])} mismatched, exempt {x['exempt']}")
     print(f"outline errors: {sum(len(v) for v in r['outline errors'].values())}; direction flips: {len(r['direction flips'])}; "
           f"shaped width diff: {r['shaped width diff px']:.2f} px at 100 px")
+    print(f"tabular widths: {r['tabular widths']}; tnum spread: {r['tnum spread px']:.3f} px at 100 px")
     (ROOT / "build").mkdir(exist_ok=True)
     (ROOT / "build" / "gate.json").write_text(json.dumps(r, indent=1, default=str), encoding="utf-8")
     print("GATE PASS" if ok else "GATE FAIL")

@@ -12,7 +12,8 @@ def test_instances_match_original(w, style):
 
 def test_same_glyph_set_as_original():
     new, old = gate.instance(400), gate.original("Regular")
-    assert set(new.getGlyphOrder()) == set(old.getGlyphOrder())   # helper glyphs (zero.dnom...) stay unexported
+    tf = {d + ".tf" for d in ("zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine")}
+    assert set(new.getGlyphOrder()) == set(old.getGlyphOrder()) | tf   # helpers (zero.dnom...) stay unexported
 
 
 @pytest.mark.parametrize("w", [300, 400, 700, 350, 550, 650])
@@ -32,3 +33,12 @@ def test_kerning_widths_match_original():
 def test_app_characters_match_original():
     r = gate.compare_outlines(400, "Regular", chars="0123456789.,×·–’«»àèéìòùÀÈÉÌÒÙ")
     assert r["compared"] == 30 and r["mismatches"] == []
+
+
+def test_tabular_one_width_per_instance():
+    widths = gate.tabular_widths((300, 400, 550, 700))
+    assert all(len(s) == 1 for s in widths.values()), widths
+
+
+def test_tnum_shaped_equal():
+    assert gate.tnum_shaped_diff((300, 400, 550, 700)) <= 0.01
