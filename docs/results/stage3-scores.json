@@ -1,0 +1,266 @@
+{
+ "rows": [
+  {
+   "variant": "B",
+   "code": "K4",
+   "harmony": 0.686,
+   "numbers": 0.856,
+   "technical": 1.0,
+   "small": 0.991,
+   "faithful": 0.978,
+   "stone": 0.917,
+   "carving": 0.667,
+   "calm": 0.675,
+   "votes": {
+    "stone": [
+     3,
+     4,
+     4
+    ],
+    "carving": [
+     2,
+     3,
+     3
+    ],
+    "calm": [
+     3,
+     3,
+     3
+    ]
+   },
+   "disagreement": 1,
+   "why": [
+    {
+     "stone": "Strong faceting on bowls and digits reads as cut stone, comparable to the most carved variants.",
+     "carving": "Facets are mostly coherent, but the rotated-diamond period and slightly uneven segment lengths on 6 and 5 feel more mechanical than chiselled.",
+     "calm": "Steady overall, though the diamond dots and harder corners add a touch of nervousness."
+    },
+    {
+     "stone": "Clearly faceted curves across all letters and figures give a convincing hewn-inscription character.",
+     "carving": "One consistent cutting logic with crisp straight planes and legible digits; only marginally rough on the heaviest bold rounds.",
+     "calm": "Grounded and steady, though the pronounced facets make the bold numbers a touch more forceful than K1."
+    },
+    {
+     "stone": "The most convincingly hewn: angular bowls, faceted counters and diamond-like dots read as an inscription cut into stone.",
+     "carving": "The faceting is one coherent system carried through letters, digits and punctuation, with digits easy to tell apart, though the largest bowls get somewhat coarse.",
+     "calm": "Grounded with strong presence; the angularity is firm but not aggressive."
+    }
+   ],
+   "total": 0.8375,
+   "tie_with_next": true
+  },
+  {
+   "variant": "C",
+   "code": "K1",
+   "harmony": 0.695,
+   "numbers": 0.884,
+   "technical": 1.0,
+   "small": 0.991,
+   "faithful": 0.983,
+   "stone": 0.667,
+   "carving": 0.75,
+   "calm": 0.758,
+   "votes": {
+    "stone": [
+     2,
+     3,
+     3
+    ],
+    "carving": [
+     3,
+     3,
+     3
+    ],
+    "calm": [
+     4,
+     4,
+     3
+    ]
+   },
+   "disagreement": 1,
+   "why": [
+    {
+     "stone": "Moderate faceting on bowls (O, 6, 0, B) gives a hint of hewn edges, but at a glance it still reads mostly as a smooth book serif.",
+     "carving": "Facets are applied consistently across letters and digits with clean straight cuts, and 1/7, 3/8, 0/O stay clearly distinct.",
+     "calm": "Quiet and steady with full presence; the cuts never call attention to themselves."
+    },
+    {
+     "stone": "Moderate polygonal faceting on bowls and curves gives the serif a hewn, inscribed feel without losing its classical shape.",
+     "carving": "Facets are applied consistently across lowercase, caps and digits and stay crisp; 1/7, 3/8 and 0/O remain easy to tell apart, though the cuts are less decisive than in the stronger variants.",
+     "calm": "Steady and composed, with enough texture to give presence without any agitation."
+    },
+    {
+     "stone": "Moderate faceting on bowls (B, e, 6, O) gives a hewn, inscriptional feel over a classical serif skeleton.",
+     "carving": "Facets are applied evenly across letters and digits and stay crisp, with 1/7, 3/8 and 0/O clearly distinct, though some curves read slightly polygonal.",
+     "calm": "Steady and grounded with good presence; the facets add a little edge but nothing shouts."
+    }
+   ],
+   "total": 0.8315,
+   "tie_with_next": true
+  },
+  {
+   "variant": "D",
+   "code": "K5",
+   "harmony": 0.655,
+   "numbers": 0.869,
+   "technical": 1.0,
+   "small": 0.991,
+   "faithful": 0.982,
+   "stone": 0.833,
+   "carving": 0.667,
+   "calm": 0.7,
+   "votes": {
+    "stone": [
+     3,
+     4,
+     3
+    ],
+    "carving": [
+     3,
+     2,
+     3
+    ],
+    "calm": [
+     3,
+     3,
+     3
+    ]
+   },
+   "disagreement": 1,
+   "why": [
+    {
+     "stone": "Pronounced, even polygonal cuts on O, 0, 6, 5 and the lowercase bowls give a clear hewn-inscription feel.",
+     "carving": "Faceting is consistent across the whole set with crisp planes and a round-ish period, and confusable digits remain easy to separate.",
+     "calm": "Grounded and composed with presence, slightly more insistent than the subtler variants."
+    },
+    {
+     "stone": "Strong polygonal cuts on bowls and terminals read unmistakably as chiselled stone.",
+     "carving": "Consistent in concept, but the bold rounds (O, 0, C, 6) show slightly irregular, stepped facets that start to look rough rather than precisely cut.",
+     "calm": "Not aggressive, but the heavier faceting adds some restlessness to the bold display lines."
+    },
+    {
+     "stone": "Clear, medium-strength facets give a carved feel similar to K1.",
+     "carving": "Facets are consistent and crisp across letters and figures with no broken shapes, and the digit pairs stay distinct.",
+     "calm": "Balanced and steady, with presence and only mild angular tension."
+    }
+   ],
+   "total": 0.8275,
+   "tie_with_next": true
+  },
+  {
+   "variant": "A",
+   "code": "K2",
+   "harmony": 0.648,
+   "numbers": 0.856,
+   "technical": 1.0,
+   "small": 0.991,
+   "faithful": 0.979,
+   "stone": 0.833,
+   "carving": 0.583,
+   "calm": 0.7,
+   "votes": {
+    "stone": [
+     3,
+     4,
+     3
+    ],
+    "carving": [
+     3,
+     2,
+     2
+    ],
+    "calm": [
+     3,
+     3,
+     3
+    ]
+   },
+   "disagreement": 1,
+   "why": [
+    {
+     "stone": "Clearly polygonal bowls on O, 6, 5, e and s read as chisel-cut planes, giving the titles and set numbers a convincing inscribed feel.",
+     "carving": "One coherent faceting system across caps, lowercase and digits with crisp cuts; only some small bowls (s, e at the largest size) get slightly lumpy, and digits stay legible.",
+     "calm": "Still composed, though the visible angularity adds a little more edge than the softer variants."
+    },
+    {
+     "stone": "Strong faceting turns every bowl into chiselled planes, so the display text reads clearly as cut stone.",
+     "carving": "Coherent across the set, but at bold caps the O, C and 0 edges get slightly jagged and stepped, edging toward a rough rather than clean chisel.",
+     "calm": "Still measured, but the rougher faceting adds a little visual noise at large bold sizes."
+    },
+    {
+     "stone": "Strong, visible facets on every bowl make the display text read clearly as cut stone.",
+     "carving": "Facets are coarse and large enough that curves (e, s, 6, 5) start to look low-poly rather than chiselled, though digits remain distinguishable.",
+     "calm": "Calm overall, but the heavier angularity adds some visual noise at large sizes."
+    }
+   ],
+   "total": 0.8134,
+   "tie_with_next": false
+  },
+  {
+   "variant": "E",
+   "code": "K3",
+   "harmony": 0.678,
+   "numbers": 0.858,
+   "technical": 1.0,
+   "small": 0.991,
+   "faithful": 0.989,
+   "stone": 0.417,
+   "carving": 0.5,
+   "calm": 0.8,
+   "votes": {
+    "stone": [
+     1,
+     2,
+     2
+    ],
+    "carving": [
+     2,
+     2,
+     2
+    ],
+    "calm": [
+     4,
+     4,
+     4
+    ]
+   },
+   "disagreement": 1,
+   "why": [
+    {
+     "stone": "Faceting is so faint it is barely noticeable even at the largest size, so it reads as an ordinary serif.",
+     "carving": "What carving there is is coherent and clean, but it is too subtle to register at display size.",
+     "calm": "Very calm and balanced with solid presence."
+    },
+    {
+     "stone": "Faceting is subtle and mostly visible only on large curves, so it hints at stone more than it declares it.",
+     "carving": "What carving there is looks clean and consistent, but it is so faint at display size that it barely registers as a design trait.",
+     "calm": "Very calm and even, close to a plain classical serif, with solid presence from the weight."
+    },
+    {
+     "stone": "Faceting is subtle and mostly reads as a classical serif with only a hint of cut stone.",
+     "carving": "What carving there is is clean and consistent, but it is barely visible at display size so it contributes little.",
+     "calm": "Very calm and composed with full presence, close to a refined book serif."
+    }
+   ],
+   "total": 0.7651,
+   "tie_with_next": false
+  }
+ ],
+ "plain_control_votes": {
+  "stone": [
+   1,
+   1,
+   1
+  ],
+  "carving": [
+   0,
+   0,
+   0
+  ],
+  "calm": [
+   4,
+   4,
+   4
+  ]
+ }
+}

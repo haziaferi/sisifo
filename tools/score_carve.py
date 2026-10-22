@@ -22,13 +22,16 @@ import sys
 
 from fontTools.ttLib import TTFont
 from fontTools.varLib.instancer import instantiateVariableFont
-from PIL import Image, ImageDraw, ImageFont
+from fontTools.pens.basePen import BasePen
+from PIL import Image, ImageDraw
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SEARCH = ROOT.parent
 sys.path.insert(0, str(SEARCH / "tools"))
 sys.path.insert(0, str(pathlib.Path.home() / ".claude" / "tools"))
 import measure  # noqa: E402
+sys.path.insert(0, str(ROOT / "tools"))
+import gate  # noqa: E402
 
 OUT = ROOT / "build" / "carve"
 ORTICA = SEARCH / "ortica-src" / "fonts" / "OrticaLinear-Regular.otf"
@@ -50,12 +53,57 @@ def static(v, carve):
     return p
 
 
+class _Flat(BasePen):
+    """Polylines of a glyph's contours (curves flattened)."""
+    def __init__(self):
+        super().__init__(None)
+        self.polys, self.cur = [], []
+
+    def _moveTo(self, p):
+        self.cur = [p]
+
+    def _lineTo(self, p):
+        self.cur.append(p)
+
+    def _curveToOne(self, a, b, c):
+        p0 = self.cur[-1]
+        for i in range(1, 13):
+            t, u = i / 12, 1 - i / 12
+            self.cur.append(tuple(u ** 3 * p0[k] + 3 * u * u * t * a[k] + 3 * u * t * t * b[k] + t ** 3 * c[k]
+                                  for k in (0, 1)))
+
+    def _closePath(self):
+        self.polys.append(self.cur)
+        self.cur = []
+
+
 def _mask(font, text, size, canvas=None):
-    ft = ImageFont.truetype(str(font), size)
-    w, h = canvas or (int(ft.getlength(text)) + 40, size * 2)
-    im = Image.new("L", (w, h), 0)
-    ImageDraw.Draw(im).text((20, size // 2), text, font=ft, fill=255)
-    return im, ft
+    """Text rasterised from the outlines themselves, the same way for every font (no hinting: PIL hints TrueType and
+    CFF differently, which alone made Sisifo's line 2 % wider than Ortica's with identical advances). Overlaps are
+    merged first, then outer contours fill and counters clear, at 4x and averaged down."""
+    t = TTFont(font)
+    cmap, upm, hmtx = t.getBestCmap(), t["head"].unitsPerEm, t["hmtx"].metrics
+    s, k = size / upm, 4
+    width = sum(hmtx[cmap[ord(c)]][0] for c in text) * s
+    w, h = canvas or (int(width) + 40, size * 2)
+    im = Image.new("L", (w * k, h * k), 0)
+    dr = ImageDraw.Draw(im)
+    x = 20.0
+    for c in text:
+        name = cmap[ord(c)]
+        pen = _Flat()
+        gate._merged(t, name).draw(pen)
+        polys = sorted(pen.polys, key=lambda p: -abs(_area(p)))
+        for poly in polys:
+            pts = [((x + px * s) * k, (size * 1.5 - py * s) * k) for px, py in poly]
+            if len(pts) > 2:
+                dr.polygon(pts, fill=255 if _area(poly) * _area(polys[0]) > 0 else 0)
+        x += hmtx[name][0] * s
+    return im.resize((w, h), Image.LANCZOS), width
+
+
+def _area(poly):
+    return sum(poly[i][0] * poly[i - 1][1] - poly[i - 1][0] * poly[i][1] for i in range(len(poly))) / 2
 
 
 def _iou(a, b):
@@ -71,10 +119,10 @@ def _iou(a, b):
 
 def small_text(v):
     size = round(13 * 2.8125)
-    new, fn = _mask(static(v, 0), SMALL, size)
-    old, fo = _mask(ORTICA, SMALL, size, new.size)
-    xh = lambda ft: ft.getbbox("x")[3] - ft.getbbox("x")[1]
-    xr, wr = xh(fn) / xh(fo), fn.getlength(SMALL) / fo.getlength(SMALL)
+    new, wn = _mask(static(v, 0), SMALL, size)
+    old, wo = _mask(ORTICA, SMALL, size, new.size)
+    xh = lambda f: measure.bbox_units(TTFont(f), "x")[3]
+    xr, wr = xh(static(v, 0)) / xh(ORTICA), wn / wo
     parts = {"xheight_ratio": round(xr, 4), "width_ratio": round(wr, 4), "line_iou": round(_iou(new, old), 4)}
     parts["small"] = round(statistics.mean([measure.clamp(1 - abs(xr - 1) / 0.1), measure.clamp(1 - abs(wr - 1) / 0.05),
                                             parts["line_iou"]]), 3)
@@ -113,7 +161,10 @@ def faithful(v):
     tc, oc = t.getBestCmap(), o.getBestCmap()
     adv = statistics.mean(t["hmtx"].metrics[tc[ord(c)]][0] == o["hmtx"].metrics[oc[ord(c)]][0] for c in CHARS)
     kern_px = _shaped_widths(vf(v))
-    parts = {"shape_iou": round(statistics.mean(ious), 4), "worst": sorted(zip(ious, CHARS))[:3],
+    plain = statistics.mean(_iou(_mask(static(v, 0), ch, 64, (140, 128))[0], _mask(orig, ch, 64, (140, 128))[0])
+                            for ch in CHARS)
+    parts = {"shape_iou": round(statistics.mean(ious), 4), "shape_iou_plain": round(plain, 4),
+             "worst": sorted(zip(ious, CHARS))[:3],
              "advances_equal": adv, "kern_diff_px": round(kern_px, 3), "kerning": 1.0 if kern_px <= 0.5 else 0.0}
     parts["faithful"] = round(statistics.mean([parts["shape_iou"], adv, parts["kerning"]]), 3)
     return parts

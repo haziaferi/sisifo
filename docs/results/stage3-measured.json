@@ -1,0 +1,187 @@
+{
+ "A": {
+  "harmony": 0.648,
+  "numbers": 0.856,
+  "calm_measured": 0.65,
+  "technical": 1.0,
+  "size_kb": 195,
+  "numbers_parts": {
+   "tabular": 1.0,
+   "lining": 1.0,
+   "distinct": 1.0,
+   "decimal": 0.424
+  },
+  "xheight_ratio": 1.0,
+  "width_ratio": 1.0,
+  "line_iou": 0.9738,
+  "small": 0.991,
+  "shape_iou": 0.9377,
+  "shape_iou_plain": 0.9857,
+  "worst": [
+   [
+    0.8359133126934984,
+    "0"
+   ],
+   [
+    0.8359511343804538,
+    "C"
+   ],
+   [
+    0.8502581755593803,
+    "6"
+   ]
+  ],
+  "advances_equal": 1,
+  "kern_diff_px": 0.0,
+  "kerning": 1.0,
+  "faithful": 0.979
+ },
+ "B": {
+  "harmony": 0.686,
+  "numbers": 0.856,
+  "calm_measured": 0.6,
+  "technical": 1.0,
+  "size_kb": 200,
+  "numbers_parts": {
+   "tabular": 1.0,
+   "lining": 1.0,
+   "distinct": 1.0,
+   "decimal": 0.424
+  },
+  "xheight_ratio": 1.0,
+  "width_ratio": 1.0,
+  "line_iou": 0.9743,
+  "small": 0.991,
+  "shape_iou": 0.9332,
+  "shape_iou_plain": 0.9855,
+  "worst": [
+   [
+    0.8197226502311248,
+    "0"
+   ],
+   [
+    0.8304498269896193,
+    "C"
+   ],
+   [
+    0.835030549898167,
+    "3"
+   ]
+  ],
+  "advances_equal": 1,
+  "kern_diff_px": 0.0,
+  "kerning": 1.0,
+  "faithful": 0.978
+ },
+ "C": {
+  "harmony": 0.695,
+  "numbers": 0.884,
+  "calm_measured": 0.6,
+  "technical": 1.0,
+  "size_kb": 235,
+  "numbers_parts": {
+   "tabular": 1.0,
+   "lining": 1.0,
+   "distinct": 1.0,
+   "decimal": 0.536
+  },
+  "xheight_ratio": 1.0,
+  "width_ratio": 1.0,
+  "line_iou": 0.9733,
+  "small": 0.991,
+  "shape_iou": 0.9499,
+  "shape_iou_plain": 0.985,
+  "worst": [
+   [
+    0.8375394321766562,
+    "0"
+   ],
+   [
+    0.8617021276595744,
+    "C"
+   ],
+   [
+    0.8739669421487604,
+    "3"
+   ]
+  ],
+  "advances_equal": 1,
+  "kern_diff_px": 0.0,
+  "kerning": 1.0,
+  "faithful": 0.983
+ },
+ "D": {
+  "harmony": 0.655,
+  "numbers": 0.869,
+  "calm_measured": 0.65,
+  "technical": 1.0,
+  "size_kb": 222,
+  "numbers_parts": {
+   "tabular": 1.0,
+   "lining": 1.0,
+   "distinct": 1.0,
+   "decimal": 0.474
+  },
+  "xheight_ratio": 1.0,
+  "width_ratio": 1.0,
+  "line_iou": 0.9735,
+  "small": 0.991,
+  "shape_iou": 0.9457,
+  "shape_iou_plain": 0.9857,
+  "worst": [
+   [
+    0.8359133126934984,
+    "0"
+   ],
+   [
+    0.8359511343804538,
+    "C"
+   ],
+   [
+    0.8502581755593803,
+    "6"
+   ]
+  ],
+  "advances_equal": 1,
+  "kern_diff_px": 0.0,
+  "kerning": 1.0,
+  "faithful": 0.982
+ },
+ "E": {
+  "harmony": 0.678,
+  "numbers": 0.858,
+  "calm_measured": 0.6,
+  "technical": 1.0,
+  "size_kb": 152,
+  "numbers_parts": {
+   "tabular": 1.0,
+   "lining": 1.0,
+   "distinct": 1.0,
+   "decimal": 0.433
+  },
+  "xheight_ratio": 1.0,
+  "width_ratio": 1.0,
+  "line_iou": 0.9736,
+  "small": 0.991,
+  "shape_iou": 0.9683,
+  "shape_iou_plain": 0.9855,
+  "worst": [
+   [
+    0.8685897435897436,
+    "0"
+   ],
+   [
+    0.8904109589041096,
+    "c"
+   ],
+   [
+    0.907608695652174,
+    "9"
+   ]
+  ],
+  "advances_equal": 1,
+  "kern_diff_px": 0.0,
+  "kerning": 1.0,
+  "faithful": 0.989
+ }
+}
