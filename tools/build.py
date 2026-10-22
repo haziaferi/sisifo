@@ -80,7 +80,13 @@ def _fontmake(ds, out, conversion_error=None) -> pathlib.Path:
     cmd = [sys.executable, "-m", "fontmake", "-m", str(ds), "-o", "variable", "--output-path", str(out)]
     if conversion_error:
         cmd += ["--conversion-error", str(conversion_error)]
-    r = subprocess.run(cmd, capture_output=True, text=True, cwd=ROOT)
+    # reproducible: the font's build time is the last commit's, so one commit always gives byte-identical fonts
+    import os
+    env = dict(os.environ)
+    stamp = subprocess.run(["git", "log", "-1", "--format=%ct"], capture_output=True, text=True, cwd=ROOT)
+    if stamp.returncode == 0 and stamp.stdout.strip():
+        env.setdefault("SOURCE_DATE_EPOCH", stamp.stdout.strip())
+    r = subprocess.run(cmd, capture_output=True, text=True, cwd=ROOT, env=env)
     if r.returncode:
         raise RuntimeError(f"fontmake failed ({r.returncode}):\n{r.stdout[-3000:]}\n{r.stderr[-3000:]}")
     return out
