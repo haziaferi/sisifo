@@ -10,8 +10,11 @@
       <point x="546" y="-80"/>
       <point x="464" y="13" type="curve"/>
       <point x="359" y="-2" type="line"/>
-      <point x="443" y="-92"/>
-      <point x="532" y="-136"/>
+      <point x="437" y="-85"/>
+      <point x="519" y="-129"/>
+      <point x="719" y="-127" type="curve" smooth="yes"/>
+      <point x="736" y="-127"/>
+      <point x="753" y="-127"/>
     </contour>
     <component base="O" identifier="590FF826"/>
   </outline>
