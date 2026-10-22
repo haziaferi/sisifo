@@ -2,6 +2,7 @@
 
 Usage:  python tools/build.py          -> sources/Sisifo.designspace, fonts/variable/Sisifo[wght].ttf
         python tools/build.py A [E ..] -> build/variants/<id>/Sisifo[CARV,wght].ttf, two axes, from tools/carve.py masters
+        python tools/build.py release  -> fonts/variable/Sisifo[CARV,wght].ttf, the chosen carve (CHOSEN)
 """
 import pathlib
 import subprocess
@@ -89,6 +90,18 @@ def build() -> pathlib.Path:
     return _fontmake(designspace(), OUT)
 
 
+CHOSEN = "GL"   # owner, 2026-10-22, after round 3: "The new GL reads better; keep it and move on"
+RELEASE = ROOT / "fonts" / "variable" / "Sisifo[CARV,wght].ttf"
+
+
+def release() -> pathlib.Path:
+    """The chosen carve as the font the app takes: fonts/variable/Sisifo[CARV,wght].ttf."""
+    import shutil
+    RELEASE.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy(build_carved(CHOSEN), RELEASE)
+    return RELEASE
+
+
 def build_carved(variant="A") -> pathlib.Path:
     # cubic-to-quadratic error 0.25 unit, not fontmake's 1: the quadratics fall consistently inside the curve, and on a
     # thin accent (breve.case, Light, variant E) that cost 1.06 % of its area at CARV 0 (0.5 unit: still 1.06 %;
@@ -98,5 +111,10 @@ def build_carved(variant="A") -> pathlib.Path:
 
 
 if __name__ == "__main__":
-    for p in [build_carved(v) for v in sys.argv[1:]] or [build()]:
+    args = sys.argv[1:]
+    if args == ["release"]:
+        args, done = [], [release()]
+    else:
+        done = []
+    for p in done + [build_carved(v) for v in args] or [build()]:
         print(p, f"{p.stat().st_size // 1024} KB")

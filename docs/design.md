@@ -119,3 +119,12 @@ Each of these is judged by the axes above, not by preference.
 Its own public repository, `github.com/haziaferi/sisifo`: sources, build script, OFL and notices, its own CI. The app
 takes released font files and does not run Python font tooling in its Gradle CI. Creating the repository and pushing
 to it wait for the owner's go-ahead at the end of stage 1.
+
+## Decisions during the build
+
+- **Stage 2 (2026-10-22):** tabular lining figures (`.tf`, `tnum`), one advance per master; default digits unchanged.
+- **Stage 3 (2026-10-22): the carve is GL**, Ortica Angular's own cuts fitted onto Linear's outlines, gentler at
+  Light (Light 0.5, Regular 0.75, Bold 1 of the full carve). Chosen by the owner on the phone after three rounds
+  (round 1's best, B, "lost personality"; round 2 added Angular's cuts and a blind personality axis; round 3 added
+  guided fits for the 6 and other fallbacks and evened 3, 8, S). Released as `fonts/variable/Sisifo[CARV,wght].ttf`
+  by `python tools/build.py release`. Scores and the panel's reasons: `docs/results/stage3-*.json`.
