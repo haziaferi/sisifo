@@ -1,4 +1,4 @@
-fonts/
+/fonts/
 __pycache__/
-build/
+/build/
 .pytest_cache/
