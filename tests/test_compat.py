@@ -7,7 +7,7 @@ from fontTools.pens.areaPen import AreaPen
 from fontTools.pens.boundsPen import BoundsPen
 
 import compat
-from conftest import ORIGINAL_UFO, SOURCES
+from conftest import ORIGINAL_UFO
 
 FIXED_NAMES = ["A", "I", "M", "Q", "V", "W", "X", "Y", "ampersand", "b", "d", "h", "k", "l", "m", "n", "p", "r", "u",
                "v", "w", "x", "y"]
@@ -32,8 +32,8 @@ def test_split_preserves_shape():
 def fixed(tmp_path_factory):
     d = tmp_path_factory.mktemp("ufos")
     fonts = []
-    for s in ("Light", "Regular", "Bold"):
-        shutil.copytree(SOURCES / f"Sisifo-{s}.ufo", d / f"{s}.ufo")
+    for s in ("Light", "Regular", "Bold"):           # the untouched Ortica sources, not the already-fixed copies
+        shutil.copytree(ORIGINAL_UFO[s], d / f"{s}.ufo")
         fonts.append(ufoLib2.Font.open(d / f"{s}.ufo"))
     report = compat.make_compatible(*fonts)
     return fonts, report

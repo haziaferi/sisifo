@@ -467,6 +467,47 @@
       <string>caroncomb.case</string>
       <string>brevecomb.case</string>
     </array>
+    <key>public.openTypeCategories</key>
+    <dict>
+      <key>acutecomb</key>
+      <string>mark</string>
+      <key>brevecomb</key>
+      <string>mark</string>
+      <key>brevecomb.case</key>
+      <string>mark</string>
+      <key>caroncomb</key>
+      <string>mark</string>
+      <key>caroncomb.alt</key>
+      <string>mark</string>
+      <key>caroncomb.case</key>
+      <string>mark</string>
+      <key>cedillacomb</key>
+      <string>mark</string>
+      <key>circumflexcomb</key>
+      <string>mark</string>
+      <key>circumflexcomb.case</key>
+      <string>mark</string>
+      <key>commaaccentcomb</key>
+      <string>mark</string>
+      <key>commaturnedabovecomb</key>
+      <string>mark</string>
+      <key>dieresiscomb</key>
+      <string>mark</string>
+      <key>dotaccentcomb</key>
+      <string>mark</string>
+      <key>gravecomb</key>
+      <string>mark</string>
+      <key>hungarumlautcomb</key>
+      <string>mark</string>
+      <key>macroncomb</key>
+      <string>mark</string>
+      <key>ogonekcomb</key>
+      <string>mark</string>
+      <key>ringcomb</key>
+      <string>mark</string>
+      <key>tildecomb</key>
+      <string>mark</string>
+    </dict>
     <key>public.postscriptNames</key>
     <dict>
       <key>Gcommaaccent</key>

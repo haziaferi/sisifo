@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <glyph name="brevecomb" format="2">
-  <advance width="349.5"/>
   <unicode hex="0306"/>
   <anchor x="175" y="502" name="_top"/>
   <anchor x="175" y="749" name="top"/>

@@ -27,6 +27,10 @@ def designspace() -> pathlib.Path:
         if style == "Regular":   # the default master carries the features, groups and info
             s.copyLib = s.copyInfo = s.copyGroups = s.copyFeatures = True
         doc.addSource(s)
+    # helper glyphs Ortica does not export (zero.dnom among them); fontmake reads this list from the designspace lib
+    import ufoLib2
+    regular = ufoLib2.Font.open(ROOT / "sources" / "Sisifo-Regular.ufo")
+    doc.lib["public.skipExportGlyphs"] = list(regular.lib.get("public.skipExportGlyphs", []))
     for style, w in INSTANCES:
         i = InstanceDescriptor()
         i.familyName, i.styleName, i.location = "Sisifo", style, {"Weight": w}

@@ -51,4 +51,22 @@
       </location>
     </instance>
   </instances>
+  <lib>
+    <dict>
+      <key>public.skipExportGlyphs</key>
+      <array>
+        <string>four.dnom</string>
+        <string>four.numr</string>
+        <string>foursuperior</string>
+        <string>one.dnom</string>
+        <string>one.numr</string>
+        <string>three.dnom</string>
+        <string>three.numr</string>
+        <string>two.dnom</string>
+        <string>two.numr</string>
+        <string>zero.dnom</string>
+        <string>zero.numr</string>
+      </array>
+    </dict>
+  </lib>
 </designspace>
