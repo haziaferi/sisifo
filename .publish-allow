@@ -1,2 +1,2 @@
-^email\|OFL\.txt\|
-^email\|vendor/ortica/LICENSE\.txt\|
+^email\|(history:)?OFL\.txt\|
+^email\|(history:)?vendor/ortica/LICENSE\.txt\|
