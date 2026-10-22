@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>ascender</key>
+    <integer>760</integer>
+    <key>capHeight</key>
+    <integer>700</integer>
+    <key>copyright</key>
+    <string>Copyright 2021 Benedetta Bovani &amp; Collletttivo (Ortica, https://github.com/collletttivo/ortica). Sisifo modifications copyright 2026 haziaferi.</string>
+    <key>descender</key>
+    <integer>-240</integer>
+    <key>familyName</key>
+    <string>Sisifo</string>
+    <key>italicAngle</key>
+    <integer>0</integer>
+    <key>openTypeHeadCreated</key>
+    <string>2022/04/09 16:41:27</string>
+    <key>openTypeHheaAscender</key>
+    <integer>1033</integer>
+    <key>openTypeHheaDescender</key>
+    <integer>-320</integer>
+    <key>openTypeHheaLineGap</key>
+    <integer>60</integer>
+    <key>openTypeNameDesigner</key>
+    <string>Benedetta Bovani (Ortica); Sisifo derivation: haziaferi</string>
+    <key>openTypeNameLicense</key>
+    <string>This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://openfontlicense.org</string>
+    <key>openTypeNameLicenseURL</key>
+    <string>https://openfontlicense.org</string>
+    <key>openTypeNameManufacturer</key>
+    <string>Collletttivo</string>
+    <key>openTypeNameManufacturerURL</key>
+    <string>https://www.collletttivo.it</string>
+    <key>openTypeNamePreferredFamilyName</key>
+    <string>Sisifo</string>
+    <key>openTypeNamePreferredSubfamilyName</key>
+    <string>Light</string>
+    <key>openTypeOS2Selection</key>
+    <array>
+      <integer>7</integer>
+    </array>
+    <key>openTypeOS2Type</key>
+    <array/>
+    <key>openTypeOS2TypoAscender</key>
+    <integer>1033</integer>
+    <key>openTypeOS2TypoDescender</key>
+    <integer>-320</integer>
+    <key>openTypeOS2TypoLineGap</key>
+    <integer>60</integer>
+    <key>openTypeOS2UnicodeRanges</key>
+    <array>
+      <integer>0</integer>
+      <integer>1</integer>
+      <integer>2</integer>
+    </array>
+    <key>openTypeOS2VendorID</key>
+    <string>NONE</string>
+    <key>openTypeOS2WeightClass</key>
+    <integer>300</integer>
+    <key>openTypeOS2WidthClass</key>
+    <integer>5</integer>
+    <key>openTypeOS2WinAscent</key>
+    <integer>1033</integer>
+    <key>openTypeOS2WinDescent</key>
+    <integer>306</integer>
+    <key>postscriptBlueValues</key>
+    <array>
+      <integer>-11</integer>
+      <integer>0</integer>
+      <integer>500</integer>
+      <integer>511</integer>
+      <integer>700</integer>
+      <integer>713</integer>
+      <integer>760</integer>
+      <integer>771</integer>
+    </array>
+    <key>postscriptFontName</key>
+    <string>Sisifo-Light</string>
+    <key>postscriptFullName</key>
+    <string>Sisifo Light</string>
+    <key>styleMapFamilyName</key>
+    <string>Sisifo Light</string>
+    <key>styleMapStyleName</key>
+    <string>regular</string>
+    <key>styleName</key>
+    <string>Light</string>
+    <key>unitsPerEm</key>
+    <integer>1000</integer>
+    <key>versionMajor</key>
+    <integer>0</integer>
+    <key>versionMinor</key>
+    <integer>1</integer>
+    <key>xHeight</key>
+    <integer>500</integer>
+  </dict>
+</plist>
