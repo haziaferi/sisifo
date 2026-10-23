@@ -89,3 +89,18 @@ def test_z_credits_cinzel():
     fs = {s: ufoLib2.Font.open(SOURCES / f"Sisifo-{s}.ufo") for s in STYLES}
     ss01.add(fs, "Z")
     assert all("Cinzel Project Authors" in fs[s].info.copyright for s in STYLES)
+
+
+def test_z_kerned_from_cinzel():
+    """Z's capitals take Cinzel's own kerning at each master's weight: classic pairs tighten, every ss01 capital and
+    its accented forms are in one kerning group per side."""
+    fs = {s: ufoLib2.Font.open(SOURCES / f"Sisifo-{s}.ufo") for s in STYLES}
+    names = ss01.add(fs, "Z")
+    for s, f in fs.items():
+        k = f.kerning
+        for a, b in (("A", "V"), ("T", "A"), ("L", "T"), ("A", "Y")):
+            assert k[(f"public.kern1.ss01_{a}", f"public.kern2.ss01_{b}")] < -40, (s, a, b)
+        assert k[("public.kern1.ss01_T", "period")] < -40
+        for side in ("kern1", "kern2"):
+            grouped = [n for g, m in f.groups.items() if g.startswith(f"public.{side}.ss01_") for n in m]
+            assert sorted(grouped) == sorted(names), (s, side)

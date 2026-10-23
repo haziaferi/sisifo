@@ -116,6 +116,86 @@ def _cinzel_stems():
     return s(400), s(900)
 
 
+PUNCT = ".,:;-–—'’‘\"“”«»!?()&/·"   # kerned against the ss01 capitals
+
+
+def _cinzel_k(target, cap):
+    """Where on Cinzel's weight axis Sisifo's stem `target` falls: k = 0 at 400, 1 at 900 (negative: below 400)."""
+    s400, s900 = _cinzel_stems()
+    return (target / (cap / 700) - s400) / (s900 - s400)
+
+
+@functools.lru_cache(maxsize=None)
+def _cinzel_pairs(w):
+    """Cinzel's kern feature at weight w, resolved: {(left glyph, right glyph): x-advance adjustment}."""
+    t = _cinzel_static(w)
+    gpos = t["GPOS"].table
+    out = {}
+    idx = {i for fr in gpos.FeatureList.FeatureRecord if fr.FeatureTag == "kern" for i in fr.Feature.LookupListIndex}
+    for i in sorted(idx):
+        for st in gpos.LookupList.Lookup[i].SubTable:
+            st = getattr(st, "ExtSubTable", st)
+            if st.Format == 1:
+                for left, ps in zip(st.Coverage.glyphs, st.PairSet):
+                    for pv in ps.PairValueRecord:
+                        v = getattr(pv.Value1, "XAdvance", 0) if pv.Value1 else 0
+                        out.setdefault((left, pv.SecondGlyph), v)
+            else:
+                c1, c2 = st.ClassDef1.classDefs, st.ClassDef2.classDefs
+                rights = {}
+                for g, k in c2.items():
+                    rights.setdefault(k, []).append(g)
+                for left in st.Coverage.glyphs:
+                    rec = st.Class1Record[c1.get(left, 0)]
+                    for k2, c2rec in enumerate(rec.Class2Record):
+                        v = getattr(c2rec.Value1, "XAdvance", 0) if c2rec.Value1 else 0
+                        if v:
+                            for right in rights.get(k2, []):
+                                out.setdefault((left, right), v)   # pairs (format 1) come first and win
+    return out
+
+
+def _cinzel_kern_value(left_ch, right_ch, k, scale):
+    """Cinzel's kerning between two characters at axis position k, scaled to Sisifo's cap height."""
+    cm = _cinzel_static(400).getBestCmap()
+    if ord(left_ch) not in cm or ord(right_ch) not in cm:
+        return 0
+    pair = (cm[ord(left_ch)], cm[ord(right_ch)])
+    if k >= 0:
+        v = _cinzel_pairs(round(400 + 500 * k)).get(pair, 0)
+    else:
+        v4, v5 = _cinzel_pairs(400).get(pair, 0), _cinzel_pairs(500).get(pair, 0)
+        v = v4 + k * 5 * (v5 - v4)
+    return round(v * scale)
+
+
+def kern_z(f, names):
+    """Z: Cinzel's own kerning for the ss01 capitals in this master, at the Cinzel weight its capitals came from.
+    Each capital and its accented forms make one kerning group per side; pairs go between groups and against
+    Sisifo's punctuation."""
+    k, scale = _cinzel_k(stem(f, "I"), f.info.capHeight), f.info.capHeight / 700
+    members = {ch: [n for n in names if n == f"{ch}.ss01" or (n.endswith(".ss01") and f[n].components
+                                                                 and f[n].components[0].baseGlyph == f"{ch}.ss01")]
+               for ch in CAPS}
+    for ch, ms in members.items():
+        f.groups[f"public.kern1.ss01_{ch}"] = ms
+        f.groups[f"public.kern2.ss01_{ch}"] = list(ms)
+    cmap = {u: g.name for g in f for u in g.unicodes}
+    for a in CAPS:
+        for b in CAPS:
+            v = _cinzel_kern_value(a, b, k, scale)
+            if v:
+                f.kerning[(f"public.kern1.ss01_{a}", f"public.kern2.ss01_{b}")] = v
+        for p in PUNCT:
+            if ord(p) not in cmap:
+                continue
+            v1, v2 = _cinzel_kern_value(a, p, k, scale), _cinzel_kern_value(p, a, k, scale)
+            if v1:
+                f.kerning[(f"public.kern1.ss01_{a}", cmap[ord(p)])] = v1
+            if v2:
+                f.kerning[(cmap[ord(p)], f"public.kern2.ss01_{a}")] = v2
+
+
 def _cinzel_at_stem(ch, target, cap):
     """Cinzel's capital at the weight whose I stem is `target` (Sisifo units), scaled to cap height `cap`."""
     scale = cap / 700
@@ -361,4 +441,5 @@ def add(fonts, kind, ref=None):
         else:
             if CINZEL_COPYRIGHT not in (f.info.copyright or ""):
                 f.info.copyright = f"{f.info.copyright.rstrip('. ')}. Inscriptional capitals (ss01) from Cinzel: {CINZEL_COPYRIGHT}"
+            kern_z(f, names)
     return names

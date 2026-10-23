@@ -86,3 +86,8 @@ large. Sisifo is not Ortica and is not endorsed by its authors.
   licences; the font search's measure script is tools/search_measure.py; requirements.txt pins the build tools.
 - GL is not a separate file: `ss01` off is GL glyph for glyph, now pinned by a test. README.md documents the axes,
   the features and the build.
+- ss01 kerning (2026-10-23): Cinzel's own kern feature, read at each master's Cinzel weight (Light extrapolated)
+  and scaled to Sisifo's cap height, between the ss01 capitals (one group per letter with its accented forms) and
+  against punctuation: 653 pairs per master (A-V -110, T-A -78, L-T -100, T-period -85 at Regular). Checked by eye
+  (AVATAR, TAVOLA, WAVY, L'AVVENTO, T.A.V.: the gaps close). Two optical-spacing numbers were tried and both misjudge
+  diagonal pairs (one saturates, one penalises the tight AV a designer wants), so neither is used. Release 255 KB.
