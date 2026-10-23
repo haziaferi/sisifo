@@ -529,6 +529,9 @@ def make_masters(variant, out_dir):
                 import oblique
                 oblique.slant_font(f, v["slant"])
                 f.info.styleMapStyleName = "italic"
+                # the default master's names become the file's: "Regular" here would name the italic file Regular
+                f.info.styleName = f.info.openTypeNamePreferredSubfamilyName = "Italic" if s == "Regular" else f"{s} Italic"
+                f.info.postscriptFontName = "Sisifo-" + f.info.styleName.replace(" ", "")
             if carve_value:
                 f.info.styleName = f"{s} Carved"
             p = out_dir / f"Sisifo-{s}-C{carve_value}.ufo"

@@ -134,3 +134,7 @@ to it wait for the owner's go-ahead at the end of stage 1.
   (customization, app weight, simplicity, licence, upkeep): inside 1.00, a separate file 0.76.
 - **Self-contained repository** (2026-10-23): Ortica and Cinzel vendored with their licences; builds are
   byte-reproducible from a commit.
+- **Stage 5 (2026-10-23): the oblique is 12°, a second file**, `fonts/variable/Sisifo-Italic[CARV,wght].ttf`, built
+  by the same `release`. The panel tied the angles (7° 0.832, 9° 0.824, 12° 0.821); the owner picked 12° as the
+  easiest to tell apart from the upright. The file beat a slnt axis on the five packaging axes (0.93 against 0.83).
+  Scores and reasons: `docs/results/stage5-*.json`.

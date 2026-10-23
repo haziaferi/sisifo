@@ -2,7 +2,8 @@
 
 Usage:  python tools/build.py          -> sources/Sisifo.designspace, fonts/variable/Sisifo[wght].ttf
         python tools/build.py A [E ..] -> build/variants/<id>/Sisifo[CARV,wght].ttf, two axes, from tools/carve.py masters
-        python tools/build.py release  -> fonts/variable/Sisifo[CARV,wght].ttf, the chosen carve (CHOSEN)
+        python tools/build.py release  -> fonts/variable/Sisifo[CARV,wght].ttf, the chosen carve (CHOSEN),
+                                          and Sisifo-Italic[CARV,wght].ttf, its oblique (OBLIQUE)
 """
 import pathlib
 import subprocess
@@ -99,13 +100,18 @@ def build() -> pathlib.Path:
 
 CHOSEN = "GLZ"  # owner, 2026-10-23: "Release GLZ" (GL carve + Cinzel capitals as ss01); GL before that
 RELEASE = ROOT / "fonts" / "variable" / "Sisifo[CARV,wght].ttf"
+# owner, 2026-10-23: 12 degrees, "the one that can most easily be told apart" from the upright; a second file, the
+# delivery that scored higher (0.93 against 0.83 for a slnt axis)
+OBLIQUE = f"{CHOSEN}_I12"
+RELEASE_ITALIC = RELEASE.with_name("Sisifo-Italic[CARV,wght].ttf")
 
 
 def release() -> pathlib.Path:
-    """The chosen carve as the font the app takes: fonts/variable/Sisifo[CARV,wght].ttf."""
+    """The chosen carve as the fonts the app takes: fonts/variable/Sisifo[CARV,wght].ttf and its Italic."""
     import shutil
     RELEASE.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy(build_carved(CHOSEN), RELEASE)
+    shutil.copy(build_carved(OBLIQUE), RELEASE_ITALIC)
     return RELEASE
 
 
@@ -149,7 +155,7 @@ def build_carved(variant="A") -> pathlib.Path:
 if __name__ == "__main__":
     args = sys.argv[1:]
     if args == ["release"]:
-        args, done = [], [release()]
+        args, done = [], [release(), RELEASE_ITALIC]
     else:
         done = []
     for p in done + [build_carved(v) for v in args] or [build()]:

@@ -92,7 +92,7 @@ large. Sisifo is not Ortica and is not endorsed by its authors.
   (AVATAR, TAVOLA, WAVY, L'AVVENTO, T.A.V.: the gaps close). Two optical-spacing numbers were tried and both misjudge
   diagonal pairs (one saturates, one penalises the tight AV a designer wants), so neither is used. Release 255 KB.
 
-## 0.6 (2026-10-23), stage 5: obliques (owner review pending)
+## 0.6 (2026-10-23), stage 5: obliques
 - tools/oblique.py slants the release's masters after the carve and ss01: x + y tan(theta) - tan(theta) xHeight/2,
   so advances and kerning carry over; components get M' = A M A^-1, o' = M' c + A o - c (exact for flipped ones:
   caroncomb.case is a flipped circumflex, and the plain rule put carons ~100 units off). Built at 7, 9 and 12
@@ -104,3 +104,7 @@ large. Sisifo is not Ortica and is not endorsed by its authors.
   Fit by use: 7 degrees best for notes (1.00) but weak as emphasis (0.58); 9 and 12 even (0.75). Measured axes
   compare obliques with Ortica slanted alike, and deslant the raster for the spacing and contrast readings.
 - Delivery on the owner's packaging axes: second file 0.93, slnt axis 0.83 (0.93 once the gate covers slnt).
+- Owner's choice: 12 degrees, "the one that can most easily be told apart" from the upright, as a second file. The
+  release now writes fonts/variable/Sisifo-Italic[CARV,wght].ttf (GLZ_I12) beside the upright. Its names are its own
+  (Italic, Sisifo-Italic; they were inherited from the Regular master and would have clashed on a device), and a
+  test pins the angle, the italic bits, the family and the advances.

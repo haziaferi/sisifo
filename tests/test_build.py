@@ -74,3 +74,17 @@ def test_ss01_off_is_gl():
             ga[n].draw(pa)
             gb[n].draw(pb)
             assert pa.value == pb.value and a["hmtx"].metrics[n] == b["hmtx"].metrics[n], (n, w, c)
+
+
+def test_release_italic_is_12_degrees():
+    """Owner, 2026-10-23: 12 degrees, as a second file beside the upright. The release ships it as an italic style
+    linked to the upright: italicAngle -12, the italic bits set, the same family, the same advances."""
+    build.release()
+    up, it = TTFont(build.RELEASE), TTFont(build.RELEASE_ITALIC)
+    assert it["post"].italicAngle == -12
+    assert it["OS/2"].fsSelection & 1 and not it["OS/2"].fsSelection & 64 and it["head"].macStyle & 2
+    assert it["name"].getDebugName(1) == up["name"].getDebugName(1) == "Sisifo"
+    assert it["name"].getDebugName(2) == "Italic" and it["name"].getDebugName(6) == "Sisifo-Italic"
+    assert it["name"].getDebugName(17) in (None, "Italic") and up["name"].getDebugName(6) == "Sisifo-Regular"
+    # advances carry over; side bearings move with the slant
+    assert {n: m[0] for n, m in it["hmtx"].metrics.items()} == {n: m[0] for n, m in up["hmtx"].metrics.items()}

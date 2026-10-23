@@ -2,7 +2,7 @@
 
 A variable typeface carved from [Ortica Linear](https://github.com/collletttivo/ortica), made for SisyphusFit, an offline workout tracker. Small text is plain Ortica; titles and set numbers are cut like stone. SIL Open Font License 1.1.
 
-The font is one file, `Sisifo[CARV,wght].ttf`, about 244 KB.
+The font is two files: `Sisifo[CARV,wght].ttf` (255 KB) and its oblique, `Sisifo-Italic[CARV,wght].ttf` (12°, 263 KB), with the same axes and features.
 
 ## Axes
 
@@ -20,18 +20,18 @@ The app ties carve to text size: small text stays at 0, while titles and set num
 - **`ss01` off is the GL release.** With `ss01` off, Sisifo is the GL carve with its own capitals, identical glyph for glyph (a test checks every glyph's outline and advance). There's no separate GL file: switch the feature instead.
 - **Ortica's own features** are kept: `onum`, `lnum`, `case`, `frac`, `sups`, `ordn`, `liga`, `dlig`.
 
-In Jetpack Compose, one `FontFamily` covers everything. Set carve and weight with `FontVariation.Settings`, and add `fontFeatureSettings = "ss01"` to the text styles whose titles are set in capitals. Leave it off to get GL's capitals.
+In Jetpack Compose, one `FontFamily` holds both files: the italic one as `FontStyle.Italic`. Set carve and weight with `FontVariation.Settings`, and add `fontFeatureSettings = "ss01"` to the text styles whose titles are set in capitals. Leave it off to get GL's capitals.
 
 ## Building
 
 ```bash
 pip install -r requirements.txt
 python tools/build.py release
-python tools/gate.py "fonts/variable/Sisifo[CARV,wght].ttf"
+python tools/gate.py "fonts/variable/Sisifo[CARV,wght].ttf" "fonts/variable/Sisifo-Italic[CARV,wght].ttf"
 python -m pytest
 ```
 
-- **The build** writes `fonts/variable/Sisifo[CARV,wght].ttf`. It is reproducible: the font's build time is the last commit's (`SOURCE_DATE_EPOCH`), so a commit always gives byte-identical files.
+- **The build** writes `fonts/variable/Sisifo[CARV,wght].ttf` and `Sisifo-Italic[CARV,wght].ttf`. It is reproducible: the font's build time is the last commit's (`SOURCE_DATE_EPOCH`), so a commit always gives byte-identical files.
 - **The gate:**
   - compares Ortica's 394 glyphs at CARV 0 with the original fonts;
   - checks the outlines at CARV 0, 50 and 100, and that carving never cuts through a stroke;
