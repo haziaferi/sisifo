@@ -108,3 +108,11 @@ large. Sisifo is not Ortica and is not endorsed by its authors.
   release now writes fonts/variable/Sisifo-Italic[CARV,wght].ttf (GLZ_I12) beside the upright. Its names are its own
   (Italic, Sisifo-Italic; they were inherited from the Regular master and would have clashed on a device), and a
   test pins the angle, the italic bits, the family and the advances.
+
+## 0.7 (2026-10-23), stage 6: signed off
+- Scored against the font search's finalists (Grenze, Ortica Linear, Avara, Cinzel, Bagnard), IBM Plex Sans (with
+  IBM's italic) and Libertinus Sans, blind, on ten axes: Sisifo 0.880, Libertinus Sans 0.739, Avara 0.715, Ortica
+  0.676, Grenze 0.675, Bagnard 0.659, Plex 0.531, Cinzel 0.531. Every other face measured exactly as in the search.
+- Carve by text size, in the stage 1a screens: stepped (0 up to 16 dp, 100 above) 0.885 and a ramp (15 to 28 dp)
+  0.873, a tie. The owner signed off Sisifo with the stepped mapping; it goes into SisyphusFit's type tokens.
+- tools/signoff.py: specimens, measures, combine and the review page; results in docs/results/stage6-*.

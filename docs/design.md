@@ -138,3 +138,7 @@ to it wait for the owner's go-ahead at the end of stage 1.
   by the same `release`. The panel tied the angles (7° 0.832, 9° 0.824, 12° 0.821); the owner picked 12° as the
   easiest to tell apart from the upright. The file beat a slnt axis on the five packaging axes (0.93 against 0.83).
   Scores and reasons: `docs/results/stage5-*.json`.
+- **Stage 6 (2026-10-23): signed off by the owner**, with the **stepped** carve mapping: carve 0 for text up to
+  16 dp (labels, eyebrows, body), 100 above (row titles, headings, exercise names, set numbers). Blind panel against
+  the font search's finalists: Sisifo 0.880, next Libertinus Sans 0.739. Stepped and a 15-28 dp ramp tied (0.885,
+  0.873); the owner chose stepped. Scores and reasons: `docs/results/stage6-*.json`.

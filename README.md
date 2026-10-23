@@ -11,7 +11,7 @@ The font is two files: `Sisifo[CARV,wght].ttf` (255 KB) and its oblique, `Sisifo
 | `wght` | 300–700 | 400 | Weight: Light 300, Regular 400, Medium 500, SemiBold 600, Bold 700 (the named instances). |
 | `CARV` | 0–100 | 0 | Carve. At 0 it is Ortica Linear's outline, glyph for glyph (the gate checks this). At 100 curves become chiselled cuts, after Ortica Angular's own cuts, gentler at Light (half the carve) than at Bold (the full carve). |
 
-The app ties carve to text size: small text stays at 0, while titles and set numbers sit at or near 100.
+The app ties carve to text size, stepped (owner, stage 6): text up to 16 dp stays at 0, and everything larger (row titles, headings, exercise names, set numbers) is set at 100.
 
 ## Features
 
