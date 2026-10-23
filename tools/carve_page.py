@@ -104,6 +104,36 @@ AXES = [("oblique", "Oblique"), ("inscription", "Inscription"), ("personality", 
         ("harmony", "Harmony"), ("numbers", "Numbers"), ("technical", "Technical"), ("small", "Small text"),
         ("faithful", "Faithful (½)")]
 
+# the page's own style; the stage 6 sign-off page (tools/signoff.py) shares it
+STYLE = """<style>
+/* Layout: one 384 px column, the phone's own width, so each specimen shows 1:1 on the 6T */
+:root { --bg:#ebebeb; --fg:#1c1c1c; --mute:#5c5c5c; --rule:#d2d2d2; --bar:#1c1c1c; --track:#d9d9d9;
+  --ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; --mono: ui-monospace, "Cascadia Mono", monospace; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#161616; --fg:#e8e8e8; --mute:#a0a0a0;
+  --rule:#333; --bar:#e8e8e8; --track:#333; color-scheme:dark } }
+:root[data-theme="dark"] { --bg:#161616; --fg:#e8e8e8; --mute:#a0a0a0; --rule:#333; --bar:#e8e8e8; --track:#333;
+  color-scheme:dark }
+body { background:var(--bg); color:var(--fg); font:15px/1.45 var(--ui);
+  padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); }
+main { max-width:384px; margin:0 auto; padding-block:20px 48px; display:grid; gap:36px; }
+h1 { font-size:22px; margin:0 0 6px; text-wrap:balance; }
+.intro p { margin:0 0 8px; color:var(--mute); }
+.intro b { color:var(--fg); }
+section { display:grid; gap:10px; border-top:1px solid var(--rule); padding-top:16px; }
+section header { display:grid; grid-template-columns:auto 1fr auto; align-items:baseline; gap:10px; }
+h2 { margin:0; font-size:28px; }
+.look { margin:0; color:var(--mute); font-size:13px; }
+.total { margin:0; font:600 17px var(--mono); font-variant-numeric:tabular-nums; text-align:right; }
+.tie { display:block; font:400 11px var(--ui); color:var(--mute); letter-spacing:.02em; }
+.note { margin:0; }
+.axes { display:grid; gap:3px; font-size:12px; }
+.ax { display:grid; grid-template-columns:84px 1fr 34px; align-items:center; gap:8px; }
+.ax span { color:var(--mute); }
+.ax i { height:6px; background:linear-gradient(90deg, var(--bar) calc(var(--v)*100%), var(--track) 0); }
+.ax b { font:500 12px var(--mono); font-variant-numeric:tabular-nums; text-align:right; }
+img { display:block; width:100%; max-width:384px; height:auto; }
+</style>"""
+
 
 def card(r):
     v = r["variant"]
@@ -152,34 +182,7 @@ def main():
     cards = "\n".join(card(r) for r in s["rows"])
     page = f"""<title>Sisifo Carve Variants</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<style>
-/* Layout: one 384 px column, the phone's own width, so each specimen shows 1:1 on the 6T */
-:root {{ --bg:#ebebeb; --fg:#1c1c1c; --mute:#5c5c5c; --rule:#d2d2d2; --bar:#1c1c1c; --track:#d9d9d9;
-  --ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; --mono: ui-monospace, "Cascadia Mono", monospace; }}
-@media (prefers-color-scheme: dark) {{ :root:not([data-theme="light"]) {{ --bg:#161616; --fg:#e8e8e8; --mute:#a0a0a0;
-  --rule:#333; --bar:#e8e8e8; --track:#333; color-scheme:dark }} }}
-:root[data-theme="dark"] {{ --bg:#161616; --fg:#e8e8e8; --mute:#a0a0a0; --rule:#333; --bar:#e8e8e8; --track:#333;
-  color-scheme:dark }}
-body {{ background:var(--bg); color:var(--fg); font:15px/1.45 var(--ui);
-  padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); }}
-main {{ max-width:384px; margin:0 auto; padding-block:20px 48px; display:grid; gap:36px; }}
-h1 {{ font-size:22px; margin:0 0 6px; text-wrap:balance; }}
-.intro p {{ margin:0 0 8px; color:var(--mute); }}
-.intro b {{ color:var(--fg); }}
-section {{ display:grid; gap:10px; border-top:1px solid var(--rule); padding-top:16px; }}
-section header {{ display:grid; grid-template-columns:auto 1fr auto; align-items:baseline; gap:10px; }}
-h2 {{ margin:0; font-size:28px; }}
-.look {{ margin:0; color:var(--mute); font-size:13px; }}
-.total {{ margin:0; font:600 17px var(--mono); font-variant-numeric:tabular-nums; text-align:right; }}
-.tie {{ display:block; font:400 11px var(--ui); color:var(--mute); letter-spacing:.02em; }}
-.note {{ margin:0; }}
-.axes {{ display:grid; gap:3px; font-size:12px; }}
-.ax {{ display:grid; grid-template-columns:84px 1fr 34px; align-items:center; gap:8px; }}
-.ax span {{ color:var(--mute); }}
-.ax i {{ height:6px; background:linear-gradient(90deg, var(--bar) calc(var(--v)*100%), var(--track) 0); }}
-.ax b {{ font:500 12px var(--mono); font-variant-numeric:tabular-nums; text-align:right; }}
-img {{ display:block; width:100%; max-width:384px; height:auto; }}
-</style>
+{STYLE}
 <main>
   <div class="intro">
     <h1>Sisifo carve variants{'' if ROUND == '1' else ', round ' + ROUND}</h1>

@@ -1,0 +1,956 @@
+{
+ "faces": [
+  {
+   "face": "sisifo",
+   "code": "K5",
+   "harmony": 0.688,
+   "numbers": 0.894,
+   "technical": 0.981,
+   "stone": 1.0,
+   "carving": 1.0,
+   "personality": 1.0,
+   "inscription": 1.0,
+   "oblique": 0.75,
+   "small": 0.75,
+   "calm": 0.736,
+   "size_kb": 520,
+   "votes": {
+    "stone": [
+     4,
+     4,
+     4
+    ],
+    "carving": [
+     4,
+     4,
+     4
+    ],
+    "calm": [
+     3,
+     3,
+     3
+    ],
+    "personality": [
+     4,
+     4,
+     4
+    ],
+    "inscription": [
+     4,
+     4,
+     4
+    ],
+    "oblique": [
+     3,
+     3,
+     3
+    ],
+    "small": [
+     3,
+     3,
+     3
+    ]
+   },
+   "disagreement": 0,
+   "why": [
+    {
+     "stone": "Faceted glyphic serif that reads convincingly as letters cut into stone.",
+     "carving": "SISIFO, the titles and 62.5 show crisp polygonal facets and flat-cut curves at display size.",
+     "calm": "Wide, steady rhythm with presence; the faceting adds texture without aggression.",
+     "personality": "Memorable chiselled character that fits the stone and engraving brief closely.",
+     "inscription": "Capitals (BENCH PRESS, MOBILITÀ · EQUILIBRIO) have broad Roman proportions and a dignified flared stroke.",
+     "oblique": "A real italic with consistent slant and even colour, clearly distinct, slightly light at 13 px.",
+     "small": "13 px text is open and readable; the facets disappear at that size so it stays clean."
+    },
+    {
+     "stone": "Lapidary, glyphic wedge forms with flared strokes read convincingly as cut stone.",
+     "carving": "Titles and set numbers show crisp polygonal facets and flat-cut curves throughout.",
+     "calm": "Steady rhythm and moderate weight; the faceting adds texture without aggression.",
+     "personality": "Distinct carved character that still feels refined and suits the app.",
+     "inscription": "Capitals have Roman inscriptional proportions, flared strokes and quiet dignity.",
+     "oblique": "A consistent, even italic clearly distinct from the upright and readable at 13 px.",
+     "small": "13 px text is clean and open; the glyphic forms stay smooth at that size."
+    },
+    {
+     "stone": "The flared, glyphic serif with faceted curves reads like a carved monument inscription.",
+     "carving": "At display size the O, S, 6 and 5 show clean flat-cut facets and sharp flared terminals.",
+     "calm": "It is quiet and even, with presence, and only a slight nervousness in the faceted heavy numerals.",
+     "personality": "A memorable chiselled, classical voice that suits the app's grounded tone.",
+     "inscription": "The capitals have wide Roman proportions, flared strokes and real inscriptional dignity.",
+     "oblique": "The italic has a consistent slant and even colour, is clearly distinct, and reads well as emphasis.",
+     "small": "The 13 px lines are clear and comfortable, with slightly wide spacing but nothing clotting."
+    }
+   ],
+   "total": 0.8799,
+   "tie_with_next": false
+  },
+  {
+   "face": "libertinus-sans",
+   "code": "K8",
+   "harmony": 0.753,
+   "numbers": 0.91,
+   "technical": 0.852,
+   "stone": 0.583,
+   "carving": 0.25,
+   "personality": 0.667,
+   "inscription": 0.75,
+   "oblique": 0.75,
+   "small": 1.0,
+   "calm": 0.875,
+   "size_kb": 545,
+   "votes": {
+    "stone": [
+     3,
+     2,
+     2
+    ],
+    "carving": [
+     1,
+     1,
+     1
+    ],
+    "calm": [
+     4,
+     4,
+     4
+    ],
+    "personality": [
+     3,
+     3,
+     2
+    ],
+    "inscription": [
+     3,
+     3,
+     3
+    ],
+    "oblique": [
+     3,
+     3,
+     3
+    ],
+    "small": [
+     4,
+     4,
+     4
+    ]
+   },
+   "disagreement": 1,
+   "why": [
+    {
+     "stone": "Flared glyphic sans with inscriptional ancestry gives a quiet, chiselled-sans feel.",
+     "carving": "The flare is smooth and drawn; display letters show no cut facets.",
+     "calm": "Very calm, even and graceful with presence and no aggression.",
+     "personality": "Recognisable humanist-flared character that suits the app, if familiar.",
+     "inscription": "Capitals have Roman-derived proportions and flaring, a sans echo of inscriptional letters.",
+     "oblique": "A clean, evenly coloured sloped roman, consistent and readable, less distinct than a true italic.",
+     "small": "13 px text is open, sharp and comfortable."
+    },
+    {
+     "stone": "A flared humanist sans with a hint of glyphic stroke, grounded but not carved.",
+     "carving": "Smooth flared strokes with no facets at display sizes.",
+     "calm": "Light, even and open; very calm and unhurried.",
+     "personality": "The flared stroke gives quiet distinction suited to the app.",
+     "inscription": "Capitals echo Roman proportions through flared strokes, though sans-serif.",
+     "oblique": "A clean, consistent italic distinct from the upright and readable at 13 px.",
+     "small": "13 px text is open, even and very easy to read."
+    },
+    {
+     "stone": "The flared sans nods to glyphic lettering but feels light and humanist rather than stone-cut.",
+     "carving": "The stroke flare is smooth and continuous, with no facets at display sizes.",
+     "calm": "It is calm, open and evenly paced, with no aggression.",
+     "personality": "A pleasant, Optima-like humanist sans that is somewhat familiar.",
+     "inscription": "The flared capitals echo inscriptional proportions and stroke modulation reasonably well.",
+     "oblique": "The italic is consistent and readable, clearly distinct though somewhat soft.",
+     "small": "The 13 px text is clean, open and very easy to read."
+    }
+   ],
+   "total": 0.739,
+   "tie_with_next": false
+  },
+  {
+   "face": "avara",
+   "code": "K4",
+   "harmony": 0.484,
+   "numbers": 0.679,
+   "technical": 0.875,
+   "stone": 0.833,
+   "carving": 0.917,
+   "personality": 1.0,
+   "inscription": 0.75,
+   "oblique": 0.5,
+   "small": 0.583,
+   "calm": 0.532,
+   "size_kb": 103,
+   "votes": {
+    "stone": [
+     3,
+     3,
+     4
+    ],
+    "carving": [
+     4,
+     3,
+     4
+    ],
+    "calm": [
+     2,
+     1,
+     2
+    ],
+    "personality": [
+     4,
+     4,
+     4
+    ],
+    "inscription": [
+     3,
+     3,
+     3
+    ],
+    "oblique": [
+     2,
+     2,
+     2
+    ],
+    "small": [
+     2,
+     2,
+     3
+    ]
+   },
+   "disagreement": 1,
+   "why": [
+    {
+     "stone": "Rough, irregular outlines give a weathered, hand-cut stone feel.",
+     "carving": "Display titles and numbers show clear chiselled facets and broken, flat-cut curves.",
+     "calm": "The roughness creates a nervous, uneven texture and the bold lines barely differ from regular.",
+     "personality": "Strongly distinctive, ancient-feeling character with real imperfection.",
+     "inscription": "Capitals have classical proportions and a weathered inscription look, though somewhat irregular.",
+     "oblique": "Italic is distinct but a calligraphic, almost blackletter-tinged cursive that is busy and lumpy at 13 px.",
+     "small": "13 px lines are readable but the ragged edges soften and the colour is uneven."
+    },
+    {
+     "stone": "Rough, irregular outlines and old-style forms read as weathered, hand-cut lettering.",
+     "carving": "Display sizes show clear angular facets on the bowls and figures, like chisel cuts.",
+     "calm": "The rough edges and lively, uneven contours give a nervous, antique texture; bold barely differs from regular.",
+     "personality": "Highly memorable rustic, imperfect character that fits the Sisyphus myth.",
+     "inscription": "Capitals are classical with good proportion, though the roughness reads more weathered than formal.",
+     "oblique": "A real italic with character, but its calligraphic, bouncy forms are busy at 13 px.",
+     "small": "Readable at 13 px but the roughened edges make the text a little blotchy and uneven."
+    },
+    {
+     "stone": "The polygonal, slightly irregular outlines look like letters cut into rock by hand.",
+     "carving": "SISIFO and the set numbers are made of crisp, flat facets on every curve, clearly chiselled rather than drawn.",
+     "calm": "The texture is grounded but slightly rough and uneven, and the bold weight barely differs from regular.",
+     "personality": "Its hand-cut, imperfect stone feel is unique and fits the Sisyphus theme closely.",
+     "inscription": "The capitals have classical proportions and serifs, with a rustic rather than formal-imperial cut.",
+     "oblique": "The italic is a lively calligraphic hand with an uneven, bouncy texture that is distinct but a little lumpy at 13 px.",
+     "small": "The 13 px roman is readable and open, though the faceted outlines soften slightly at small sizes."
+    }
+   ],
+   "total": 0.7153,
+   "tie_with_next": false
+  },
+  {
+   "face": "ortica",
+   "code": "K7",
+   "harmony": 0.655,
+   "numbers": 0.639,
+   "technical": 0.938,
+   "stone": 0.5,
+   "carving": 0.25,
+   "personality": 0.5,
+   "inscription": 0.75,
+   "oblique": 0.917,
+   "small": 0.833,
+   "calm": 0.783,
+   "size_kb": 138,
+   "votes": {
+    "stone": [
+     2,
+     2,
+     2
+    ],
+    "carving": [
+     1,
+     1,
+     1
+    ],
+    "calm": [
+     3,
+     4,
+     4
+    ],
+    "personality": [
+     2,
+     2,
+     2
+    ],
+    "inscription": [
+     3,
+     3,
+     3
+    ],
+    "oblique": [
+     3,
+     4,
+     4
+    ],
+    "small": [
+     3,
+     3,
+     4
+    ]
+   },
+   "disagreement": 1,
+   "why": [
+    {
+     "stone": "Elegant high-contrast serif that feels editorial rather than carved.",
+     "carving": "Smooth bracketed serifs and soft curves at display sizes, no facets.",
+     "calm": "Quiet and refined with an even rhythm.",
+     "personality": "Polished but close to a generic magazine serif.",
+     "inscription": "Capitals have classical proportions and decent dignity, with a slightly modern contrast.",
+     "oblique": "Well-formed true italic, consistent and distinct, readable at 13 px.",
+     "small": "13 px text reads well, though the thin hairlines lighten it slightly."
+    },
+    {
+     "stone": "An elegant transitional serif, solid and classical but smooth ink rather than stone.",
+     "carving": "Curves are smooth with sharp hairline serifs; no facets at display sizes.",
+     "calm": "Even, measured rhythm and balanced contrast; very quiet with presence.",
+     "personality": "Refined and pleasant but close to a generic editorial serif.",
+     "inscription": "Well-proportioned classical capitals, though bookish rather than lapidary.",
+     "oblique": "A true italic with consistent slant, even colour and clear distinction from the upright.",
+     "small": "13 px text is even and readable, with slightly fine hairlines."
+    },
+    {
+     "stone": "An elegant, classical transitional serif that feels refined and bookish more than carved.",
+     "carving": "Its display sizes have smooth curves and bracketed serifs with no chiselled facets.",
+     "calm": "The rhythm is very even, with a quiet, composed presence.",
+     "personality": "It is handsome but conventional, a familiar editorial serif.",
+     "inscription": "The capitals have good classical proportions and dignity, if more typographic than inscribed.",
+     "oblique": "A true italic with an even slant and colour, clearly distinct and graceful at 13 px.",
+     "small": "The 13 px lines are sharp, open and very comfortable."
+    }
+   ],
+   "total": 0.6765,
+   "tie_with_next": true
+  },
+  {
+   "face": "grenze",
+   "code": "K1",
+   "harmony": 0.785,
+   "numbers": 0.928,
+   "technical": 1.0,
+   "stone": 0.5,
+   "carving": 0.333,
+   "personality": 0.75,
+   "inscription": 0.25,
+   "oblique": 0.75,
+   "small": 0.75,
+   "calm": 0.7,
+   "size_kb": 137,
+   "votes": {
+    "stone": [
+     2,
+     2,
+     2
+    ],
+    "carving": [
+     1,
+     1,
+     2
+    ],
+    "calm": [
+     3,
+     3,
+     2
+    ],
+    "personality": [
+     3,
+     3,
+     3
+    ],
+    "inscription": [
+     1,
+     1,
+     1
+    ],
+    "oblique": [
+     3,
+     3,
+     3
+    ],
+    "small": [
+     3,
+     3,
+     3
+    ]
+   },
+   "disagreement": 1,
+   "why": [
+    {
+     "stone": "Sturdy wedge-serifed humanist with weight, but it reads as a bookish slab rather than lettering cut in stone.",
+     "carving": "Display titles and set numbers have smooth, ink-like curves; only the wedge serifs hint at a cut.",
+     "calm": "Even, grounded rhythm with no shouting, though the bold numbers are quite dark.",
+     "personality": "Warm, slightly condensed wedge serif with a distinct voice that suits a gentle tracker.",
+     "inscription": "Capitals are narrow and slab-like (BENCH PRESS, SISIFO), far from Roman inscriptional proportions.",
+     "oblique": "A true cursive italic with consistent slant and even colour, clearly distinct, slightly narrow at 13 px.",
+     "small": "13 px lines are crisp and readable, a little compact in width."
+    },
+    {
+     "stone": "A sturdy, slab-ish book face with weight and solidity, more woodcut-and-print than carved stone.",
+     "carving": "Display letters are smooth with soft bracketed wedges; no visible facets or flat-cut curves.",
+     "calm": "Even, compact rhythm and moderate contrast; the bold is heavy but never shouts.",
+     "personality": "Warm wedge serifs and condensed proportions give a friendly, distinct voice.",
+     "inscription": "Capitals are narrow and bookish, far from Roman inscriptional proportions.",
+     "oblique": "A true, consistent italic with even colour, clearly distinct from the upright and fine at 13 px.",
+     "small": "13 px lines are sturdy and open, though the narrow set makes them a little tight."
+    },
+    {
+     "stone": "A condensed, slightly angular slab-like serif that feels sturdy and grounded but more like a book face than cut stone.",
+     "carving": "The heavy S, O and set numbers show some flat, angled cuts on curves, but the effect is mild and mostly reads as ink.",
+     "calm": "The narrow, dark bold and tightly packed capitals make it a little dense and insistent rather than quiet.",
+     "personality": "The condensed, chunky, slightly rustic forms are distinctive and memorable.",
+     "inscription": "The capitals are narrow and compressed, far from the broad, square proportions of Roman inscriptional caps.",
+     "oblique": "A true italic with a consistent slant and clear contrast with the upright, though it reads a bit cramped at 13 px.",
+     "small": "The 13 px lines are sharp and legible, but the narrow letters and tight spacing make them slightly dense."
+    }
+   ],
+   "total": 0.6746,
+   "tie_with_next": true
+  },
+  {
+   "face": "bagnard",
+   "code": "K6",
+   "harmony": 0.616,
+   "numbers": 0.63,
+   "technical": 0.797,
+   "stone": 0.75,
+   "carving": 0.583,
+   "personality": 0.75,
+   "inscription": 0.583,
+   "oblique": 0.667,
+   "small": 0.667,
+   "calm": 0.551,
+   "size_kb": 13,
+   "votes": {
+    "stone": [
+     3,
+     3,
+     3
+    ],
+    "carving": [
+     2,
+     3,
+     2
+    ],
+    "calm": [
+     2,
+     2,
+     2
+    ],
+    "personality": [
+     3,
+     3,
+     3
+    ],
+    "inscription": [
+     3,
+     2,
+     2
+    ],
+    "oblique": [
+     3,
+     2,
+     3
+    ],
+    "small": [
+     3,
+     2,
+     3
+    ]
+   },
+   "disagreement": 1,
+   "why": [
+    {
+     "stone": "Heavy, angular old-style serif with a solid, grounded mass.",
+     "carving": "Some angular serifs and sheared terminals at display size, but the bowls stay mostly smooth.",
+     "calm": "Very dark colour throughout makes titles and numbers feel heavy and slightly loud.",
+     "personality": "Distinctive, robust and slightly quirky (the open g), though more bookish than lapidary.",
+     "inscription": "Capitals are solid and classical with good dignity, a little dense and heavy.",
+     "oblique": "True italic with steady slant, but whole italic lines run dark at 13 px.",
+     "small": "13 px text is legible and sharp, if somewhat heavy in colour."
+    },
+    {
+     "stone": "Heavy, high-contrast forms with slightly irregular edges feel solid and stony.",
+     "carving": "Display numbers and capitals show angular cuts on curves, though less crisp than a true glyphic.",
+     "calm": "Very dark and heavy overall, with an oddly hooked g, so it tends toward loud.",
+     "personality": "Strong old-style character with idiosyncratic details.",
+     "inscription": "Capitals are dignified but heavy and condensed rather than inscriptional.",
+     "oblique": "The italic is consistent but very bold and dark at 13 px, crowding the emphasis.",
+     "small": "13 px text is dark and dense; readable but heavy compared with the others."
+    },
+    {
+     "stone": "The heavy wedge-serif forms feel solid and engraved, though rather like Victorian print.",
+     "carving": "The serifs are sharp, cut wedges, but the bowls and curves are smooth ink rather than faceted.",
+     "calm": "The dark weight and very bold display lines feel heavy and somewhat loud.",
+     "personality": "The wedge serifs and the odd g give it a distinct, old-fashioned character.",
+     "inscription": "The capitals are heavy and closely spaced, closer to a display serif than to Roman inscriptional caps.",
+     "oblique": "A proper italic with a consistent slant, but the dark colour makes the notes lines heavy.",
+     "small": "The 13 px text is legible but dark and slightly dense."
+    }
+   ],
+   "total": 0.6594,
+   "tie_with_next": false
+  },
+  {
+   "face": "ibm-plex-sans",
+   "code": "K2",
+   "harmony": 0.745,
+   "numbers": 0.86,
+   "technical": 0.889,
+   "stone": 0.0,
+   "carving": 0.0,
+   "personality": 0.25,
+   "inscription": 0.0,
+   "oblique": 0.75,
+   "small": 1.0,
+   "calm": 0.82,
+   "size_kb": 1111,
+   "votes": {
+    "stone": [
+     0,
+     0,
+     0
+    ],
+    "carving": [
+     0,
+     0,
+     0
+    ],
+    "calm": [
+     3,
+     3,
+     3
+    ],
+    "personality": [
+     1,
+     1,
+     1
+    ],
+    "inscription": [
+     0,
+     0,
+     0
+    ],
+    "oblique": [
+     3,
+     3,
+     3
+    ],
+    "small": [
+     4,
+     4,
+     4
+    ]
+   },
+   "disagreement": 0,
+   "why": [
+    {
+     "stone": "A neutral grotesque sans with no lapidary quality at all.",
+     "carving": "Perfectly smooth, engineered curves at every display size.",
+     "calm": "Quiet and orderly, but the heavy bold numbers feel technical rather than grounded.",
+     "personality": "Competent but generic UI sans; nothing ties it to stone or Sisyphus.",
+     "inscription": "Monoline grotesque capitals have none of the Roman inscriptional stroke or proportion.",
+     "oblique": "Clean, consistent italic with true italic forms, clearly distinct and readable at 13 px.",
+     "small": "Very open, sharp and even at 13 px; the most comfortable small text of the set."
+    },
+    {
+     "stone": "A clean grotesque sans with no lapidary quality at all.",
+     "carving": "Perfectly smooth, engineered outlines with no cuts or facets.",
+     "calm": "Neutral and orderly, quiet though somewhat cold and technical.",
+     "personality": "Generic UI sans; competent but forgettable for this voice.",
+     "inscription": "Monoline sans capitals with no inscriptional proportion or stroke.",
+     "oblique": "Consistent, even italic clearly distinct from the upright, readable as emphasis.",
+     "small": "13 px text is the clearest and most open of the set."
+    },
+    {
+     "stone": "A neutral grotesque sans that reads as screen UI, with nothing lapidary about it.",
+     "carving": "The display sizes have smooth, mechanical curves with no facets or chiselled terminals.",
+     "calm": "The rhythm is even and orderly, though the bold numbers have a slightly technical, assertive feel.",
+     "personality": "A generic corporate sans that could belong to any app.",
+     "inscription": "Monoline grotesque capitals bear no relation to Roman inscriptional capitals.",
+     "oblique": "The italic is clean, consistent and distinct, with even colour, but a little cold.",
+     "small": "The 13 px text is open, crisp and very comfortable to read."
+    }
+   ],
+   "total": 0.5314,
+   "tie_with_next": true
+  },
+  {
+   "face": "cinzel",
+   "code": "K3",
+   "harmony": 0.419,
+   "numbers": 0.536,
+   "technical": 1.0,
+   "stone": 0.75,
+   "carving": 0.333,
+   "personality": 0.75,
+   "inscription": 0.75,
+   "oblique": 0.25,
+   "small": 0.0,
+   "calm": 0.524,
+   "size_kb": 123,
+   "votes": {
+    "stone": [
+     3,
+     3,
+     3
+    ],
+    "carving": [
+     1,
+     2,
+     1
+    ],
+    "calm": [
+     2,
+     1,
+     1
+    ],
+    "personality": [
+     3,
+     3,
+     3
+    ],
+    "inscription": [
+     3,
+     3,
+     3
+    ],
+    "oblique": [
+     1,
+     1,
+     1
+    ],
+    "small": [
+     0,
+     0,
+     0
+    ]
+   },
+   "disagreement": 1,
+   "why": [
+    {
+     "stone": "Clearly lapidary, Trajan-like capital letterforms evoke carved monuments.",
+     "carving": "Despite the inscriptional shapes the outlines are smooth and drawn, with no visible facets.",
+     "calm": "Dignified in plain titles, but the swash capitals and all-caps body become theatrical and busy.",
+     "personality": "Very memorable, but its movie-poster classicism risks overwhelming a quiet app.",
+     "inscription": "Regular capitals have true Roman proportions, though the swash variants (bold MOBILITÀ, italic SISIFO · ROCK) undercut the dignity.",
+     "oblique": "Italic small caps look like a mechanical skew and are hard to read as running emphasis.",
+     "small": "13 px text sets entirely in small caps, which is tiring and unsuitable for body copy."
+    },
+    {
+     "stone": "Flared, incised-looking all-caps letters evoke engraved inscriptions strongly.",
+     "carving": "Flared terminals suggest a chisel, but the curves are smooth rather than faceted.",
+     "calm": "Swashy bold caps with ligatures and unusual forms feel ornate and restless.",
+     "personality": "Very distinctive and classical, though leaning decorative and fantasy-like.",
+     "inscription": "Regular caps have true Roman inscriptional proportions; the bold swashes undercut the dignity.",
+     "oblique": "Italic small caps and swash forms are wiry and fussy, hard to read as 13 px emphasis.",
+     "small": "There is no lowercase, so 13 px running text sets in caps and small caps and reads poorly."
+    },
+    {
+     "stone": "The all-capital classical forms evoke engraved lettering, even though the overall effect is more ornamental than solid.",
+     "carving": "The curves and terminals are smooth and refined, with no visible chisel facets.",
+     "calm": "The swashed bold capitals and caps-only body text make the page busy and theatrical.",
+     "personality": "It is very distinctive, though the decorative flourishes push it toward fantasy rather than quiet stone.",
+     "inscription": "The regular capitals have good Roman proportions and dignity, but the bold weight turns into decorative swashes.",
+     "oblique": "The italic is a slanted small-caps texture with flourishes, so it barely reads as emphasis and is awkward at 13 px.",
+     "small": "The 13 px body set entirely in small capitals is tiring and hard to scan at phone size."
+    }
+   ],
+   "total": 0.5312,
+   "tie_with_next": false
+  }
+ ],
+ "mappings": [
+  {
+   "mapping": "stepped",
+   "numbers": 1.0,
+   "small": 1.0,
+   "stone": 0.667,
+   "hierarchy": 0.875,
+   "carve": {
+    "bal": {
+     "xs": 0,
+     "eb": 0,
+     "b": 0,
+     "t": 100,
+     "h": 100,
+     "ex": 100,
+     "num": 100,
+     "pad": 100
+    },
+    "cmp": {
+     "xs": 0,
+     "eb": 0,
+     "b": 0,
+     "t": 100,
+     "h": 100,
+     "ex": 100,
+     "num": 100,
+     "pad": 100
+    }
+   },
+   "votes": {
+    "stone": [
+     3,
+     4,
+     2,
+     3,
+     2,
+     4,
+     3,
+     2,
+     3,
+     3,
+     2,
+     3,
+     2,
+     2,
+     2
+    ],
+    "hierarchy": [
+     3,
+     3,
+     3,
+     3,
+     3,
+     3,
+     3,
+     3,
+     3,
+     3,
+     3,
+     3,
+     3,
+     3,
+     3
+    ]
+   },
+   "why": {
+    "M4": [
+     {
+      "stone": "Large stepper numbers look chiselled; the title is solid with a slight cut.",
+      "hierarchy": "Roles are distinct and the rest timer button joins without clutter."
+     },
+     {
+      "stone": "The set numbers are strongly polygonal, clearly chisel-cut, and the title matches.",
+      "hierarchy": "Roles are distinct and the rest-timer layout keeps the numbers dominant without shouting."
+     },
+     {
+      "stone": "The input numbers are faceted and carved, while the title remains smooth.",
+      "hierarchy": "Roles stay distinct; the rest-timer button adds one more element but the screen stays orderly."
+     }
+    ],
+    "M5": [
+     {
+      "stone": "The title and especially the 60 and 5 show the crispest, most visible facets of the workout screens.",
+      "hierarchy": "Same clear structure: title, caps headers, set rows, stepper numbers and button all distinct."
+     },
+     {
+      "stone": "Faceted 60 and 5 read as cut, with a solid glyphic title.",
+      "hierarchy": "Clear title, labels, table and numbers in an orderly layout, slightly loose in the middle."
+     },
+     {
+      "stone": "The title also shows faint cut edges, matching the faceted 60 and 5 inputs.",
+      "hierarchy": "Title, chip, set table and inputs are distinct and calm, with the same empty mid-screen band."
+     }
+    ],
+    "M6": [
+     {
+      "stone": "Titles look marginally firmer than on the other History screen but still read mostly smooth.",
+      "hierarchy": "Clear, calm order of title, date headings, card titles and meta lines."
+     },
+     {
+      "stone": "The title is grounded and glyphic but its cuts barely show at this size.",
+      "hierarchy": "The same calm, clearly layered history list with distinct roles."
+     },
+     {
+      "stone": "The History title has slightly angular, cut outlines, but there are no big numbers to show carving.",
+      "hierarchy": "The date headings, titles and tags are clearly layered in a quiet list."
+     }
+    ],
+    "M7": [
+     {
+      "stone": "Faceted stepper numbers read as carved; the smaller title loses some of its cut.",
+      "hierarchy": "Tighter layout keeps roles distinct, though the smaller title has slightly less presence."
+     },
+     {
+      "stone": "The numbers are faceted but lighter and smaller, so the carving is a little less present.",
+      "hierarchy": "Tighter type sizes keep roles distinct and calm, though the big numbers carry less weight."
+     },
+     {
+      "stone": "The inputs are carved, but the slightly smaller title is smooth.",
+      "hierarchy": "The tighter layout keeps the roles distinct, with the inputs lower and the table more compact."
+     }
+    ],
+    "M9": [
+     {
+      "stone": "Title and value lines are firm but read as a smooth serif at these sizes.",
+      "hierarchy": "Clear label, value, detail stacking within calm cards."
+     },
+     {
+      "stone": "The This week title shows visible angular cuts on its curves, more than its twin screen.",
+      "hierarchy": "Clear separation of title, labels, totals and notes in a calm card list."
+     },
+     {
+      "stone": "The This week title has slightly cut outlines, but the card values remain fairly smooth.",
+      "hierarchy": "Each card's label, value and detail are clearly ranked in an even, calm stack."
+     }
+    ]
+   },
+   "total": 0.8855,
+   "tie_with_next": true
+  },
+  {
+   "mapping": "ramp",
+   "numbers": 1.0,
+   "small": 0.999,
+   "stone": 0.617,
+   "hierarchy": 0.875,
+   "carve": {
+    "bal": {
+     "xs": 0,
+     "eb": 0,
+     "b": 8,
+     "t": 31,
+     "h": 62,
+     "ex": 100,
+     "num": 100,
+     "pad": 100
+    },
+    "cmp": {
+     "xs": 0,
+     "eb": 0,
+     "b": 0,
+     "t": 15,
+     "h": 38,
+     "ex": 69,
+     "num": 100,
+     "pad": 100
+    }
+   },
+   "votes": {
+    "stone": [
+     3,
+     3,
+     2,
+     2,
+     3,
+     3,
+     4,
+     2,
+     2,
+     3,
+     2,
+     3,
+     1,
+     1,
+     3
+    ],
+    "hierarchy": [
+     3,
+     3,
+     3,
+     3,
+     3,
+     3,
+     3,
+     3,
+     3,
+     3,
+     3,
+     3,
+     3,
+     3,
+     3
+    ]
+   },
+   "why": {
+    "M1": [
+     {
+      "stone": "The 60 and 5 set numbers are visibly faceted and carved; the title is only faintly cut.",
+      "hierarchy": "Title, caps column heads, set rows and big steppers are distinct and the screen is orderly."
+     },
+     {
+      "stone": "The 60 and 5 show clear facets, and the title has a firm glyphic cut.",
+      "hierarchy": "Title, set label, tracked headers, table and big numbers are distinct and orderly, with an empty middle gap."
+     },
+     {
+      "stone": "The 60 and 5 inputs are visibly faceted and carved, but the Bench press title is smooth.",
+      "hierarchy": "Title, chip, set table and big inputs are clearly distinct and orderly, with a large empty band mid-screen."
+     }
+    ],
+    "M10": [
+     {
+      "stone": "Stepper numbers are clearly faceted and the title shows a slight cut.",
+      "hierarchy": "Distinct roles and a calm layout with the rest timer integrated."
+     },
+     {
+      "stone": "Large, strongly faceted set numbers and a cut title read clearly as carved stone.",
+      "hierarchy": "Distinct roles and a dominant number column, calm despite the timer button."
+     },
+     {
+      "stone": "The title shows cut edges, and the 60 and 5 inputs are clearly faceted.",
+      "hierarchy": "The roles stay distinct and orderly, with the rest-timer button placed out of the way."
+     }
+    ],
+    "M2": [
+     {
+      "stone": "Title and 20 min figures read as a calm serif; the cut is barely perceptible at these sizes.",
+      "hierarchy": "Card label, value and detail lines separate clearly and the list stays quiet."
+     },
+     {
+      "stone": "The title and module numbers are solid and wedge-serifed but look mostly smooth at this size.",
+      "hierarchy": "Title, card labels, totals and sub-lines separate cleanly and calmly."
+     },
+     {
+      "stone": "The This week title and the card values look smooth, with no carved display numbers on screen.",
+      "hierarchy": "Each card's label, bold value and grey detail read clearly in a calm, even stack."
+     }
+    ],
+    "M3": [
+     {
+      "stone": "History title and card names show only a slight cut; there are no large numbers to carry it.",
+      "hierarchy": "Title, spaced-caps date headings, card titles and meta lines form a clear, calm order."
+     },
+     {
+      "stone": "The History title has quiet flared serifs but little visible cutting.",
+      "hierarchy": "Title, tracked date headers, card titles and tags read as distinct roles in a calm list."
+     },
+     {
+      "stone": "The History title is a smooth serif, and there are no large numbers to carry the carved feel.",
+      "hierarchy": "The spaced date headings, session titles and tags separate cleanly into a quiet list."
+     }
+    ],
+    "M8": [
+     {
+      "stone": "Numbers show clear facets and the smaller title a modest cut.",
+      "hierarchy": "Orderly and distinct roles in the compact layout, title a little understated."
+     },
+     {
+      "stone": "Lightly faceted numbers and a lighter title read as cut but understated.",
+      "hierarchy": "Orderly and calm with distinct roles; the numbers are slightly less dominant."
+     },
+     {
+      "stone": "Both the title and the input numbers show crisp cut facets.",
+      "hierarchy": "The compact layout reads clearly and calmly from title to table to inputs."
+     }
+    ]
+   },
+   "total": 0.8728,
+   "tie_with_next": false
+  }
+ ]
+}

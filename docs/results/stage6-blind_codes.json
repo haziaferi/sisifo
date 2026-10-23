@@ -1,0 +1,20 @@
+{
+ "K1": "grenze",
+ "K2": "ibm-plex-sans",
+ "K3": "cinzel",
+ "K4": "avara",
+ "K5": "sisifo",
+ "K6": "bagnard",
+ "K7": "ortica",
+ "K8": "libertinus-sans",
+ "M1": "ramp|bal|exercise",
+ "M10": "ramp|bal|exercise_rest",
+ "M2": "ramp|bal|this_week",
+ "M3": "ramp|bal|history",
+ "M4": "stepped|bal|exercise_rest",
+ "M5": "stepped|bal|exercise",
+ "M6": "stepped|bal|history",
+ "M7": "stepped|cmp|exercise",
+ "M8": "ramp|cmp|exercise",
+ "M9": "stepped|bal|this_week"
+}
