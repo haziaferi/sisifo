@@ -1,0 +1,250 @@
+{
+ "rows": [
+  {
+   "variant": "GLZ_I7",
+   "code": "K4",
+   "harmony": 0.683,
+   "numbers": 0.895,
+   "technical": 1.0,
+   "small": 0.99,
+   "faithful": 0.965,
+   "stone": 0.917,
+   "carving": 0.75,
+   "personality": 0.583,
+   "oblique": 0.75,
+   "calm": 0.85,
+   "votes": {
+    "stone": [
+     4,
+     4,
+     3
+    ],
+    "carving": [
+     3,
+     3,
+     3
+    ],
+    "calm": [
+     4,
+     4,
+     4
+    ],
+    "personality": [
+     2,
+     3,
+     2
+    ],
+    "oblique": [
+     3,
+     3,
+     3
+    ]
+   },
+   "disagreement": 1,
+   "why": [
+    {
+     "stone": "The gentlest slant keeps the figures and capitals planted and monumental, the closest to carved stone.",
+     "carving": "Facets crisp and coherent, digits very clear; the oblique barely distinguishes the carving from the upright.",
+     "calm": "Very steady and composed, with full presence and no restlessness.",
+     "personality": "So close to upright that the oblique has little voice of its own.",
+     "oblique": "Even, undistorted slant with steady spacing, but so slight that it reads almost as a sloped upright."
+    },
+    {
+     "stone": "Gentlest slant keeps the carved weight fully grounded; Bench press and 62.5 feel like inscription.",
+     "carving": "Clean, coherent carving with clear digits; facets are calm rather than showy.",
+     "calm": "The most steady and composed of the four while retaining presence.",
+     "personality": "Deliberate and quiet, though the restraint makes it slightly less memorable.",
+     "oblique": "Even, unhurried slant that sits closest to the upright, though at small sizes the contrast with upright is a little soft."
+    },
+    {
+     "stone": "The shallowest lean keeps the display most grounded and monumental, still faceted.",
+     "carving": "Clean, crisp facets with clear digits; slightly softer than K3.",
+     "calm": "The steadiest of the four, with quiet confidence and no restlessness.",
+     "personality": "The gentle slant drifts toward the upright, so the oblique voice is the least distinct.",
+     "oblique": "Even, undistorted slant, though it is so mild that it sits almost too close to the upright."
+    }
+   ],
+   "fits": {
+    "fit_emphasis": 0.583,
+    "fit_notes": 1.0,
+    "fit_display": 0.75
+   },
+   "total": 0.8316,
+   "tie_with_next": true
+  },
+  {
+   "variant": "GLZ_I9",
+   "code": "K1",
+   "harmony": 0.714,
+   "numbers": 0.875,
+   "technical": 1.0,
+   "small": 0.99,
+   "faithful": 0.965,
+   "stone": 0.75,
+   "carving": 0.75,
+   "personality": 0.75,
+   "oblique": 0.75,
+   "calm": 0.767,
+   "votes": {
+    "stone": [
+     3,
+     3,
+     3
+    ],
+    "carving": [
+     3,
+     3,
+     3
+    ],
+    "calm": [
+     4,
+     3,
+     3
+    ],
+    "personality": [
+     3,
+     3,
+     3
+    ],
+    "oblique": [
+     3,
+     3,
+     3
+    ]
+   },
+   "disagreement": 1,
+   "why": [
+    {
+     "stone": "Moderate slant keeps the faceted wedge terminals and heavy figures reading as cut stone, only slightly lighter in feel than the upright.",
+     "carving": "Facets on B, p, 6, 2 and 5 are coherent and crisp and the digits are clear, though the kg and x sit a little loosely beside the figures.",
+     "calm": "Measured slant gives a steady forward lean without urgency, with real presence in the title.",
+     "personality": "A recognisable chiselled sloped roman, though it sits close to K2 and K4 in voice.",
+     "oblique": "Even, deliberate angle with steady strokes and spacing; sits comfortably beside the upright with no visible distortion."
+    },
+    {
+     "stone": "Moderate slant keeps the carved masses grounded; Bench press and 62.5 still read as cut stone.",
+     "carving": "Facets are coherent and crisp, digits clear, with the 6 and 2 well formed; nothing distinctive beyond solid.",
+     "calm": "Steady mid slant with presence, no restlessness.",
+     "personality": "Recognisable carved voice but hard to tell apart from K2.",
+     "oblique": "Even slant and spacing, sits well beside the upright; capitals slightly lean-heavy but not distorted."
+    },
+    {
+     "stone": "Faceted bowls and wedge serifs keep the slanted display reading as cut stone with a firm baseline.",
+     "carving": "Facets are coherent and crisp across Bench press and the digits, and 6, 2 and 5 stay clear, though the 6 bowl is slightly lumpy.",
+     "calm": "A moderate slant gives forward motion without agitation; steady presence.",
+     "personality": "A recognisable chiselled italic voice, though very close to K2.",
+     "oblique": "Even, moderate slant with steady strokes that sits well beside the upright; no visible distortion."
+    }
+   ],
+   "fits": {
+    "fit_emphasis": 0.75,
+    "fit_notes": 0.75,
+    "fit_display": 0.75
+   },
+   "total": 0.8241,
+   "tie_with_next": true
+  },
+  {
+   "variant": "GLZ_I12",
+   "code": "K2",
+   "harmony": 0.699,
+   "numbers": 0.883,
+   "technical": 1.0,
+   "small": 0.989,
+   "faithful": 0.965,
+   "stone": 0.75,
+   "carving": 0.75,
+   "personality": 0.75,
+   "oblique": 0.75,
+   "calm": 0.75,
+   "votes": {
+    "stone": [
+     3,
+     3,
+     3
+    ],
+    "carving": [
+     3,
+     3,
+     3
+    ],
+    "calm": [
+     3,
+     3,
+     3
+    ],
+    "personality": [
+     3,
+     3,
+     3
+    ],
+    "oblique": [
+     3,
+     3,
+     3
+    ]
+   },
+   "disagreement": 0,
+   "why": [
+    {
+     "stone": "Still reads as carved, though the slightly steeper lean begins to loosen the grounded block feel of the figures.",
+     "carving": "Facets stay clean and digits clear; the 6 and 5 hold their cut forms well at the stronger angle.",
+     "calm": "A touch more forward motion than K1; steady but a little more pressing.",
+     "personality": "Slightly more energetic voice than K1, but hard to tell apart from it at a glance.",
+     "oblique": "Consistent angle and spacing with no lopsided letters, a fraction more mechanical-looking in the capitals than K1."
+    },
+    {
+     "stone": "Nearly identical to K1, a touch more slant but still grounded carving.",
+     "carving": "Crisp coherent facets; digits clear and sturdy.",
+     "calm": "Steady and composed, marginally more forward motion than K1.",
+     "personality": "Same carved voice as K1, deliberate but not further distinguished.",
+     "oblique": "Even deliberate slant with steady strokes; pairs well with the upright."
+    },
+    {
+     "stone": "Practically identical to K1: faceted, grounded, stony at display size.",
+     "carving": "Crisp, coherent facets and clear digits, with marginally sharper corners on the 5 and 6 than K1.",
+     "calm": "Steady moderate slant, calm with presence.",
+     "personality": "The same deliberate chiselled voice as K1; hard to tell apart.",
+     "oblique": "Even slant and steady spacing, comfortable next to the upright."
+    }
+   ],
+   "fits": {
+    "fit_emphasis": 0.75,
+    "fit_notes": 0.75,
+    "fit_display": 0.75
+   },
+   "total": 0.8214,
+   "tie_with_next": false
+  }
+ ],
+ "control_votes": {
+  "faux": {
+   "stone": [
+    2,
+    2,
+    2
+   ],
+   "carving": [
+    3,
+    3,
+    3
+   ],
+   "calm": [
+    2,
+    2,
+    2
+   ],
+   "personality": [
+    4,
+    4,
+    4
+   ],
+   "oblique": [
+    3,
+    2,
+    2
+   ]
+  }
+ },
+ "plain_control_votes": null
+}

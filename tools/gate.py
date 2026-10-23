@@ -77,37 +77,53 @@ class _CubicPen(BasePen):
         self.value.append(("closePath", ()))
 
 
-def _merged(font, name):
-    """The glyph with overlaps merged (booleanOperations), quadratics elevated to cubics first."""
+def _merged(font, name, slant=None):
+    """The glyph with overlaps merged (booleanOperations), quadratics elevated to cubics first. slant (t, c): each
+    point moved as tools/oblique.py slants it, x + y t - c (the gate slants Ortica's originals to check obliques)."""
     gs = font.getGlyphSet()
     rec = _CubicPen(gs)
     gs[name].draw(rec)
     bg = BooleanGlyph()
     seg = SegmentToPointPen(bg.getPointPen())
+    move = (lambda p: (p[0] + p[1] * slant[0] - slant[1], p[1])) if slant else (lambda p: p)
     for op, args in rec.value:
-        getattr(seg, op)(*args)
+        getattr(seg, op)(*[move(a) for a in args])
     return bg.removeOverlap()
+
+
+SPECK = 1.0   # units²: contours smaller than this are the integer grid's specks, not shapes (0.01 px² at 100 px)
+
+
+def _parts(font, name):
+    """Contours of the merged outline, specks left out: TrueType coordinates are whole units, so a slanted outline
+    leaves sub-unit specks where contours meet (ẞ at 12 degrees: 0.1 units² in a 1-unit box)."""
+    n = 0
+    for c in _merged(font, name).contours:
+        a = AreaPen()
+        c.draw(a)
+        n += abs(a.value) >= SPECK
+    return n
 
 
 def topology_changes(weights, vf):
     """Glyphs whose merged outline has a different number of contours carved (CARV 100) than plain (CARV 0): a cut
-    through a stroke, a counter opened, or a part come loose."""
+    through a stroke, a counter opened, or a part come loose. Specks under SPECK are not counted."""
     bad = []
     for w in weights:
         plain, carved = instance(w, 0, vf), instance(w, 100, vf)
         for name in plain.getGlyphOrder():
-            if len(_merged(plain, name).contours) != len(_merged(carved, name).contours):
+            if _parts(plain, name) != _parts(carved, name):
                 bad.append(f"{name} at {w}")
     return bad
 
 
-def _measure(font, name):
+def _measure(font, name, slant=None):
     """Area after merging overlaps (a variable font keeps overlapping contours; the original OTF had them merged),
-    bounds, and advance."""
-    gs = font.getGlyphSet()
-    a, b = AreaPen(), BoundsPen(gs)
-    _merged(font, name).draw(a)
-    gs[name].draw(b)
+    bounds, and advance; slant as in _merged."""
+    m = _merged(font, name, slant)
+    a, b = AreaPen(), BoundsPen(None)
+    m.draw(a)
+    m.draw(b)
     return abs(a.value), b.bounds, font["hmtx"].metrics[name][0]
 
 
@@ -120,12 +136,18 @@ def compare_outlines(w, style, chars=None, vf=None):
         names = set(new.getGlyphOrder())
         pairs = [(n, n) for n in old.getGlyphOrder() if n in names and n != ".notdef"]
     bad, exempt = [], []
+    # an oblique (stage 5) is compared with Ortica's original slanted the same way: a shear keeps area exactly
+    theta = -new["post"].italicAngle
+    slant = None
+    if theta:
+        tt = math.tan(math.radians(theta))
+        slant = (tt, tt * old["OS/2"].sxHeight / 2)
     for nn, on in pairs:
         if (on, w) in EXEMPT:
             exempt.append(on)
             continue
         a1, b1, w1 = _measure(new, nn)
-        a0, b0, w0 = _measure(old, on)
+        a0, b0, w0 = _measure(old, on, slant)
         why = []
         if w1 != w0:
             why.append(f"advance {w0}->{w1}")

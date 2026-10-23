@@ -299,7 +299,24 @@ UNSEATED = []            # (master, glyph) where no clean seat was found: the ga
 MIN_OVERLAP_AREA = 150  # units²: a mark below the letter must really overlap it, not touch it at a corner
 
 
+SEAT_MARGIN = 2   # a seat must stay clean with the mark moved this much any way: TrueType rounds every offset and
+                  # point to whole units, and a slant makes them fractional (Ç at 7 degrees: a 0.37-unit move opened a
+                  # 591 units² hole between the cedilla's hook and the C when the seat was clean at one exact spot)
+
+
 def _seated(f, base, comp):
+    """Clean, with room to spare: clean at the mark's place and at every SEAT_MARGIN move around it."""
+    t = comp.transformation
+    for dx in (-SEAT_MARGIN, 0, SEAT_MARGIN):
+        for dy in (-SEAT_MARGIN, 0, SEAT_MARGIN):
+            moved = copy.copy(comp)
+            moved.transformation = (t[0], t[1], t[2], t[3], t[4] + dx, t[5] + dy)
+            if not _seated_at(f, base, moved):
+                return False
+    return True
+
+
+def _seated_at(f, base, comp):
     from booleanOperations.booleanGlyph import BooleanGlyph
     from fontTools.pens.transformPen import TransformPointPen
     if _overlap_area(f, base, comp) < MIN_OVERLAP_AREA:

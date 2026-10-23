@@ -91,3 +91,16 @@ large. Sisifo is not Ortica and is not endorsed by its authors.
   against punctuation: 653 pairs per master (A-V -110, T-A -78, L-T -100, T-period -85 at Regular). Checked by eye
   (AVATAR, TAVOLA, WAVY, L'AVVENTO, T.A.V.: the gaps close). Two optical-spacing numbers were tried and both misjudge
   diagonal pairs (one saturates, one penalises the tight AV a designer wants), so neither is used. Release 255 KB.
+
+## 0.6 (2026-10-23), stage 5: obliques (owner review pending)
+- tools/oblique.py slants the release's masters after the carve and ss01: x + y tan(theta) - tan(theta) xHeight/2,
+  so advances and kerning carry over; components get M' = A M A^-1, o' = M' c + A o - c (exact for flipped ones:
+  caroncomb.case is a flipped circumflex, and the plain rule put carons ~100 units off). Built at 7, 9 and 12
+  degrees as Sisifo-Italic[CARV,wght].ttf, and as a slnt axis in one file (Sisifo[CARV,slnt,wght].ttf).
+- Gate for obliques: Ortica's originals slanted the same way; all 394 glyphs match at every angle. Mark seats must
+  now stay clean within 2 units (integer rounding opened a hole under Ç at 7 degrees); contours under 1 unit² are
+  the integer grid's specks and are not counted (one in ẞ at 12 degrees).
+- Panel (nine axes + oblique quality, the browser's faked oblique as control): 7 0.832, 9 0.824, 12 0.821 (a tie).
+  Fit by use: 7 degrees best for notes (1.00) but weak as emphasis (0.58); 9 and 12 even (0.75). Measured axes
+  compare obliques with Ortica slanted alike, and deslant the raster for the spacing and contrast readings.
+- Delivery on the owner's packaging axes: second file 0.93, slnt axis 0.83 (0.93 once the gate covers slnt).

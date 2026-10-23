@@ -20,7 +20,7 @@ ROUND = sys.argv[1] if len(sys.argv) > 1 else "1"
 OUT = ROOT / "build" / ("carve" if ROUND == "1" else f"carve{ROUND}")
 # round 2 (personality) adds Ortica Angular Bold as a second reference; it has one weight, used for every line
 VARIANTS = {"1": ["A", "B", "C", "D", "E"], "2": ["B", "R", "RL", "G", "GL"], "3": ["GL"],
-            "4": ["GLP", "GLZ", "GL"]}[ROUND]
+            "4": ["GLP", "GLZ", "GL"], "5": ["GLZ_I7", "GLZ_I9", "GLZ_I12"]}[ROUND]
 # round 3 re-scores GL after the guided fits and the evened 3, 8, S, beside round 2's GL (its specimen image is kept;
 # the font itself was rebuilt)
 PRIOR = {"3": {"GL_r2": ROOT / "build" / "carve2" / "named" / "GL.png"}}.get(ROUND, {})
@@ -64,14 +64,66 @@ font-family:S}} .lab{{font:500 9px monospace;color:#575757;margin:10px 0 2px}}
 <div style="font-size:13px;line-height:20px;{v(700, 0)}">Today · 3 sets · 1:30 rest</div>"""
 
 
+def oblique_page(italic, label):
+    """Round 5 (stage 5): the release upright with an oblique, in the three uses the owner named. italic None: no
+    oblique file, so the browser fakes one by skewing (the mechanical control)."""
+    up = ROOT / "fonts" / "variable" / "Sisifo[CARV,wght].ttf"
+    faces = f"@font-face{{font-family:S;src:url('{up.as_uri()}');font-style:normal}}"
+    if italic:
+        faces += f"@font-face{{font-family:S;src:url('{italic.as_uri()}');font-style:italic}}"
+    v = lambda w, c: f"font-variation-settings:'wght' {w},'CARV' {c}"
+    return f"""<!doctype html><meta charset="utf-8"><style>{faces}
+html{{zoom:2.8125}} body{{margin:0;width:384px;box-sizing:border-box;padding:12px 16px;background:#ebebeb;color:#1c1c1c;
+font-family:S}} i{{font-style:italic}} .lab{{font:500 9px monospace;color:#575757;margin:12px 0 3px}}
+.s{{font-size:13px;line-height:20px;{v(400, 0)}}}</style>
+{f'<div class="lab">{label}</div>' if label else ''}
+<div class="lab">emphasis inside 13 px text</div>
+<div class="s">Rest <i>ninety seconds</i> between sets, then <i>breathe</i>. Labels stay in the list for
+<i>reuse</i>. Mobilità ed <i>equilibrio</i>, perché è <i>così</i>.</div>
+<div class="lab">notes and hints (whole lines)</div>
+<div class="s" style="font-style:italic">Tip: a short walk between sets keeps the legs loose.</div>
+<div class="s" style="font-style:italic">Habit, not motivation: the next set starts when you are ready.</div>
+<div class="s" style="font-style:italic;{v(300, 0)}">Light: two sets today · 1:30 rest · perché è così</div>
+<div class="lab">display accents (carved)</div>
+<div style="font-size:44px;line-height:50px;font-style:italic;{v(600, 100)}">Bench press</div>
+<div style="font-size:30px;line-height:36px;font-style:italic;{v(400, 100)}">Mobilità · Equilibrio</div>
+<div style="font-size:52px;line-height:60px;font-style:italic;font-feature-settings:'tnum' 1;{v(700, 100)}">62.5 <span style="font-size:18px">kg</span> × 5</div>
+<div style="font-size:30px;line-height:36px;font-style:italic;font-feature-settings:'ss01' 1;{v(500, 100)}">SISIFO · ROCK</div>
+<div class="lab">upright, for comparison</div>
+<div style="font-size:30px;line-height:36px;{v(600, 100)}">Bench press 62.5</div>"""
+
+
 def render(html, out):
     p = OUT / "html" / (out.stem + ".html")
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(html, encoding="utf-8")
-    hb.screenshot(str(p), str(out), 1080, 2450 if ROUND != "4" else 2900)   # round 4 adds a block of capitals
+    hb.screenshot(str(p), str(out), 1080, {"4": 2900, "5": 2000}.get(ROUND, 2450))   # round 4 adds a block of capitals
+
+
+def main_oblique():
+    """Round 5: one page per angle, plus the browser's faked oblique as the mechanical control."""
+    entries = [(v, ROOT / "build" / "variants" / v / "Sisifo-Italic[CARV,wght].ttf") for v in VARIANTS]
+    entries.append(("faux", None))
+    rng = random.Random(20261023)
+    codes = [f"K{i}" for i in range(1, len(entries) + 1)]
+    rng.shuffle(codes)
+    blind = {}
+    (OUT / "named").mkdir(parents=True, exist_ok=True)
+    (OUT / "blind").mkdir(parents=True, exist_ok=True)
+    try:
+        for (name, italic), code in zip(entries, codes):
+            render(oblique_page(italic, f"Sisifo {name}"), OUT / "named" / f"{name}.png")
+            render(oblique_page(italic, ""), OUT / "blind" / f"{code}.png")
+            blind[code] = name
+    finally:
+        hb.close_all()
+    (OUT / "blind_codes.json").write_text(json.dumps(dict(sorted(blind.items())), indent=1), encoding="utf-8")
+    print(OUT)
 
 
 def main():
+    if ROUND == "5":
+        return main_oblique()
     fonts = {v: ROOT / "build" / "variants" / v / "Sisifo[CARV,wght].ttf" for v in VARIANTS}
     entries = [(v, fonts[v], 100) for v in VARIANTS] + [("plain", fonts[VARIANTS[0]], 0)]
     if ROUND in ("2", "3"):

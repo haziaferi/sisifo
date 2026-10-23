@@ -43,6 +43,9 @@ VARIANTS = {
 # stage 4: the release carve plus inscriptional capitals (ss01), P = proportions only, Z = Cinzel's capitals
 VARIANTS["GLP"] = {**VARIANTS["GL"], "ss01": "P", "look": "GL with proportioned capitals"}
 VARIANTS["GLZ"] = {**VARIANTS["GL"], "ss01": "Z", "look": "GL with Cinzel capitals"}
+# stage 5: the release slanted (scripted obliques), three angles
+for _a in (7, 9, 12):
+    VARIANTS[f"GLZ_I{_a}"] = {**VARIANTS["GLZ"], "slant": _a, "look": f"GLZ oblique {_a} degrees"}
 # hand pins for the general Angular fit: glyph -> {Angular corner (merged order): (contour, segment[, t])}
 ANCHORS = {
     # Angular's 6 curls its arm and hooks the terminal (corners 11-14); Linear's arm is thin and straight, so the
@@ -522,6 +525,10 @@ def make_masters(variant, out_dir):
             elif v.get("ss01") == "Z":   # marks below Cinzel's capitals, seated on the carved letter
                 import ss01
                 ss01.reseat_below_marks(f)
+            if v.get("slant"):         # stage 5: last, after the carve and ss01
+                import oblique
+                oblique.slant_font(f, v["slant"])
+                f.info.styleMapStyleName = "italic"
             if carve_value:
                 f.info.styleName = f"{s} Carved"
             p = out_dir / f"Sisifo-{s}-C{carve_value}.ufo"

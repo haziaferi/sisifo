@@ -79,7 +79,7 @@ def weight_of(f):
 
 
 def pick_regular(files):
-    best = None
+    best = italic = None
     for f in files:
         try:
             w, it, t = weight_of(f)
@@ -88,9 +88,13 @@ def pick_regular(files):
         if "fvar" in t:
             return f, t, True
         if it:
+            # Sisifo copy: an italic is used when it is all there is (stage 5 measures obliques on their own)
+            if italic is None or abs(w - 400) < abs(italic[1] - 400):
+                italic = (f, w, t)
             continue
         if best is None or abs(w - 400) < abs(best[1] - 400):
             best = (f, w, t)
+    best = best or italic
     return (best[0], best[2], False) if best else (None, None, False)
 
 

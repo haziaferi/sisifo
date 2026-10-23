@@ -17,6 +17,7 @@ Judged by the blind panel (0-4, /4): stone, carving at display size, and calm (j
 Total = weighted mean over the eight axes (faithful counts half). A gap under 0.02 is a tie.
 """
 import json
+import math
 import pathlib
 import statistics
 import sys
@@ -30,6 +31,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 sys.path.insert(0, str(pathlib.Path.home() / ".claude" / "tools"))
 import search_measure as measure  # noqa: E402
+MEASURE_INK = measure.ink
 sys.path.insert(0, str(ROOT / "tools"))
 import gate  # noqa: E402
 
@@ -37,13 +39,17 @@ ROUND = sys.argv[2] if len(sys.argv) > 2 else "1"
 OUT = ROOT / "build" / ("carve" if ROUND == "1" else f"carve{ROUND}")
 ORTICA = ROOT / "vendor" / "ortica" / "fonts" / "OrticaLinear-Regular.otf"
 VARIANTS = {"1": ["A", "B", "C", "D", "E"], "2": ["B", "R", "RL", "G", "GL"], "3": ["GL"],
-            "4": ["GLP", "GLZ", "GL"]}[ROUND]
+            "4": ["GLP", "GLZ", "GL"], "5": ["GLZ_I7", "GLZ_I9", "GLZ_I12"]}[ROUND]
 # round 3: round 2's GL is judged again beside the new GL; its measured axes come from round 2
 PRIOR = {"3": {"GL_r2": ("carve2", "GL")}}.get(ROUND, {})
 # round 2 (owner): a blind "personality" axis, judged against two unnamed references, plain and Ortica Angular
 JUDGED = ["stone", "carving", "calm"] + (["personality"] if ROUND != "1" else []) + (["inscription"] if ROUND == "4"
                                                                                      else [])
 CONTROLS = ["plain"] + (["angular"] if ROUND in ("2", "3") else []) + (["cinzel"] if ROUND == "4" else [])
+if ROUND == "5":     # stage 5: obliques; the control is the browser's faked oblique (a plain skew of the upright)
+    JUDGED = ["stone", "carving", "calm", "personality", "oblique"]
+    CONTROLS = ["faux"]
+FITS = ["fit_emphasis", "fit_notes", "fit_display"] if ROUND == "5" else []   # where the obliques go; not in totals
 SMALL = "Labels stay in the list for reuse. Mobilità ed equilibrio, perché è così."
 CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 AXES = {"harmony": 1, "stone": 1, "numbers": 1, "calm": 1, "technical": 1, "carving": 1, "small": 1, "faithful": 0.5}
@@ -51,10 +57,13 @@ if ROUND != "1":
     AXES["personality"] = 1
 if ROUND == "4":          # stage 4 (owner): a blind "inscriptional character" axis
     AXES["inscription"] = 1
+if ROUND == "5":          # stage 5 (owner): a blind "oblique quality" axis
+    AXES["oblique"] = 1
 
 
 def vf(v):
-    return ROOT / "build" / "variants" / v / "Sisifo[CARV,wght].ttf"
+    d = ROOT / "build" / "variants" / v
+    return d / "Sisifo-Italic[CARV,wght].ttf" if (d / "Sisifo-Italic[CARV,wght].ttf").exists() else d / "Sisifo[CARV,wght].ttf"
 
 
 def static(v, carve):
@@ -89,7 +98,17 @@ class _Flat(BasePen):
         self.cur = []
 
 
-def _mask(font, text, size, canvas=None):
+def _slant_of(font):
+    """(tan, centring) of an oblique's slant, from its italic angle; None for an upright."""
+    f = TTFont(font)
+    theta = -f["post"].italicAngle
+    if not theta:
+        return None
+    tt = math.tan(math.radians(theta))
+    return tt, tt * f["OS/2"].sxHeight / 2
+
+
+def _mask(font, text, size, canvas=None, slant=None):
     """Text rasterised from the outlines themselves, the same way for every font (no hinting: PIL hints TrueType and
     CFF differently, which alone made Sisifo's line 2 % wider than Ortica's with identical advances). Overlaps are
     merged first, then outer contours fill and counters clear, at 4x and averaged down."""
@@ -104,7 +123,7 @@ def _mask(font, text, size, canvas=None):
     for c in text:
         name = cmap[ord(c)]
         pen = _Flat()
-        gate._merged(t, name).draw(pen)
+        gate._merged(t, name, slant).draw(pen)
         polys = sorted(pen.polys, key=lambda p: -abs(_area(p)))
         for poly in polys:
             pts = [((x + px * s) * k, (size * 1.5 - py * s) * k) for px, py in poly]
@@ -132,7 +151,8 @@ def _iou(a, b):
 def small_text(v):
     size = round(13 * 2.8125)
     new, wn = _mask(static(v, 0), SMALL, size)
-    old, wo = _mask(ORTICA, SMALL, size, new.size)
+    # an oblique is compared with Ortica slanted the same way (stage 5), as the gate does
+    old, wo = _mask(ORTICA, SMALL, size, new.size, _slant_of(static(v, 0)))
     xh = lambda f: measure.bbox_units(TTFont(f), "x")[3]
     xr, wr = xh(static(v, 0)) / xh(ORTICA), wn / wo
     parts = {"xheight_ratio": round(xr, 4), "width_ratio": round(wr, 4), "line_iou": round(_iou(new, old), 4)}
@@ -164,16 +184,17 @@ def _shaped_widths(font_path):
 
 def faithful(v):
     carved, orig = static(v, 100), ORTICA
+    sl = _slant_of(carved)          # an oblique is compared with Ortica slanted the same way
     ious = []
     for ch in CHARS:
         a, _ = _mask(carved, ch, 64, (140, 128))
-        b, _ = _mask(orig, ch, 64, (140, 128))
+        b, _ = _mask(orig, ch, 64, (140, 128), sl)
         ious.append(_iou(a, b))
     t, o = TTFont(carved), TTFont(orig)
     tc, oc = t.getBestCmap(), o.getBestCmap()
     adv = statistics.mean(t["hmtx"].metrics[tc[ord(c)]][0] == o["hmtx"].metrics[oc[ord(c)]][0] for c in CHARS)
     kern_px = _shaped_widths(vf(v))
-    plain = statistics.mean(_iou(_mask(static(v, 0), ch, 64, (140, 128))[0], _mask(orig, ch, 64, (140, 128))[0])
+    plain = statistics.mean(_iou(_mask(static(v, 0), ch, 64, (140, 128))[0], _mask(orig, ch, 64, (140, 128), sl)[0])
                             for ch in CHARS)
     parts = {"shape_iou": round(statistics.mean(ious), 4), "shape_iou_plain": round(plain, 4),
              "worst": sorted(zip(ious, CHARS))[:3],
@@ -182,9 +203,32 @@ def faithful(v):
     return parts
 
 
+def _deslanted_ink(tan):
+    """The font search's ink() with the slant taken out of the raster, so its spacing measure (blank columns between
+    letters, which assumes upright stems) sees an oblique's letters as it sees upright ones."""
+    from PIL import Image as _Image
+    orig = MEASURE_INK
+
+    def ink(ft, text, pad=20):
+        im = orig(ft, text, pad)
+        w, h = im.size
+        out = im.transform((w + int(tan * h) + 1, h), _Image.AFFINE, (1, -tan, tan * h, 0, 1, 0),
+                           resample=_Image.BICUBIC, fill=0)
+        box = out.getbbox()      # back to the ink plus the same padding: the contrast reading uses the centre column
+        if not box:
+            return out
+        cropped = out.crop(box)
+        framed = _Image.new("L", (cropped.width + 2 * pad, cropped.height + 2 * pad), 0)
+        framed.paste(cropped, (pad, pad))
+        return framed
+    return ink
+
+
 def measure_all():
     out = {}
     for v in VARIANTS:
+        sl = _slant_of(static(v, 100))
+        measure.ink = _deslanted_ink(sl[0]) if sl else MEASURE_INK
         m = measure.measure({"family": f"Sisifo {v}", "slug": f"sisifo-{v}", "files": [str(static(v, 100))],
                              "licence_dir": str(ROOT)})
         tech = measure.measure({"family": f"Sisifo {v}", "slug": f"sisifo-{v}", "files": [str(vf(v))],
@@ -213,7 +257,8 @@ def combine():
              **{k: round(statistics.mean(votes[k]) / 4, 3) for k in JUDGED if k != "calm"},
              "calm": round((statistics.mean(votes["calm"]) / 4 + x["calm_measured"]) / 2, 3),
              "votes": votes, "disagreement": max(max(s) - min(s) for s in votes.values()),
-             "why": [{k: j[code][k + "_why"] for k in JUDGED} for j in judges]}
+             "why": [{k: j[code][k + "_why"] for k in JUDGED} for j in judges],
+             "fits": {k: round(statistics.mean(j[code][k] for j in judges) / 4, 3) for k in FITS}}
         r["total"] = round(sum(r[a] * w for a, w in AXES.items()) / sum(AXES.values()), 4)
         rows.append(r)
     controls = {c: {k: [j[by_name[c]][k] for j in judges] for k in JUDGED} for c in CONTROLS}
@@ -221,7 +266,7 @@ def combine():
     for i, r in enumerate(rows):
         r["tie_with_next"] = i + 1 < len(rows) and r["total"] - rows[i + 1]["total"] < 0.02
     (OUT / "scores.json").write_text(json.dumps({"rows": rows, "control_votes": controls,
-                                                 "plain_control_votes": controls["plain"]}, indent=1,
+                                                 "plain_control_votes": controls.get("plain")}, indent=1,
                                                 ensure_ascii=False), encoding="utf-8")
     print("var  total  " + "  ".join(f"{a[:5]:>5}" for a in AXES) + "  disagree")
     for r in rows:

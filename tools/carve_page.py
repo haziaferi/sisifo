@@ -22,7 +22,8 @@ LOOK = {"A": "Angular: long flats, 45° facets", "B": "short flats, 45° facets"
         "G": "Ortica Angular's own cuts on Linear's outlines", "GL": "Angular's own cuts, gentler at Light",
         "GL_r2": "round 2's GL, before the guided fits and evening",
         "GLP": "GL + proportioned capitals (ss01): Sisifo's own, carved, re-proportioned to Cinzel's widths",
-        "GLZ": "GL + Cinzel's capitals (ss01), carved by the rules"}
+        "GLZ": "GL + Cinzel's capitals (ss01), carved by the rules",
+        "GLZ_I7": "oblique 7°", "GLZ_I9": "oblique 9°", "GLZ_I12": "oblique 12°"}
 # the panel's reasons, condensed (scores.json has them in full)
 NOTE = {
     "1": {
@@ -59,6 +60,12 @@ NOTE = {
         "GLP": "Read as condensed by all three judges. Sisifo's O, C and D are already about as wide as Cinzel's "
                "(ratios 1.02 to 1.05), so the stretch mostly narrowed E, S and B and the set lost width contrast.",
     },
+    "5": {
+        "GLZ_I7": "The calmest and most grounded. Best for whole lines of notes (fit 1.00), but as emphasis inside "
+                  "13 px text it barely stands out (0.58). Display 0.75.",
+        "GLZ_I9": "Even all round: emphasis, notes and display all 0.75. Two judges could hardly tell it from 12°.",
+        "GLZ_I12": "Leans a little more; emphasis, notes and display all 0.75.",
+    },
 }
 INTRO = {
     "1": ("Five ways to carve Ortica Linear, ranked by the eight axes. Titles and set numbers are carved (CARV 100). "
@@ -84,8 +91,16 @@ INTRO = {
           "<b>GLZ leads clearly</b> (0.868; GL 0.811, GLP 0.767), first on every judged axis. Look at the block "
           "\"titles in capitals (ss01)\" in each image.",
           "Should GLZ become the release, with Cinzel's capitals as ss01?"),
+    "5": ("Stage 5: obliques of the release at 7°, 9° and 12°, beside the upright, in the three uses: emphasis "
+          "inside 13 px text, whole lines of notes, display accents. The control is the browser's own faked oblique "
+          "(a plain skew), which scored lowest on oblique quality and calm.",
+          "<b>The three angles tie</b> (7° 0.832, 9° 0.824, 12° 0.821). Where they go: 7° for notes, 9° or 12° "
+          "for emphasis, any for display. Delivery, on your five packaging axes: a second file 0.93, a slnt axis "
+          "0.83 (lighter, 373 KB against 532 KB, and it can use 7° for notes and 12° for emphasis at once, but "
+          "harder to wire in Compose and not yet covered by the gate; with the gate taught, the two tie).",
+          "Which delivery and angle?"),
 }
-AXES = [("inscription", "Inscription"), ("personality", "Personality"), ("stone", "Stone"), ("carving", "Carving"), ("calm", "Calm"),
+AXES = [("oblique", "Oblique"), ("inscription", "Inscription"), ("personality", "Personality"), ("stone", "Stone"), ("carving", "Carving"), ("calm", "Calm"),
         ("harmony", "Harmony"), ("numbers", "Numbers"), ("technical", "Technical"), ("small", "Small text"),
         ("faithful", "Faithful (½)")]
 
@@ -120,8 +135,13 @@ def main():
     for p in (CARVE / "named").glob("*.png"):
         shutil.copy(p, OUT / "img" / p.name)
     controls = s.get("control_votes", {"plain": s["plain_control_votes"]})
-    keys = list(controls["plain"])
-    refs = reference("plain", "0", "plain Sisifo (Ortica Linear's outlines), no carve", controls["plain"], keys)
+    keys = list(next(iter(controls.values())))
+    refs = ""
+    if "plain" in controls:
+        refs = reference("plain", "0", "plain Sisifo (Ortica Linear's outlines), no carve", controls["plain"], keys)
+    if "faux" in controls:
+        refs += reference("faux", "Fx", "no oblique file: the browser fakes one by skewing the upright (the control)",
+                          controls["faux"], keys)
     if "angular" in controls:
         refs += "\n" + reference("angular", "Ang", "Ortica Angular Bold, its one weight on every line",
                                  controls["angular"], keys)
